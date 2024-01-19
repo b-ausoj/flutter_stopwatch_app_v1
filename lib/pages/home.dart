@@ -88,6 +88,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             }
             var item = _homeManager.stopwatchCards.removeAt(oldIndex);
             _homeManager.stopwatchCards.insert(newIndex, item);
+            storeHomeState(_homeManager); // TODO: a bit redundant
           },
         ),
       ),

@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_stopwatch_app_v1/enums/sort_criterion.dart';
+import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
 import 'package:flutter_stopwatch_app_v1/managers/home_manager.dart';
 import 'package:flutter_stopwatch_app_v1/models/lap_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/saved_stopwatch_model.dart';
@@ -23,6 +25,7 @@ Future<void> loadHomeState(HomeManager homeManager) async {
     ));
   }
   StopwatchModel.nextId = prefs.getInt("nextStopwatchId") ?? 1;
+  homeManager.setSorting(SortCriterion.values[prefs.getInt("order") ?? 0], SortDirection.values[prefs.getInt("direction") ?? 0]);
 }
 
 Future<void> resetSharedPreferences() async {
@@ -53,14 +56,16 @@ Future<void> saveStopwatch(StopwatchModel stopwatchModel) async {
   stopwatchModel.reset();
 }
 
-Future<void> storeHomeState(List<StopwatchCard> stopwatchCards) async {
+Future<void> storeHomeState(HomeManager homeManager) async {
   final prefs = await SharedPreferences.getInstance();
   List<String> home = [];
-  for (StopwatchCard card in stopwatchCards) {
+  for (StopwatchCard card in homeManager.stopwatchCards) {
     home.add(jsonEncode(card.stopwatchModel));
   }
   prefs.setStringList("home", home);
   prefs.setInt("nextStopwatchId", StopwatchModel.nextId);
+  prefs.setInt("order", SortCriterion.values.indexOf(homeManager.order));
+  prefs.setInt("direction", SortDirection.values.indexOf(homeManager.orientation));
 }
 
 Future<void> storeSavedStopwatchState(SavedStopwatchModel model) async {

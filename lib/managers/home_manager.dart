@@ -33,7 +33,8 @@ class HomeManager {
         (int id, String name) => deleteStopwatch(id, name), changedState, id,
         key: Key("$id")));
     _cardsCount = _stopwatchCards.length;
-    storeHomeState(_stopwatchCards);
+    storeHomeState(this);
+    changedState();
   }
 
   void changedState() => sortAndListCards(_stopwatchCards, _order, _direction);
@@ -49,7 +50,7 @@ class HomeManager {
     }
     _stopwatchCards.clear();
     _cardsCount = 0;
-    storeHomeState(_stopwatchCards);
+    storeHomeState(this);
     showLongSnackBar(context, "All stopwatches have been removed",
         action: SnackBarAction(
             label: "Undo",
@@ -69,7 +70,7 @@ class HomeManager {
     }
     StopwatchCard deleted = _stopwatchCards.removeAt(index);
     _cardsCount = _stopwatchCards.length;
-    storeHomeState(_stopwatchCards);
+    storeHomeState(this);
     showLongSnackBar(context, "'$name' has been removed",
         action: SnackBarAction(
             label: "Undo",
@@ -77,7 +78,7 @@ class HomeManager {
               _stopwatchCards.add(deleted);
               _cardsCount = _stopwatchCards.length;
               changedState();
-              storeHomeState(_stopwatchCards);
+              storeHomeState(this);
             }));
   }
 
@@ -94,14 +95,14 @@ class HomeManager {
     for (StopwatchCard card in _stopwatchCards) {
       card.stopwatchModel.reset();
     }
-    storeHomeState(_stopwatchCards);
+    storeHomeState(this);
     showLongSnackBar(context, "All stopwatches has been reseted",
         action: SnackBarAction(
             label: "Undo",
             onPressed: () {
               for (var element in _stopwatchCards) {
                 element.stopwatchModel.restore();
-                storeHomeState(_stopwatchCards);
+                storeHomeState(this);
               }
             }));
   }
@@ -120,19 +121,20 @@ class HomeManager {
       ));
     }
     _cardsCount = _stopwatchCards.length;
-    storeHomeState(_stopwatchCards);
+    storeHomeState(this);
   }
 
   void setSorting(SortCriterion order, SortDirection direction) {
     _order = order;
     _direction = direction;
     changedState();
+    storeHomeState(this); // TODO: a bit redundant
   }
 
   void startAllStopwatches() {
     for (var element in _stopwatchCards) {
       element.stopwatchModel.start();
     }
-    storeHomeState(_stopwatchCards);
+    storeHomeState(this);
   }
 }
