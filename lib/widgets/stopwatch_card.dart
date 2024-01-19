@@ -5,8 +5,8 @@ import 'package:flutter_stopwatch_app_v1/enums/stopwatch_card_menu_item.dart';
 import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/utils/times_formatting_utils.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/stopwatch_popup_menu_button.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/rename_dialog.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/stopwatch_popup_menu_button.dart';
 
 class StopwatchCard extends StatefulWidget {
   final int id;

@@ -3,8 +3,8 @@ import 'package:flutter_stopwatch_app_v1/enums/saved_stopwatch_card_menu_item.da
 import 'package:flutter_stopwatch_app_v1/models/saved_stopwatch_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/utils/times_formatting_utils.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/saved_stopwatch_popup_menu_button.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/rename_dialog.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/saved_stopwatch_popup_menu_button.dart';
 
 class SavedStopwatchCard extends StatefulWidget {
   final Map<String, dynamic> json;
