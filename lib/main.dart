@@ -6,6 +6,7 @@ void main() {
 }
 
 // TODO: undo in history page
+// TODO: settings page where user can set default order and orientation
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

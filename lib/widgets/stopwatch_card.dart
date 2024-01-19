@@ -1,18 +1,12 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_stopwatch_app_v1/models/lap_model.dart';
-import 'package:flutter_stopwatch_app_v1/models/saved_stopwatch_model.dart';
+import 'package:flutter_stopwatch_app_v1/enums/stopwatch_card_menu_item.dart';
 import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/utils/times_formatting_utils.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/rename_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/stopwatch_popup_menu_button.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:flutter_stopwatch_app_v1/enums/stopwatch_card_menu_item.dart';
 
 class StopwatchCard extends StatefulWidget {
   final int id;
@@ -35,34 +29,6 @@ class _StopwatchCardState extends State<StopwatchCard>
   late final StopwatchModel _stopwatchModel = widget.stopwatchModel;
   late final Ticker _ticker;
   bool showAllLaps = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _ticker = createTicker((elapsed) {
-      assert(widget.id == _stopwatchModel.id); // TODO: remove for deployment
-      setState(() {});
-    });
-    _ticker.start();
-  }
-
-  @override
-  void dispose() {
-    _ticker.dispose();
-    super.dispose();
-  }
-
-  Future<String?> _showRenameDialog() async {
-    return showDialog<String>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return RenameDialog(_stopwatchModel.name, (String text) {
-          _stopwatchModel.name = text;
-        });
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -268,6 +234,34 @@ class _StopwatchCardState extends State<StopwatchCard>
           )
         ],
       ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _ticker.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _ticker = createTicker((elapsed) {
+      assert(widget.id == _stopwatchModel.id); // TODO: remove for deployment
+      setState(() {});
+    });
+    _ticker.start();
+  }
+
+  Future<String?> _showRenameDialog() async {
+    return showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return RenameDialog(_stopwatchModel.name, (String text) {
+          _stopwatchModel.name = text;
+        });
+      },
     );
   }
 }

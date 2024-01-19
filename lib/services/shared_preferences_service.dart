@@ -1,28 +1,34 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_stopwatch_app_v1/managers/home_manager.dart';
 import 'package:flutter_stopwatch_app_v1/models/lap_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/saved_stopwatch_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/stopwatch_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<void> storeSavedStopwatchState(SavedStopwatchModel model) async {
-  final prefs = await SharedPreferences.getInstance();
-  List<String> history = prefs.getStringList("history") ?? [];
-  history.removeWhere(
-    (element) => jsonDecode(element)["id"] == model.id,
-  );
-  history.add(jsonEncode(model));
-  prefs.setStringList("history", history);
-}
-
-Future<void> storeStopwatchState(StopwatchModel model) async {
+Future<void> loadHomeState(HomeManager homeManager) async {
   final prefs = await SharedPreferences.getInstance();
   List<String> home = prefs.getStringList("home") ?? [];
-  home.removeWhere(
-    (element) => jsonDecode(element)["id"] == model.id,
-  );
-  home.add(jsonEncode(model));
-  prefs.setStringList("home", home);
+  for (String entry in home) {
+    dynamic json = jsonDecode(entry);
+    homeManager.stopwatchCards.add(StopwatchCard(
+      json["name"],
+      homeManager.deleteStopwatch,
+      homeManager.changedState,
+      json["id"],
+      key: Key("${json["id"]}"),
+      json: json,
+    ));
+  }
+  StopwatchModel.nextId = prefs.getInt("nextStopwatchId") ?? 1;
+}
+
+Future<void> resetSharedPreferences() async {
+  // TODO: only for debugging
+  final prefs = await SharedPreferences.getInstance();
+  prefs.clear();
 }
 
 Future<void> saveStopwatch(StopwatchModel stopwatchModel) async {
@@ -45,4 +51,34 @@ Future<void> saveStopwatch(StopwatchModel stopwatchModel) async {
   prefs.setStringList("history", history);
   prefs.setInt("nextSavedStopwatchId", SavedStopwatchModel.nextId);
   stopwatchModel.reset();
+}
+
+Future<void> storeHomeState(List<StopwatchCard> stopwatchCards) async {
+  final prefs = await SharedPreferences.getInstance();
+  List<String> home = [];
+  for (StopwatchCard card in stopwatchCards) {
+    home.add(jsonEncode(card.stopwatchModel));
+  }
+  prefs.setStringList("home", home);
+  prefs.setInt("nextStopwatchId", StopwatchModel.nextId);
+}
+
+Future<void> storeSavedStopwatchState(SavedStopwatchModel model) async {
+  final prefs = await SharedPreferences.getInstance();
+  List<String> history = prefs.getStringList("history") ?? [];
+  history.removeWhere(
+    (element) => jsonDecode(element)["id"] == model.id,
+  );
+  history.add(jsonEncode(model));
+  prefs.setStringList("history", history);
+}
+
+Future<void> storeStopwatchState(StopwatchModel model) async {
+  final prefs = await SharedPreferences.getInstance();
+  List<String> home = prefs.getStringList("home") ?? [];
+  home.removeWhere(
+    (element) => jsonDecode(element)["id"] == model.id,
+  );
+  home.add(jsonEncode(model));
+  prefs.setStringList("home", home);
 }
