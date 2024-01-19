@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_stopwatch_app_v1/enums/stopwatch_card_menu_item.dart';
 
 class StopwatchPopupMenuButton extends StatelessWidget {

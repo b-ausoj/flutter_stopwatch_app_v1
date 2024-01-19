@@ -35,14 +35,18 @@ class StopwatchModel {
 
   int get elapsedTimeRounded =>
       ((state == StopwatchState.running
-          ? DateTime.now().difference(startedTime)
-          : Duration.zero) +
-      savedTime).inMilliseconds ~/ 100;
+                  ? DateTime.now().difference(startedTime)
+                  : Duration.zero) +
+              savedTime)
+          .inMilliseconds ~/
+      100;
   int get elapsedLapTimeRounded =>
       ((state == StopwatchState.running
-          ? DateTime.now().difference(startedLapTime)
-          : Duration.zero) +
-      savedLapTime).inMilliseconds ~/ 100;
+                  ? DateTime.now().difference(startedLapTime)
+                  : Duration.zero) +
+              savedLapTime)
+          .inMilliseconds ~/
+      100;
 
   StopwatchModel(this.name, this.id,
       {this.state = StopwatchState.reseted,
@@ -102,7 +106,8 @@ class StopwatchModel {
     startedTime = DateTime.now();
     startedLapTime = DateTime.now();
     startTimestamp = DateTime.now();
-    startTimestamp = startTimestamp.subtract(Duration(milliseconds: startTimestamp.millisecond));
+    startTimestamp = startTimestamp
+        .subtract(Duration(milliseconds: startTimestamp.millisecond));
   }
 
   void stop() {
@@ -125,18 +130,20 @@ class StopwatchModel {
 
   void restore() {
     Map<String, dynamic> json = jsonDecode(oldStopwatch);
-    if (json.isEmpty) throw Exception("Restore without reset"); // only call restore form snackbar when shortly before reset was called
+    if (json.isEmpty)
+      throw Exception(
+          "Restore without reset"); // only call restore form snackbar when shortly before reset was called
     name = json["name"];
     state = json["state"] == "${StopwatchState.running}"
-          ? StopwatchState.running
-          : json["state"] == "${StopwatchState.reseted}"
-              ? StopwatchState.reseted
-              : StopwatchState.stopped;
+        ? StopwatchState.running
+        : json["state"] == "${StopwatchState.reseted}"
+            ? StopwatchState.reseted
+            : StopwatchState.stopped;
     savedTime = Duration(milliseconds: json["savedTime"]);
     savedLapTime = Duration(milliseconds: json["savedLapTime"]);
-    startTimestamp = DateTime.fromMillisecondsSinceEpoch(json["startTimestamp"]);
-    startedTime =
-        DateTime.fromMillisecondsSinceEpoch(json["startedTime"]);
+    startTimestamp =
+        DateTime.fromMillisecondsSinceEpoch(json["startTimestamp"]);
+    startedTime = DateTime.fromMillisecondsSinceEpoch(json["startedTime"]);
     startedLapTime =
         DateTime.fromMillisecondsSinceEpoch(json["startedLapTime"]);
     lapCount = json["lapCount"];
@@ -144,7 +151,6 @@ class StopwatchModel {
       lapList.add(LapModel(int.parse(key), Duration(milliseconds: value)));
     });
   }
-
 
   void reset() {
     if (state == StopwatchState.running) return;

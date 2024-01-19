@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_stopwatch_app_v1/enums/saved_stopwatch_card_menu_item.dart';
 import 'package:flutter_stopwatch_app_v1/models/saved_stopwatch_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/utils/times_formatting_utils.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/rename_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/saved_stopwatch_popup_menu_button.dart';
-
-import 'package:flutter_stopwatch_app_v1/enums/saved_stopwatch_card_menu_item.dart';
 
 class SavedStopwatchCard extends StatefulWidget {
   final Map<String, dynamic> json;
@@ -24,21 +23,6 @@ class SavedStopwatchCard extends StatefulWidget {
 class _SavedStopwatchCardState extends State<SavedStopwatchCard> {
   late final SavedStopwatchModel _savedStopwatchModel =
       widget.savedStopwatchModel;
-
-  Future<String?> _showRenameDialog() async {
-    return showDialog<String>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return RenameDialog(_savedStopwatchModel.name, (String text) {
-          setState(() {
-            _savedStopwatchModel.name = text;
-          });
-          storeSavedStopwatchState(_savedStopwatchModel);
-        });
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,6 +118,21 @@ class _SavedStopwatchCardState extends State<SavedStopwatchCard> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<String?> _showRenameDialog() async {
+    return showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return RenameDialog(_savedStopwatchModel.name, (String text) {
+          setState(() {
+            _savedStopwatchModel.name = text;
+          });
+          storeSavedStopwatchState(_savedStopwatchModel);
+        });
+      },
     );
   }
 }

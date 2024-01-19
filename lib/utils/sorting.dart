@@ -1,12 +1,6 @@
-import 'package:flutter_stopwatch_app_v1/widgets/stopwatch_card.dart';
-
 import 'package:flutter_stopwatch_app_v1/enums/sort_criterion.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
-
-List<StopwatchCard> sortAndListCards(List<StopwatchCard> list, SortCriterion order, SortDirection orientation) {
-  list.sort(buildSort(order, orientation));
-  return list;
-}
+import 'package:flutter_stopwatch_app_v1/widgets/stopwatch_card.dart';
 
 buildSort(SortCriterion order, SortDirection orientation) => ((StopwatchCard a, StopwatchCard b) {
   int sign = orientation == SortDirection.ascending ? 1 : -1;
@@ -24,4 +18,9 @@ buildSort(SortCriterion order, SortDirection orientation) => ((StopwatchCard a, 
       return 0;
   }
 });
+
+List<StopwatchCard> sortAndListCards(List<StopwatchCard> list, SortCriterion order, SortDirection orientation) {
+  list.sort(buildSort(order, orientation));
+  return list;
+}
 

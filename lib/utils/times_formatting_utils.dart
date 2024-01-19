@@ -9,19 +9,19 @@ String durationToString(Duration duration) {
   return "${minutes < 10 ? "0$minutes" : "$minutes"}:${seconds < 10 ? "0$seconds" : "$seconds"}.$hSeconds";
 }
 
+String formatLapCount(List<LapModel> lapTimes) {
+  StringBuffer result = StringBuffer();
+  for (LapModel lap in lapTimes) {
+    result.write("\n${lap.id < 10 ? "0${lap.id}" : "${lap.id}"}");
+  }
+  return result.toString();
+}
+
 String formatLapTimes(List<LapModel> lapTimes) {
   StringBuffer result = StringBuffer();
   for (LapModel lap in lapTimes) {
     result.write(
         "${durationToString(lap.lapTime)}${lap.id == lapTimes.length ? "" : "\n"}");
-  }
-  return result.toString();
-}
-
-String formatLapCount(List<LapModel> lapTimes) {
-  StringBuffer result = StringBuffer();
-  for (LapModel lap in lapTimes) {
-    result.write("\n${lap.id < 10 ? "0${lap.id}" : "${lap.id}"}");
   }
   return result.toString();
 }

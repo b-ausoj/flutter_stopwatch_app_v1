@@ -1,4 +1,3 @@
-
 enum SortCriterion {
   creationDate,
   name,

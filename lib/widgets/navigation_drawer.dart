@@ -11,20 +11,6 @@ class NavDrawer extends StatefulWidget {
 class _NavDrawerState extends State<NavDrawer> {
   int screenIndex = 0;
 
-  void handleScreenChanged(int selectedScreen) {
-    screenIndex = selectedScreen;
-    if (screenIndex == 0) {
-      Navigator.pop(context);
-    } else if (screenIndex == 1) {
-      Navigator.pop(context);
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => const History()));
-    } else {
-      Navigator.pop(context);
-    }
-    screenIndex = 0;
-  }
-
   @override
   Widget build(BuildContext context) {
     return NavigationDrawer(
@@ -47,5 +33,19 @@ class _NavDrawerState extends State<NavDrawer> {
           const NavigationDrawerDestination(
               icon: Icon(Icons.settings_outlined), label: Text("Settings")),
         ]);
+  }
+
+  void handleScreenChanged(int selectedScreen) {
+    screenIndex = selectedScreen;
+    if (screenIndex == 0) {
+      Navigator.pop(context);
+    } else if (screenIndex == 1) {
+      Navigator.pop(context);
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => const History()));
+    } else {
+      Navigator.pop(context);
+    }
+    screenIndex = 0;
   }
 }

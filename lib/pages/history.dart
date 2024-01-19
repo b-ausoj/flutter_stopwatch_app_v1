@@ -1,11 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/saved_stopwatch_card.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:flutter_stopwatch_app_v1/enums/history_card_menu_item.dart';
 import 'package:flutter_stopwatch_app_v1/enums/history_menu_item.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/saved_stopwatch_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class History extends StatefulWidget {
   const History({super.key});
@@ -19,10 +18,76 @@ class _HistoryState extends State<History> with SingleTickerProviderStateMixin {
   final List<Widget> _historyList = [];
 
   @override
-  void initState() {
-    super.initState();
-    _loadHistory();
-    setState(() {});
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("History"),
+        actions: [
+          PopupMenuButton(
+            onSelected: (HistoryMenuItem item) {
+              // addStopwatch, saveAll, resetAll, deleteAll, changeOrder, settings
+              switch (item) {
+                case HistoryMenuItem.deleteAll:
+                  deleteAllStopwatches();
+                  break;
+                case HistoryMenuItem.exportAll:
+                  break;
+                case HistoryMenuItem.settings:
+                  break;
+                default:
+                  throw Exception("Invalid HistoryMenuItem state");
+              }
+            },
+            itemBuilder: (BuildContext context) =>
+                <PopupMenuEntry<HistoryMenuItem>>[
+              const PopupMenuItem<HistoryMenuItem>(
+                value: HistoryMenuItem.deleteAll,
+                child: Row(
+                  children: [
+                    Icon(Icons.delete_outlined),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Text('Delete all'),
+                  ],
+                ),
+              ),
+              const PopupMenuItem<HistoryMenuItem>(
+                value: HistoryMenuItem.exportAll,
+                child: Row(
+                  children: [
+                    Icon(Icons.save_alt_outlined),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Text('Export all'),
+                  ],
+                ),
+              ),
+              const PopupMenuItem<HistoryMenuItem>(
+                value: HistoryMenuItem.settings,
+                child: Row(
+                  children: [
+                    Icon(Icons.settings_outlined),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Text('Settings'),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView.builder(
+          itemCount: _historyList.length,
+          itemBuilder: (context, index) => _historyList[index],
+        ),
+      ),
+    );
   }
 
   void createHistoryList() {
@@ -155,6 +220,19 @@ class _HistoryState extends State<History> with SingleTickerProviderStateMixin {
     return "$h:$min $d.$m.$y";
   }
 
+  void deleteAllStopwatches() {
+    _savedStopwatchCards.removeRange(0, _savedStopwatchCards.length);
+    createHistoryList();
+    _storeHistoryState();
+  }
+
+  void deleteCardStopwatches(DateTime timestamp) {
+    _savedStopwatchCards.removeWhere(
+        (element) => element.savedStopwatchModel.startingTime == timestamp);
+    createHistoryList();
+    _storeHistoryState();
+  }
+
   Future<void> deleteStopwatch(int id, String name) async {
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Stopwatch '$name' has been removed")));
@@ -170,26 +248,11 @@ class _HistoryState extends State<History> with SingleTickerProviderStateMixin {
     setState(() {});
   }
 
-  void deleteAllStopwatches() {
-    _savedStopwatchCards.removeRange(0, _savedStopwatchCards.length);
-    createHistoryList();
-    _storeHistoryState();
-  }
-
-  void deleteCardStopwatches(DateTime timestamp) {
-    _savedStopwatchCards.removeWhere(
-        (element) => element.savedStopwatchModel.startingTime == timestamp);
-    createHistoryList();
-    _storeHistoryState();
-  }
-
-  Future<void> _storeHistoryState() async {
-    final prefs = await SharedPreferences.getInstance();
-    List<String> history = [];
-    for (SavedStopwatchCard card in _savedStopwatchCards) {
-      history.add(jsonEncode(card.savedStopwatchModel));
-    }
-    prefs.setStringList("history", history);
+  @override
+  void initState() {
+    super.initState();
+    _loadHistory();
+    setState(() {});
   }
 
   Future<void> _loadHistory() async {
@@ -210,76 +273,12 @@ class _HistoryState extends State<History> with SingleTickerProviderStateMixin {
     setState(() {});
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("History"),
-        actions: [
-          PopupMenuButton(
-            onSelected: (HistoryMenuItem item) {
-              // addStopwatch, saveAll, resetAll, deleteAll, changeOrder, settings
-              switch (item) {
-                case HistoryMenuItem.deleteAll:
-                  deleteAllStopwatches();
-                  break;
-                case HistoryMenuItem.exportAll:
-                  break;
-                case HistoryMenuItem.settings:
-                  break;
-                default:
-                  throw Exception("Invalid HistoryMenuItem state");
-              }
-            },
-            itemBuilder: (BuildContext context) =>
-                <PopupMenuEntry<HistoryMenuItem>>[
-              const PopupMenuItem<HistoryMenuItem>(
-                value: HistoryMenuItem.deleteAll,
-                child: Row(
-                  children: [
-                    Icon(Icons.delete_outlined),
-                    SizedBox(
-                      width: 12,
-                    ),
-                    Text('Delete all'),
-                  ],
-                ),
-              ),
-              const PopupMenuItem<HistoryMenuItem>(
-                value: HistoryMenuItem.exportAll,
-                child: Row(
-                  children: [
-                    Icon(Icons.save_alt_outlined),
-                    SizedBox(
-                      width: 12,
-                    ),
-                    Text('Export all'),
-                  ],
-                ),
-              ),
-              const PopupMenuItem<HistoryMenuItem>(
-                value: HistoryMenuItem.settings,
-                child: Row(
-                  children: [
-                    Icon(Icons.settings_outlined),
-                    SizedBox(
-                      width: 12,
-                    ),
-                    Text('Settings'),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListView.builder(
-          itemCount: _historyList.length,
-          itemBuilder: (context, index) => _historyList[index],
-        ),
-      ),
-    );
+  Future<void> _storeHistoryState() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> history = [];
+    for (SavedStopwatchCard card in _savedStopwatchCards) {
+      history.add(jsonEncode(card.savedStopwatchModel));
+    }
+    prefs.setStringList("history", history);
   }
 }
