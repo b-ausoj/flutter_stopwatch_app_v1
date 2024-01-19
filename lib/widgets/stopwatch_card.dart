@@ -78,12 +78,15 @@ class _StopwatchCardState extends State<StopwatchCard>
                 Row(
                   children: [
                     Expanded(
-                        child: Text(_stopwatchModel.name,
-                            style: const TextStyle(
-                                fontSize: 26,
-                                fontWeight: FontWeight.w400,
-                                letterSpacing: 0,
-                                height: 0))),
+                        child: InkWell(
+                          onTap: _showRenameDialog,
+                          child: Text(_stopwatchModel.name,
+                              style: const TextStyle(
+                                  fontSize: 26,
+                                  fontWeight: FontWeight.w400,
+                                  letterSpacing: 0,
+                                  height: 0)),
+                        )),
                     StopwatchPopupMenuButton(
                       onSelected: (StopwatchCardMenuItem item) async {
                         switch (item) {
@@ -256,7 +259,7 @@ class _StopwatchCardState extends State<StopwatchCard>
   Future<String?> _showRenameDialog() async {
     return showDialog<String>(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return RenameDialog(_stopwatchModel.name, (String text) {
           _stopwatchModel.name = text;

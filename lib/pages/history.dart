@@ -157,6 +157,7 @@ class _HistoryState extends State<History> with SingleTickerProviderStateMixin {
     }
     if (list.isNotEmpty) {
       _historyList.add(Card(
+        elevation: 0,
         color: const Color(0xFFEFEFEF),
         child: ExpansionTile(
           shape: const Border(),

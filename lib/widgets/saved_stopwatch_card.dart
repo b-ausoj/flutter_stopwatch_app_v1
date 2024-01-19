@@ -38,13 +38,16 @@ class _SavedStopwatchCardState extends State<SavedStopwatchCard> {
               children: [
                 Expanded(
                   flex: 4,
-                  child: Text(_savedStopwatchModel.name,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                          fontSize: 26,
-                          fontWeight: FontWeight.w400,
-                          letterSpacing: 0,
-                          height: 0)),
+                  child: InkWell(
+                    onTap: _showRenameDialog,
+                    child: Text(_savedStopwatchModel.name,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: 0,
+                            height: 0)),
+                  ),
                 ),
                 Text(durationToString(_savedStopwatchModel.totalTime),
                     style: const TextStyle(
@@ -124,7 +127,7 @@ class _SavedStopwatchCardState extends State<SavedStopwatchCard> {
   Future<String?> _showRenameDialog() async {
     return showDialog<String>(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return RenameDialog(_savedStopwatchModel.name, (String text) {
           setState(() {
