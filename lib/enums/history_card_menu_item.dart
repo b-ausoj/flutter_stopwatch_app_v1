@@ -1,0 +1,1 @@
+enum HistoryCardMenuItem { deleteAll, exportAll }

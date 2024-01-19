@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/saved_stopwatch_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:flutter_stopwatch_app_v1/enums/history_card_menu_item.dart';
+import 'package:flutter_stopwatch_app_v1/enums/history_menu_item.dart';
+
 class History extends StatefulWidget {
   const History({super.key});
 
   @override
   State<History> createState() => _HistoryState();
 }
-
-enum HistoryMenuItem { deleteAll, exportAll, settings }
-enum HistoryCardMenuItem { deleteAll, exportAll }
 
 class _HistoryState extends State<History> with SingleTickerProviderStateMixin {
   final List<SavedStopwatchCard> _savedStopwatchCards = [];
@@ -149,7 +149,8 @@ class _HistoryState extends State<History> with SingleTickerProviderStateMixin {
     String m = dateTime.month < 10 ? "0${dateTime.month}" : "${dateTime.month}";
     String y = "${dateTime.year}";
     String h = dateTime.hour < 10 ? "0${dateTime.hour}" : "${dateTime.hour}";
-    String min = dateTime.minute < 10 ? "0${dateTime.minute}" : "${dateTime.minute}";
+    String min =
+        dateTime.minute < 10 ? "0${dateTime.minute}" : "${dateTime.minute}";
     //String sec = dateTime.second < 10 ? "0${dateTime.second}" : "${dateTime.second}";
     return "$h:$min $d.$m.$y";
   }
@@ -176,7 +177,8 @@ class _HistoryState extends State<History> with SingleTickerProviderStateMixin {
   }
 
   void deleteCardStopwatches(DateTime timestamp) {
-    _savedStopwatchCards.removeWhere((element) => element.savedStopwatchModel.startingTime == timestamp);
+    _savedStopwatchCards.removeWhere(
+        (element) => element.savedStopwatchModel.startingTime == timestamp);
     createHistoryList();
     _storeHistoryState();
   }

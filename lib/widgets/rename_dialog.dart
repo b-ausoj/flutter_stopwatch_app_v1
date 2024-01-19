@@ -4,7 +4,11 @@ class RenameDialog extends StatelessWidget {
   final String initialName;
   final void Function(String) onAccept;
 
-  late final TextEditingController _controller = TextEditingController.fromValue(TextEditingValue(text: initialName, selection: TextSelection(baseOffset: 0, extentOffset: initialName.length)));
+  late final TextEditingController _controller =
+      TextEditingController.fromValue(TextEditingValue(
+          text: initialName,
+          selection:
+              TextSelection(baseOffset: 0, extentOffset: initialName.length)));
 
   RenameDialog(this.initialName, this.onAccept, {super.key});
 

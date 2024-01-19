@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
+import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/utils/sorting.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/add_stopwatch_card.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/home_popup_menu_button.dart';
@@ -88,10 +89,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   void deleteStopwatch(int id, String name) {
-    int index = _stopwatchCards.indexWhere((element) => element.id == id && element.stopwatchModel.state != StopwatchState.running);
+    int index = _stopwatchCards.indexWhere((element) =>
+        element.id == id &&
+        element.stopwatchModel.state != StopwatchState.running);
     if (index == -1) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Can't delete while running"),
         duration: Duration(seconds: 2),
       ));
@@ -136,10 +138,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     oldHome = [];
     for (StopwatchCard card in _stopwatchCards) {
       if (card.stopwatchModel.state == StopwatchState.running) {
-        ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(
-        content: Text("Can't delete while running"),
-        duration: Duration(seconds: 2),
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Can't delete while running"),
+          duration: Duration(seconds: 2),
         ));
         return;
       }
@@ -168,13 +169,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void resetAllStopwatches() {
     // save all in json string list
     // call everyone to reset itself
-    // if undo then delete list and load json 
+    // if undo then delete list and load json
     for (StopwatchCard card in _stopwatchCards) {
       if (card.stopwatchModel.state == StopwatchState.running) {
-        ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(
-        content: Text("Can't reset while running"),
-        duration: Duration(seconds: 2),
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Can't reset while running"),
+          duration: Duration(seconds: 2),
         ));
         return;
       }
@@ -215,10 +215,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        return SortDialog(_order, _orientation, (SortCriterion order, SortDirection orientation) {
+        return SortDialog(_order, _orientation,
+            (SortCriterion order, SortDirection orientation) {
           _order = order;
           _orientation = orientation;
-          _stopwatchCards.sort(buildSort(_order, _orientation));  
+          _stopwatchCards.sort(buildSort(_order, _orientation));
         });
       },
     );
@@ -231,13 +232,18 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       appBar: AppBar(
         title: const Text("Stopwatch by Josua"),
         actions: [
-          HomePopupMenuButton(onSelected: (HomeMenuItem item) {
+          HomePopupMenuButton(
+            onSelected: (HomeMenuItem item) {
               switch (item) {
                 case HomeMenuItem.addStopwatch:
                   addStopwatch();
                   break;
                 case HomeMenuItem.saveAll:
-                  _stopwatchCards.forEach((element) {element.save();});
+                  for (var element in _stopwatchCards) {
+                    saveStopwatch(element.stopwatchModel);
+                    storeStopwatchState(element.stopwatchModel);
+                  }
+                  changedState();
                   break;
                 case HomeMenuItem.resetAll:
                   resetAllStopwatches();

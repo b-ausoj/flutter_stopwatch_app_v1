@@ -9,7 +9,6 @@ class NavDrawer extends StatefulWidget {
 }
 
 class _NavDrawerState extends State<NavDrawer> {
-
   int screenIndex = 0;
 
   void handleScreenChanged(int selectedScreen) {
@@ -18,7 +17,8 @@ class _NavDrawerState extends State<NavDrawer> {
       Navigator.pop(context);
     } else if (screenIndex == 1) {
       Navigator.pop(context);
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const History()));
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => const History()));
     } else {
       Navigator.pop(context);
     }
@@ -40,10 +40,12 @@ class _NavDrawerState extends State<NavDrawer> {
               style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
-          const NavigationDrawerDestination(icon: Icon(Icons.timer_outlined), label: Text("Stopwatches")),
-          const NavigationDrawerDestination(icon: Icon(Icons.history), label: Text("History")),
-          const NavigationDrawerDestination(icon: Icon(Icons.settings_outlined), label: Text("Settings")),
-        ]
-      );
+          const NavigationDrawerDestination(
+              icon: Icon(Icons.timer_outlined), label: Text("Stopwatches")),
+          const NavigationDrawerDestination(
+              icon: Icon(Icons.history), label: Text("History")),
+          const NavigationDrawerDestination(
+              icon: Icon(Icons.settings_outlined), label: Text("Settings")),
+        ]);
   }
 }

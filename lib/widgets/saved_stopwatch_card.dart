@@ -1,11 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/models/saved_stopwatch_model.dart';
-import 'package:flutter_stopwatch_app_v1/utils/saved_stopwatch_utils.dart';
+import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
+import 'package:flutter_stopwatch_app_v1/utils/times_formatting_utils.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/rename_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/saved_stopwatch_popup_menu_button.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutter_stopwatch_app_v1/enums/saved_stopwatch_card_menu_item.dart';
 
@@ -13,7 +11,8 @@ class SavedStopwatchCard extends StatefulWidget {
   final Map<String, dynamic> json;
   final void Function(int id, String name) deleteSavedStopwatch;
   late final SavedStopwatchModel savedStopwatchModel = (json.isEmpty)
-      ? SavedStopwatchModel(0, "bla", DateTime.now(), Duration.zero)
+      ? SavedStopwatchModel(0, "bla", DateTime.now(),
+          Duration.zero) // TODO: schöner/korrekt machen
       : SavedStopwatchModel.fromJson(json);
   SavedStopwatchCard(this.deleteSavedStopwatch,
       {super.key, this.json = const {}});
@@ -26,17 +25,6 @@ class _SavedStopwatchCardState extends State<SavedStopwatchCard> {
   late final SavedStopwatchModel _savedStopwatchModel =
       widget.savedStopwatchModel;
 
-  // TODO: kann ich in shared_preferences services auslagern, aber muss schauen, ob ich die methode reusen kann in den anderen klassen (stopwatch card) oder ob es spezifisch für saved_stopwatch_card ist
-  Future<void> storeChanges() async {
-    final prefs = await SharedPreferences.getInstance();
-    List<String> history = prefs.getStringList("history") ?? [];
-    history.removeWhere(
-      (element) => jsonDecode(element)["id"] == _savedStopwatchModel.id,
-    );
-    history.add(jsonEncode(_savedStopwatchModel));
-    prefs.setStringList("history", history);
-  }
-
   Future<String?> _showRenameDialog() async {
     return showDialog<String>(
       context: context,
@@ -46,7 +34,7 @@ class _SavedStopwatchCardState extends State<SavedStopwatchCard> {
           setState(() {
             _savedStopwatchModel.name = text;
           });
-          storeChanges();
+          storeSavedStopwatchState(_savedStopwatchModel);
         });
       },
     );
@@ -134,7 +122,7 @@ class _SavedStopwatchCardState extends State<SavedStopwatchCard> {
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
                             height: 0)),
-                    Text(formatSplitTimes(_savedStopwatchModel.splitTimes),
+                    Text(formatLapTimes(_savedStopwatchModel.splitTimes),
                         style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
