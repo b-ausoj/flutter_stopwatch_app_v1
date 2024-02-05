@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/enums/history_card_menu_item.dart';
@@ -19,6 +20,7 @@ class _HistoryState extends State<History> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: custom leading icon to add badge?
     return Scaffold(
       appBar: AppBar(
         title: const Text("History"),
@@ -104,6 +106,7 @@ class _HistoryState extends State<History> with SingleTickerProviderStateMixin {
           color: const Color(0xFFEFEFEF),
           elevation: 0,
           child: ExpansionTile(
+            onExpansionChanged: (value) => setViewedToTrue(timeStamp),
             shape: const Border(),
             controlAffinity: ListTileControlAffinity.leading,
             trailing: PopupMenuButton(
@@ -160,6 +163,7 @@ class _HistoryState extends State<History> with SingleTickerProviderStateMixin {
         elevation: 0,
         color: const Color(0xFFEFEFEF),
         child: ExpansionTile(
+          onExpansionChanged: (value) => setViewedToTrue(last),
           shape: const Border(),
           controlAffinity: ListTileControlAffinity.leading,
           trailing: PopupMenuButton(
@@ -230,6 +234,17 @@ class _HistoryState extends State<History> with SingleTickerProviderStateMixin {
   void deleteCardStopwatches(DateTime timestamp) {
     _savedStopwatchCards.removeWhere(
         (element) => element.savedStopwatchModel.startingTime == timestamp);
+    createHistoryList();
+    _storeHistoryState();
+  }
+
+  void setViewedToTrue(DateTime timestamp) {
+    for (SavedStopwatchCard card in _savedStopwatchCards) {
+      if (card.savedStopwatchModel.startingTime == timestamp) {
+        card.savedStopwatchModel.viewed = true;
+        log("messageeeeeeeeeeeeeeeeee");
+      }
+    }
     createHistoryList();
     _storeHistoryState();
   }

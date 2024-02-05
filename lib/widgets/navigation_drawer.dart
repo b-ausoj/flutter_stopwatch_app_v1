@@ -1,16 +1,24 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_stopwatch_app_v1/managers/home_manager.dart';
+import 'package:flutter_stopwatch_app_v1/managers/manager.dart';
 import 'package:flutter_stopwatch_app_v1/pages/about.dart';
 import 'package:flutter_stopwatch_app_v1/pages/history.dart';
 import 'package:flutter_stopwatch_app_v1/pages/home.dart';
 import 'package:flutter_stopwatch_app_v1/pages/settings.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/stopwatch_icon.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/nav_text_with_badge.dart';
 
 class NavDrawer extends StatefulWidget {
   final List<String> screens;
+  // add list of startManagers so that if we open the drawer from start page and
+  // then navigate to a screen and go back per arrows (back wishing)
+  // the badge will be updated
+  final Manager manager;
   final String name;
-  const NavDrawer(this.screens, this.name, {super.key});
+  const NavDrawer(this.screens, this.manager, this.name, {super.key});
 
   @override
   State<NavDrawer> createState() => _NavDrawerState();
@@ -36,15 +44,14 @@ class _NavDrawerState extends State<NavDrawer> {
             ),
           ),
           ..._screens.map((String screen) => NavigationDrawerDestination(
-              icon: const Icon(Icons.timer_outlined), label: Text(screen))),
+              icon: StopwatchIcon(screen), label: NavTextWithBadge(screen, false))),
           const NavigationDrawerDestination(
               icon: Icon(Icons.add), label: Text("Add Screen")),
           const Divider(),
           const NavigationDrawerDestination(
-              icon: Icon(Icons.history), label: Text("Records")),
-          NavigationDrawerDestination(
-              icon: Badge.count(count: 0,
-              child: Icon(Icons.settings_outlined)), label: Text("Settings")),
+              icon: Icon(Icons.history), label: NavTextWithBadge("Records", true)),
+          const NavigationDrawerDestination(
+              icon: Icon(Icons.settings_outlined), label: Text("Settings")),
           const NavigationDrawerDestination(
               icon: Icon(Icons.info_outlined), label: Text("About")),
         ]);
@@ -72,7 +79,8 @@ class _NavDrawerState extends State<NavDrawer> {
         case 1:
           Navigator.pop(context);
           Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => const History()));
+              .push(MaterialPageRoute(builder: (context) => const History()))
+              .then((value) => widget.manager.updateBadge());
           break;
         case 2:
           Navigator.pop(context);

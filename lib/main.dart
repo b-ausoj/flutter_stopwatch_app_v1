@@ -1,17 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stopwatch_app_v1/pages/home.dart';
+import 'package:flutter_stopwatch_app_v1/pages/start.dart';
+import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
+// TODO: at renaming stopwatches / saved stopwatches / screens, ensure that there is at least one character
 // TODO: undo in history page
+// TODO: reorganize history page
 // TODO: settings page where user can set default order and orientation
+// TODO: decide on a default order and orientation
+// TODO: decide on order or sorting as a text
+// TODO: write about page mit feedback, contact, rate us page
+// TODO: write privacy policy
+// TODO: write terms of service
+// TODO: write help page
+// TODO: write tutorial page
+// TODO: records instead of history
+// TODO: add introduction screen
+// TODO: add an configuration screen where I can save all the stopwatches (with name and order) and load some others
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
+    //resetSharedPreferences();
+    logAllSharedPreferences();
     return MaterialApp(
       title: "Stopwatch by Josua",
       theme: ThemeData(
@@ -29,7 +44,7 @@ class MyApp extends StatelessWidget {
           surfaceTintColor: Color.fromARGB(255, 255, 255, 255),
         ),
       ),
-      home: const Home(),
+      home: const Start(),
     );
   }
 }

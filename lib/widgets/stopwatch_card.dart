@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_stopwatch_app_v1/enums/stopwatch_card_menu_item.dart';
+import 'package:flutter_stopwatch_app_v1/managers/home_manager.dart';
 import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/utils/times_formatting_utils.dart';
@@ -12,13 +13,14 @@ class StopwatchCard extends StatefulWidget {
   final int id;
   final String name;
   final dynamic json;
+  final HomeManager homeManager;
   final void Function(int id, String name) deleteStopwatch;
   final void Function() changedState;
   late final StopwatchModel stopwatchModel =
       (json == null) ? StopwatchModel(name, id) : StopwatchModel.fromJson(json);
 
   StopwatchCard(this.name, this.deleteStopwatch, this.changedState, this.id,
-      {super.key, this.json});
+      {super.key, this.json, required this.homeManager});
 
   @override
   State createState() => _StopwatchCardState();
@@ -92,8 +94,6 @@ class _StopwatchCardState extends State<StopwatchCard>
                         switch (item) {
                           case StopwatchCardMenuItem.rename:
                             _showRenameDialog();
-                            storeStopwatchState(_stopwatchModel);
-                            widget.changedState();
                             break;
                           case StopwatchCardMenuItem.save:
                             switch (_stopwatchModel.state) {
@@ -113,7 +113,7 @@ class _StopwatchCardState extends State<StopwatchCard>
                                 break;
                               case StopwatchState.stopped:
                                 saveStopwatch(_stopwatchModel);
-                                storeStopwatchState(_stopwatchModel);
+                                storeStopwatchState(_stopwatchModel, widget.homeManager);
                                 widget.changedState();
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
@@ -123,7 +123,7 @@ class _StopwatchCardState extends State<StopwatchCard>
                                       label: "Undo reset",
                                       onPressed: () {
                                         _stopwatchModel.restore();
-                                        storeStopwatchState(_stopwatchModel);
+                                        storeStopwatchState(_stopwatchModel, widget.homeManager);
                                         widget.changedState();
                                       }),
                                 ));
@@ -143,7 +143,7 @@ class _StopwatchCardState extends State<StopwatchCard>
                                 break;
                               case StopwatchState.stopped:
                                 _stopwatchModel.reset();
-                                storeStopwatchState(_stopwatchModel);
+                                storeStopwatchState(_stopwatchModel, widget.homeManager);
                                 widget.changedState();
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
@@ -175,7 +175,7 @@ class _StopwatchCardState extends State<StopwatchCard>
                         StopwatchState.reseted => TextButton.icon(
                             onPressed: () {
                               _stopwatchModel.start();
-                              storeStopwatchState(_stopwatchModel);
+                              storeStopwatchState(_stopwatchModel, widget.homeManager);
                               widget.changedState();
                               HapticFeedback.lightImpact();
                             },
@@ -187,7 +187,7 @@ class _StopwatchCardState extends State<StopwatchCard>
                         StopwatchState.running => TextButton.icon(
                             onPressed: () {
                               _stopwatchModel.stop();
-                              storeStopwatchState(_stopwatchModel);
+                              storeStopwatchState(_stopwatchModel, widget.homeManager);
                               widget.changedState();
                               HapticFeedback.lightImpact();
                             },
@@ -199,7 +199,7 @@ class _StopwatchCardState extends State<StopwatchCard>
                         StopwatchState.stopped => TextButton.icon(
                             onPressed: () {
                               _stopwatchModel.resume();
-                              storeStopwatchState(_stopwatchModel);
+                              storeStopwatchState(_stopwatchModel, widget.homeManager);
                               widget.changedState();
                               HapticFeedback.lightImpact();
                             },
@@ -215,7 +215,7 @@ class _StopwatchCardState extends State<StopwatchCard>
                             _stopwatchModel.state == StopwatchState.running
                                 ? () {
                                     _stopwatchModel.lap();
-                                    storeStopwatchState(_stopwatchModel);
+                                    storeStopwatchState(_stopwatchModel, widget.homeManager);
                                     widget.changedState();
                                     HapticFeedback.lightImpact();
                                   }
@@ -263,6 +263,8 @@ class _StopwatchCardState extends State<StopwatchCard>
       builder: (BuildContext context) {
         return RenameDialog(_stopwatchModel.name, (String text) {
           _stopwatchModel.name = text;
+          storeStopwatchState(_stopwatchModel, widget.homeManager);
+          widget.changedState();
         });
       },
     );

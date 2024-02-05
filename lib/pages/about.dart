@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/pages/agb.dart';
 import 'package:flutter_stopwatch_app_v1/services/launch_url_service.dart';
 import 'package:flutter_stopwatch_app_v1/utils/snackbar_utils.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class About extends StatelessWidget {
   const About({super.key});

@@ -10,7 +10,7 @@ class SavedStopwatchCard extends StatefulWidget {
   final Map<String, dynamic> json;
   final void Function(int id, String name) deleteSavedStopwatch;
   late final SavedStopwatchModel savedStopwatchModel = (json.isEmpty)
-      ? SavedStopwatchModel(0, "bla", DateTime.now(),
+      ? SavedStopwatchModel(0, "bla", DateTime.now(), false,
           Duration.zero) // TODO: schöner/korrekt machen
       : SavedStopwatchModel.fromJson(json);
   SavedStopwatchCard(this.deleteSavedStopwatch,

@@ -1,37 +1,52 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_criterion.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
+import 'package:flutter_stopwatch_app_v1/managers/manager.dart';
 import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
+import 'package:flutter_stopwatch_app_v1/utils/badge_checking.dart';
 import 'package:flutter_stopwatch_app_v1/utils/snackbar_utils.dart';
 import 'package:flutter_stopwatch_app_v1/utils/sorting.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/stopwatch_card.dart';
 
-class HomeManager {
+class HomeManager extends Manager{
   // TODO: auf github schauen wo überall die cardsCount aktualisiert wird
 
   BuildContext context;
 
   final List<StopwatchCard> _stopwatchCards = [];
   final List<String> _oldHome = [];
+  @override
+  String name;
+
   int _cardsCount = 0;
   SortCriterion _order = SortCriterion.creationDate;
   SortDirection _direction = SortDirection.ascending;
 
-  HomeManager(this.context);
+  int badgeLabel = 0;
+  bool badgeVisible = false;
+
+  HomeManager(this.context, this.name);
 
   get order => _order;
   get orientation => _direction;
   get stopwatchCards => _stopwatchCards;
+
+  @override
+  void updateBadge() {
+    isMenuBadgeRequired(name).then((value) => badgeVisible = value);
+    getUnseenRecordsCount().then((value) => badgeLabel = value);
+  }
 
   Future<void> addStopwatch() async {
     int id = StopwatchModel.nextId++;
     // TODO: not taking the card count but the highest number a stopwatch has in "Athlete X" or cardsCount (whatever is bigger)
     _stopwatchCards.add(StopwatchCard("Athlete ${++_cardsCount}",
         (int id, String name) => deleteStopwatch(id, name), changedState, id,
-        key: Key("$id")));
+        key: Key("$id"), homeManager: this));
     _cardsCount = _stopwatchCards.length;
     storeHomeState(this);
     changedState();
@@ -118,6 +133,7 @@ class HomeManager {
         json["id"],
         key: Key("${json["id"]}"),
         json: json,
+        homeManager: this,
       ));
     }
     _cardsCount = _stopwatchCards.length;
