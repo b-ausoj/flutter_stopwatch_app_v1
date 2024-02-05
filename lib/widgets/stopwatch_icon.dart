@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stopwatch_app_v1/utils/badge_checking.dart';
 
 class StopwatchIcon extends StatefulWidget {
   final String name;

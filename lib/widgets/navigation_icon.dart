@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/managers/home_manager.dart';
 

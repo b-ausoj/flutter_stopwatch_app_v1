@@ -6,13 +6,11 @@ import 'package:flutter_stopwatch_app_v1/managers/home_manager.dart';
 import 'package:flutter_stopwatch_app_v1/managers/start_manager.dart';
 import 'package:flutter_stopwatch_app_v1/pages/home.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
-import 'package:flutter_stopwatch_app_v1/utils/badge_checking.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/navigation_drawer.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/navigation_icon.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/start_popup_menu_button.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/start_text_with_badge.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/stopwatch_icon.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/nav_text_with_badge.dart';
 
 class Start extends StatefulWidget {
   const Start({super.key});
@@ -26,12 +24,6 @@ class _StartState extends State<Start> {
   final List<StartManager> startManagers =
       []; // could combine / include screens
   var scaffoldKey = GlobalKey<ScaffoldState>();
-
-  @override
-  void initState() {
-    super.initState();
-    loadScreens(screens, startManagers, () => setState(() {}));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,5 +107,11 @@ class _StartState extends State<Start> {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadScreens(screens, startManagers, () => setState(() {}));
   }
 }
