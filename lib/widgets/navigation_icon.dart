@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stopwatch_app_v1/managers/home_manager.dart';
+import 'package:flutter_stopwatch_app_v1/controllers/home_controller.dart';
 
 class NavIcon extends StatefulWidget {
-  final HomeManager homeManager;
+  final HomeController homeController;
 
-  const NavIcon(this.homeManager, {super.key});
+  const NavIcon(this.homeController, {super.key});
 
   @override
   State<NavIcon> createState() => _NavIconState();
@@ -16,8 +16,8 @@ class _NavIconState extends State<NavIcon> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return IconButton(
       icon: Badge(
-        isLabelVisible: widget.homeManager.badgeVisible,
-        label: widget.homeManager.badgeLabel > 0 ? Text("${widget.homeManager.badgeLabel}") : null,
+        isLabelVisible: widget.homeController.badgeVisible,
+        label: widget.homeController.badgeLabel > 0 ? Text("${widget.homeController.badgeLabel}") : null,
         smallSize: 8.0,
         child: const Icon(Icons.menu),
       ),

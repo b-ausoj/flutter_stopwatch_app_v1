@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_stopwatch_app_v1/controllers/home_controller.dart';
+import 'package:flutter_stopwatch_app_v1/controllers/start_controller.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_criterion.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
-import 'package:flutter_stopwatch_app_v1/managers/home_manager.dart';
-import 'package:flutter_stopwatch_app_v1/managers/start_manager.dart';
 import 'package:flutter_stopwatch_app_v1/models/lap_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/saved_stopwatch_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
@@ -23,15 +23,15 @@ Future<void> logAllSharedPreferences() async {
   log("logAllSharedPreferences end");
 }
 
-Future<void> loadScreens(List<String> screens, List<StartManager> startManagers, var update) async {
+Future<void> loadScreens(List<String> screens, List<StartController> startControllers, var update) async {
   screens.clear();
   final prefs = await SharedPreferences.getInstance();
   log("loadScreens${prefs.getStringList("screens")}");
   screens.addAll(prefs.getStringList("screens") ?? []);
   for (String screen in screens) {
-    StartManager manager = StartManager(screen);
-    startManagers.add(manager);
-    manager.updateBadge();
+    StartController controller = StartController(screen);
+    startControllers.add(controller);
+    controller.refreshBadge();
   }
   update();
 }
@@ -41,26 +41,26 @@ Future<void> storeScreens(List<String> screens) async {
   prefs.setStringList("screens", screens);
 }
 
-Future<void> loadHomeState(HomeManager homeManager) async {
+Future<void> loadHomeState(HomeController homeController) async {
   final prefs = await SharedPreferences.getInstance();
-  List<String> home = prefs.getStringList(homeManager.name) ?? [];
+  List<String> home = prefs.getStringList(homeController.name) ?? [];
   for (String entry in home) {
     dynamic json = jsonDecode(entry);
     log(json["name"]);
-    homeManager.stopwatchCards.add(StopwatchCard(
+    homeController.stopwatchCards.add(StopwatchCard(
       json["name"],
-      homeManager.deleteStopwatch,
-      homeManager.changedState,
+      homeController.deleteStopwatch,
+      homeController.changedState,
       json["id"],
       key: Key("${json["id"]}"),
       json: json,
-      homeManager: homeManager,
+      homeController: homeController,
     ));
   }
   StopwatchModel.nextId = prefs.getInt("nextStopwatchId") ?? 1;
-  homeManager.setSorting(SortCriterion.values[prefs.getInt("order") ?? 0], SortDirection.values[prefs.getInt("direction") ?? 0]);
-  homeManager.updateBadge();
-  Timer(const Duration(milliseconds: 100), () => log("after update badge${homeManager.badgeLabel}"));
+  homeController.setSorting(SortCriterion.values[prefs.getInt("order") ?? 0], SortDirection.values[prefs.getInt("direction") ?? 0]);
+  homeController.refreshBadge();
+  Timer(const Duration(milliseconds: 100), () => log("after update badge${homeController.badgeLabel}"));
 }
 
 Future<void> resetSharedPreferences() async {
@@ -92,17 +92,17 @@ Future<void> saveStopwatch(StopwatchModel stopwatchModel) async {
   stopwatchModel.reset();
 }
 
-Future<void> storeHomeState(HomeManager homeManager) async {
+Future<void> storeHomeState(HomeController homeController) async {
   final prefs = await SharedPreferences.getInstance();
   List<String> home = [];
-  for (StopwatchCard card in homeManager.stopwatchCards) {
+  for (StopwatchCard card in homeController.stopwatchCards) {
     home.add(jsonEncode(card.stopwatchModel));
     log(jsonEncode(card.stopwatchModel));
   }
-  prefs.setStringList(homeManager.name, home);
+  prefs.setStringList(homeController.name, home);
   prefs.setInt("nextStopwatchId", StopwatchModel.nextId);
-  prefs.setInt("order", SortCriterion.values.indexOf(homeManager.order));
-  prefs.setInt("direction", SortDirection.values.indexOf(homeManager.orientation));
+  prefs.setInt("order", SortCriterion.values.indexOf(homeController.order));
+  prefs.setInt("direction", SortDirection.values.indexOf(homeController.orientation));
 }
 
 Future<void> storeSavedStopwatchState(SavedStopwatchModel model) async {
@@ -115,12 +115,12 @@ Future<void> storeSavedStopwatchState(SavedStopwatchModel model) async {
   prefs.setStringList("history", history);
 }
 
-Future<void> storeStopwatchState(StopwatchModel model, HomeManager homeManager) async {
+Future<void> storeStopwatchState(StopwatchModel model, HomeController homeController) async {
   final prefs = await SharedPreferences.getInstance();
-  List<String> home = prefs.getStringList(homeManager.name) ?? [];
+  List<String> home = prefs.getStringList(homeController.name) ?? [];
   home.removeWhere(
     (element) => jsonDecode(element)["id"] == model.id,
   );
   home.add(jsonEncode(model));
-  prefs.setStringList(homeManager.name, home);
+  prefs.setStringList(homeController.name, home);
 }

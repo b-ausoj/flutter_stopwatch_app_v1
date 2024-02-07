@@ -1,17 +1,17 @@
-import 'package:flutter_stopwatch_app_v1/managers/manager.dart';
+import 'package:flutter_stopwatch_app_v1/controllers/badge_controller.dart';
 import 'package:flutter_stopwatch_app_v1/utils/badge_checking.dart';
 
-class StartManager extends Manager {
+class StartController extends BadgeController {
   @override
   String name;
 
   int badgeLabel = 0;
   bool badgeVisible = false;
 
-  StartManager(this.name);
+  StartController(this.name);
 
   @override
-  void updateBadge() {
+  void refreshBadge() {
     isTextBadgeRequired(name).then((value) => badgeVisible = value);
     getUnseenRecordsCount().then((value) => badgeLabel = value);
   }

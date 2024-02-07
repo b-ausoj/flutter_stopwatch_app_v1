@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_stopwatch_app_v1/controllers/home_controller.dart';
+import 'package:flutter_stopwatch_app_v1/controllers/start_controller.dart';
 import 'package:flutter_stopwatch_app_v1/enums/start_card_menu_item.dart';
-import 'package:flutter_stopwatch_app_v1/managers/home_manager.dart';
-import 'package:flutter_stopwatch_app_v1/managers/start_manager.dart';
 import 'package:flutter_stopwatch_app_v1/pages/home.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/navigation_drawer.dart';
@@ -21,7 +21,7 @@ class Start extends StatefulWidget {
 
 class _StartState extends State<Start> {
   final List<String> screens = [];
-  final List<StartManager> startManagers =
+  final List<StartController> startControllers =
       []; // could combine / include screens
   var scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -32,9 +32,9 @@ class _StartState extends State<Start> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("Stopwatch by Josua"),
-        leading: NavIcon(HomeManager(context, "")),
+        leading: NavIcon(HomeController(context, "")),
       ),
-      drawer: NavDrawer(screens, StartManager(""), "Start"),
+      drawer: NavDrawer(screens, StartController(""), "Start"),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -58,7 +58,7 @@ class _StartState extends State<Start> {
                           leading: StopwatchIcon(screen),
                           title: Center(
                               child: StartTextWithBadge(
-                                  startManagers[screens.indexOf(screen)])),
+                                  startControllers[screens.indexOf(screen)])),
                           trailing: StartPopupMenuButton(
                               onSelected: (StartCardMenuItem item) {
                             switch (item) {
@@ -73,8 +73,8 @@ class _StartState extends State<Start> {
                                 .push(MaterialPageRoute(
                                     builder: (context) => Home(screen)))
                                 .then((value) {
-                                    startManagers[screens.indexOf(screen)]
-                                        .updateBadge(); setState(() {
+                                    startControllers[screens.indexOf(screen)]
+                                        .refreshBadge(); setState(() {
                                           
                                         });});
                           },
@@ -90,8 +90,8 @@ class _StartState extends State<Start> {
                       title: const Text("Add new Screen"),
                       onTap: () {
                         screens.add("Screen ${screens.length + 1}");
-                        startManagers
-                            .add(StartManager("Screen ${screens.length}"));
+                        startControllers
+                            .add(StartController("Screen ${screens.length}"));
                         storeScreens(screens);
                         setState(() {});
                         Navigator.of(context).push(MaterialPageRoute(
@@ -112,6 +112,6 @@ class _StartState extends State<Start> {
   @override
   void initState() {
     super.initState();
-    loadScreens(screens, startManagers, () => setState(() {}));
+    loadScreens(screens, startControllers, () => setState(() {}));
   }
 }

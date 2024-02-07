@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_stopwatch_app_v1/controllers/badge_controller.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_criterion.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
-import 'package:flutter_stopwatch_app_v1/managers/manager.dart';
 import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/utils/badge_checking.dart';
@@ -11,7 +11,7 @@ import 'package:flutter_stopwatch_app_v1/utils/snackbar_utils.dart';
 import 'package:flutter_stopwatch_app_v1/utils/sorting.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/stopwatch_card.dart';
 
-class HomeManager extends Manager{
+class HomeController extends BadgeController {
   // TODO: auf github schauen wo überall die cardsCount aktualisiert wird
 
   BuildContext context;
@@ -28,24 +28,19 @@ class HomeManager extends Manager{
   int badgeLabel = 0;
   bool badgeVisible = false;
 
-  HomeManager(this.context, this.name);
+  HomeController(this.context, this.name);
 
   get order => _order;
   get orientation => _direction;
-  get stopwatchCards => _stopwatchCards;
 
-  @override
-  void updateBadge() {
-    isMenuBadgeRequired(name).then((value) => badgeVisible = value);
-    getUnseenRecordsCount().then((value) => badgeLabel = value);
-  }
+  get stopwatchCards => _stopwatchCards;
 
   Future<void> addStopwatch() async {
     int id = StopwatchModel.nextId++;
     // TODO: not taking the card count but the highest number a stopwatch has in "Athlete X" or cardsCount (whatever is bigger)
     _stopwatchCards.add(StopwatchCard("Athlete ${++_cardsCount}",
         (int id, String name) => deleteStopwatch(id, name), changedState, id,
-        key: Key("$id"), homeManager: this));
+        key: Key("$id"), homeController: this));
     _cardsCount = _stopwatchCards.length;
     storeHomeState(this);
     changedState();
@@ -96,6 +91,12 @@ class HomeManager extends Manager{
             }));
   }
 
+  @override
+  void refreshBadge() {
+    isMenuBadgeRequired(name).then((value) => badgeVisible = value);
+    getUnseenRecordsCount().then((value) => badgeLabel = value);
+  }
+
   void resetAllStopwatches() {
     // save all in json string list
     // call everyone to reset itself
@@ -132,7 +133,7 @@ class HomeManager extends Manager{
         json["id"],
         key: Key("${json["id"]}"),
         json: json,
-        homeManager: this,
+        homeController: this,
       ));
     }
     _cardsCount = _stopwatchCards.length;
@@ -145,7 +146,7 @@ class HomeManager extends Manager{
     changedState();
     storeHomeState(this); // TODO: a bit redundant
   }
-
+  
   void startAllStopwatches() {
     for (var element in _stopwatchCards) {
       element.stopwatchModel.start();

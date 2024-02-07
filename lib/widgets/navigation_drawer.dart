@@ -1,8 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_stopwatch_app_v1/managers/home_manager.dart';
-import 'package:flutter_stopwatch_app_v1/managers/manager.dart';
+import 'package:flutter_stopwatch_app_v1/controllers/badge_controller.dart';
 import 'package:flutter_stopwatch_app_v1/pages/about.dart';
 import 'package:flutter_stopwatch_app_v1/pages/history.dart';
 import 'package:flutter_stopwatch_app_v1/pages/home.dart';
@@ -13,12 +12,12 @@ import 'package:flutter_stopwatch_app_v1/widgets/nav_text_with_badge.dart';
 
 class NavDrawer extends StatefulWidget {
   final List<String> screens;
-  // add list of startManagers so that if we open the drawer from start page and
+  // add list of startControllers so that if we open the drawer from start page and
   // then navigate to a screen and go back per arrows (back wishing)
   // the badge will be updated
-  final Manager manager;
+  final BadgeController controller;
   final String name;
-  const NavDrawer(this.screens, this.manager, this.name, {super.key});
+  const NavDrawer(this.screens, this.controller, this.name, {super.key});
 
   @override
   State<NavDrawer> createState() => _NavDrawerState();
@@ -80,7 +79,7 @@ class _NavDrawerState extends State<NavDrawer> {
           Navigator.pop(context);
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) => const History()))
-              .then((value) => widget.manager.updateBadge());
+              .then((value) => widget.controller.refreshBadge());
           break;
         case 2:
           Navigator.pop(context);
