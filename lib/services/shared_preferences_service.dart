@@ -23,16 +23,11 @@ Future<void> logAllSharedPreferences() async {
   log("logAllSharedPreferences end");
 }
 
-Future<void> loadScreens(List<String> screens, List<StartController> startControllers, var update) async {
+Future<void> loadScreens(List<String> screens, var update) async {
   screens.clear();
   final prefs = await SharedPreferences.getInstance();
   log("loadScreens${prefs.getStringList("screens")}");
   screens.addAll(prefs.getStringList("screens") ?? []);
-  for (String screen in screens) {
-    StartController controller = StartController(screen);
-    startControllers.add(controller);
-    controller.refreshBadgeState();
-  }
   update();
 }
 

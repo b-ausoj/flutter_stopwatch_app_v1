@@ -3,6 +3,7 @@
 // that controls a screen (view) with a badge
 // must have a method to refresh the badge state
 abstract class BadgeController {
-  String get name;
+  int badgeLabel = 0;
+  bool badgeVisible = false;
   void refreshBadgeState();
 }

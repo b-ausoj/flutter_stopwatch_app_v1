@@ -21,9 +21,9 @@ class Start extends StatefulWidget {
 
 class _StartState extends State<Start> {
   final List<String> screens = [];
-  final List<StartController> startControllers =
-      []; // could combine / include screens
-  var scaffoldKey = GlobalKey<ScaffoldState>();
+  late final StartController startController = StartController(screens, () {
+    setState(() {});
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +32,9 @@ class _StartState extends State<Start> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("Stopwatch by Josua"),
-        leading: NavIcon(HomeController(context, "")),
+        leading: NavIcon(startController),
       ),
-      drawer: NavDrawer(screens, StartController(""), "Start"),
+      drawer: NavDrawer(screens, startController, "Start"),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -58,7 +58,7 @@ class _StartState extends State<Start> {
                           leading: StopwatchIcon(screen),
                           title: Center(
                               child: StartTextWithBadge(
-                                  startControllers[screens.indexOf(screen)])),
+                                  startController, screens.indexOf(screen))),
                           trailing: StartPopupMenuButton(
                               onSelected: (StartCardMenuItem item) {
                             switch (item) {
@@ -73,10 +73,9 @@ class _StartState extends State<Start> {
                                 .push(MaterialPageRoute(
                                     builder: (context) => Home(screen)))
                                 .then((value) {
-                                    startControllers[screens.indexOf(screen)]
-                                        .refreshBadgeState(); setState(() {
-                                          
-                                        });});
+                              startController.refreshBadgeState();
+                              setState(() {});
+                            });
                           },
                         ),
                       )),
@@ -90,13 +89,17 @@ class _StartState extends State<Start> {
                       title: const Text("Add new Screen"),
                       onTap: () {
                         screens.add("Screen ${screens.length + 1}");
-                        startControllers
-                            .add(StartController("Screen ${screens.length}"));
+                        startController.refreshBadgeState();
                         storeScreens(screens);
                         setState(() {});
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                Home("Screen ${screens.length}")));
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(
+                                builder: (context) =>
+                                    Home("Screen ${screens.length}")))
+                            .then((value) {
+                          startController.refreshBadgeState();
+                          setState(() {});
+                        });
                       },
                     ),
                   ),
@@ -112,6 +115,10 @@ class _StartState extends State<Start> {
   @override
   void initState() {
     super.initState();
-    loadScreens(screens, startControllers, () => setState(() {}));
+    loadScreens(
+        screens,
+        () => setState(() {
+              startController.refreshBadgeState();
+            }));
   }
 }

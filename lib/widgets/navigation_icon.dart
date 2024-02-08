@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stopwatch_app_v1/controllers/home_controller.dart';
+import 'package:flutter_stopwatch_app_v1/controllers/badge_controller.dart';
 
 class NavIcon extends StatefulWidget {
-  final HomeController homeController;
+  final BadgeController homeController;
 
   const NavIcon(this.homeController, {super.key});
 

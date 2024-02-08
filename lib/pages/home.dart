@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_stopwatch_app_v1/controllers/home_controller.dart';
-import 'package:flutter_stopwatch_app_v1/controllers/start_controller.dart';
 import 'package:flutter_stopwatch_app_v1/enums/home_menu_item.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_criterion.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
@@ -28,7 +27,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late final Ticker _ticker;
   late final HomeController _homeController;
   late final List<String> screens;
-  late final List<StartController> startControllers;
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +112,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     super.initState();
     log("init in home");
     loadHomeState(_homeController = HomeController(context, widget.name));
-    loadScreens(screens = [], startControllers = [], () => setState(() {}));
+    loadScreens(screens = [], () => setState(() {})); // do I have to do something in setState with the controller?
     _ticker = createTicker((elapsed) {
       setState(() {});
     });

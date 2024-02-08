@@ -18,15 +18,11 @@ class HomeController extends BadgeController {
 
   final List<StopwatchCard> _stopwatchCards = [];
   final List<String> _oldHome = [];
-  @override
   String name;
 
   int _cardsCount = 0;
   SortCriterion _order = SortCriterion.creationDate;
   SortDirection _direction = SortDirection.ascending;
-
-  int badgeLabel = 0;
-  bool badgeVisible = false;
 
   HomeController(this.context, this.name);
 
@@ -46,7 +42,10 @@ class HomeController extends BadgeController {
     changedState();
   }
 
-  void changedState() => sortAndListCards(_stopwatchCards, _order, _direction);
+  void changedState() {
+    sortAndListCards(_stopwatchCards, _order, _direction);
+    refreshBadgeState();
+  }
 
   void deleteAllStopwatches() {
     _oldHome.clear();
@@ -146,7 +145,7 @@ class HomeController extends BadgeController {
     changedState();
     storeHomeState(this); // TODO: a bit redundant
   }
-  
+
   void startAllStopwatches() {
     for (var element in _stopwatchCards) {
       element.stopwatchModel.start();

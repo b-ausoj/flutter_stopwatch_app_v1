@@ -1,21 +1,30 @@
+import 'dart:developer';
+
 import 'package:flutter_stopwatch_app_v1/controllers/badge_controller.dart';
 import 'package:flutter_stopwatch_app_v1/utils/badge_checking.dart';
 
 class StartController extends BadgeController {
-  @override
-  String name;
+  List<String> names = [];
+  // needs the label/visible for the menu(drawr) icon an the screen list items
+  // TODO: use better naming for the list
+  List<bool> badgeVisibles = [];
 
-  int badgeLabel = 0;
-  bool badgeVisible = false;
+  void Function() update;
 
-  StartController(this.name);
+  StartController(this.names, this.update) {
+    refreshBadgeState();
+  }
 
   @override
   void refreshBadgeState() {
-    isTextBadgeRequired(name).then((value) => badgeVisible = value);
+    badgeVisibles = List.filled(names.length, false);
+    // could do all of that in parallel instead of .then
+    isMenuBadgeRequired("").then((value) => badgeVisible = value);
     getUnseenRecordsCount().then((value) => badgeLabel = value);
+
+    for (int i = 0; i < names.length; i++) {
+      isTextBadgeRequired(names[i]).then((value) => badgeVisibles[i] = value);
+    }
+    update(); // calls set state because start badge doesn't have a ticker with setState
   }
-
-
-
 }
