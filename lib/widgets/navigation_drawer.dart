@@ -43,12 +43,14 @@ class _NavDrawerState extends State<NavDrawer> {
             ),
           ),
           ..._screens.map((String screen) => NavigationDrawerDestination(
-              icon: StopwatchIcon(screen), label: NavTextWithBadge(screen, false))),
+              icon: StopwatchIcon(screen),
+              label: NavTextWithBadge(screen, false))),
           const NavigationDrawerDestination(
               icon: Icon(Icons.add), label: Text("Add Screen")),
           const Divider(),
           const NavigationDrawerDestination(
-              icon: Icon(Icons.history), label: NavTextWithBadge("Records", true)),
+              icon: Icon(Icons.history),
+              label: NavTextWithBadge("Records", true)),
           const NavigationDrawerDestination(
               icon: Icon(Icons.settings_outlined), label: Text("Settings")),
           const NavigationDrawerDestination(
@@ -56,30 +58,32 @@ class _NavDrawerState extends State<NavDrawer> {
         ]);
   }
 
-  void handleScreenChanged(int selectedScreen) {
-    log("$selectedScreen");
-    String? _selectedScreen = _screens.elementAtOrNull(selectedScreen);
+  void handleScreenChanged(int selectedIndex) {
+    log("$selectedIndex");
+    String? selectedScreen = _screens.elementAtOrNull(selectedIndex);
 
-    if (_selectedScreen != null) {
+    if (selectedScreen != null) {
       Navigator.pop(context);
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => Home(_selectedScreen)));
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => Home(selectedScreen)))
+          .then((value) => widget.controller.refreshBadgeState());
     } else {
       int base = _screens.length;
-      switch (selectedScreen - base) {
+      switch (selectedIndex - base) {
         case 0:
           Navigator.pop(context);
           _screens.add("Screen ${_screens.length + 1}");
           storeScreens(_screens);
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  Home("Screen ${_screens.length}")));
+          Navigator.of(context)
+              .push(MaterialPageRoute(
+                  builder: (context) => Home("Screen ${_screens.length}")))
+              .then((value) => widget.controller.refreshBadgeState());
           break;
         case 1:
           Navigator.pop(context);
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) => const History()))
-              .then((value) => widget.controller.refreshBadge());
+              .then((value) => widget.controller.refreshBadgeState());
           break;
         case 2:
           Navigator.pop(context);
@@ -97,7 +101,7 @@ class _NavDrawerState extends State<NavDrawer> {
     }
 
     setState(() {
-      _selectedIndex = selectedScreen;
+      _selectedIndex = selectedIndex;
     });
   }
 }

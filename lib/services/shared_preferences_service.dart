@@ -31,7 +31,7 @@ Future<void> loadScreens(List<String> screens, List<StartController> startContro
   for (String screen in screens) {
     StartController controller = StartController(screen);
     startControllers.add(controller);
-    controller.refreshBadge();
+    controller.refreshBadgeState();
   }
   update();
 }
@@ -59,7 +59,7 @@ Future<void> loadHomeState(HomeController homeController) async {
   }
   StopwatchModel.nextId = prefs.getInt("nextStopwatchId") ?? 1;
   homeController.setSorting(SortCriterion.values[prefs.getInt("order") ?? 0], SortDirection.values[prefs.getInt("direction") ?? 0]);
-  homeController.refreshBadge();
+  homeController.refreshBadgeState();
   Timer(const Duration(milliseconds: 100), () => log("after update badge${homeController.badgeLabel}"));
 }
 

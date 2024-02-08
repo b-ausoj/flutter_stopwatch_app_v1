@@ -11,7 +11,7 @@ class StartController extends BadgeController {
   StartController(this.name);
 
   @override
-  void refreshBadge() {
+  void refreshBadgeState() {
     isTextBadgeRequired(name).then((value) => badgeVisible = value);
     getUnseenRecordsCount().then((value) => badgeLabel = value);
   }

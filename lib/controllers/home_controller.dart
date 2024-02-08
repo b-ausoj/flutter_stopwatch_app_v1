@@ -92,7 +92,7 @@ class HomeController extends BadgeController {
   }
 
   @override
-  void refreshBadge() {
+  void refreshBadgeState() {
     isMenuBadgeRequired(name).then((value) => badgeVisible = value);
     getUnseenRecordsCount().then((value) => badgeLabel = value);
   }

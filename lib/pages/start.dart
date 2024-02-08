@@ -74,7 +74,7 @@ class _StartState extends State<Start> {
                                     builder: (context) => Home(screen)))
                                 .then((value) {
                                     startControllers[screens.indexOf(screen)]
-                                        .refreshBadge(); setState(() {
+                                        .refreshBadgeState(); setState(() {
                                           
                                         });});
                           },
