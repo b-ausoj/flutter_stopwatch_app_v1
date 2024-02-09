@@ -1,14 +1,12 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/controllers/badge_controller.dart';
 import 'package:flutter_stopwatch_app_v1/pages/about_page.dart';
 import 'package:flutter_stopwatch_app_v1/pages/recordings_page.dart';
-import 'package:flutter_stopwatch_app_v1/pages/stopwatches_page.dart';
 import 'package:flutter_stopwatch_app_v1/pages/settings_page.dart';
+import 'package:flutter_stopwatch_app_v1/pages/stopwatches_page.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/stopwatch_icon.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/nav_text_with_badge.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/stopwatch_icon.dart';
 
 class NavDrawer extends StatefulWidget {
   final List<String> screens;
@@ -59,13 +57,13 @@ class _NavDrawerState extends State<NavDrawer> {
   }
 
   void handleScreenChanged(int selectedIndex) {
-    log("$selectedIndex");
     String? selectedScreen = _screens.elementAtOrNull(selectedIndex);
 
     if (selectedScreen != null) {
       Navigator.pop(context);
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => StopwatchesPage(selectedScreen)))
+          .push(MaterialPageRoute(
+              builder: (context) => StopwatchesPage(selectedScreen)))
           .then((value) => widget.controller.refreshBadgeState());
     } else {
       int base = _screens.length;
@@ -76,19 +74,21 @@ class _NavDrawerState extends State<NavDrawer> {
           storeScreens(_screens);
           Navigator.of(context)
               .push(MaterialPageRoute(
-                  builder: (context) => StopwatchesPage("Screen ${_screens.length}")))
+                  builder: (context) =>
+                      StopwatchesPage("Screen ${_screens.length}")))
               .then((value) => widget.controller.refreshBadgeState());
           break;
         case 1:
           Navigator.pop(context);
           Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => const RecordingsPage()))
+              .push(MaterialPageRoute(
+                  builder: (context) => const RecordingsPage()))
               .then((value) => widget.controller.refreshBadgeState());
           break;
         case 2:
           Navigator.pop(context);
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => const SettingsPage()));
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const SettingsPage()));
           break;
         case 3:
           Navigator.pop(context);

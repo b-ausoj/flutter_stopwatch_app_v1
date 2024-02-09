@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/controllers/start_controller.dart';
 import 'package:flutter_stopwatch_app_v1/enums/start_page_card_menu_item.dart';
@@ -26,7 +24,6 @@ class _StartPageState extends State<StartPage> {
 
   @override
   Widget build(BuildContext context) {
-    log("build Start");
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -70,7 +67,8 @@ class _StartPageState extends State<StartPage> {
                           onTap: () {
                             Navigator.of(context)
                                 .push(MaterialPageRoute(
-                                    builder: (context) => StopwatchesPage(screen)))
+                                    builder: (context) =>
+                                        StopwatchesPage(screen)))
                                 .then((value) {
                               startController.refreshBadgeState();
                               setState(() {});
@@ -93,8 +91,8 @@ class _StartPageState extends State<StartPage> {
                         setState(() {});
                         Navigator.of(context)
                             .push(MaterialPageRoute(
-                                builder: (context) =>
-                                    StopwatchesPage("Screen ${screens.length}")))
+                                builder: (context) => StopwatchesPage(
+                                    "Screen ${screens.length}")))
                             .then((value) {
                           startController.refreshBadgeState();
                           setState(() {});

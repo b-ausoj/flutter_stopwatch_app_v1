@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/enums/recordings_page_card_menu_item.dart';
@@ -14,7 +13,8 @@ class RecordingsPage extends StatefulWidget {
   State<RecordingsPage> createState() => _RecordingsPageState();
 }
 
-class _RecordingsPageState extends State<RecordingsPage> with SingleTickerProviderStateMixin {
+class _RecordingsPageState extends State<RecordingsPage>
+    with SingleTickerProviderStateMixin {
   final List<RecordingCard> _recordingCards = [];
   final List<Widget> _recordingsList = [];
 
@@ -242,7 +242,6 @@ class _RecordingsPageState extends State<RecordingsPage> with SingleTickerProvid
     for (RecordingCard card in _recordingCards) {
       if (card.recordingModel.startingTime == timestamp) {
         card.recordingModel.viewed = true;
-        log("messageeeeeeeeeeeeeeeeee");
       }
     }
     createHistoryList();
@@ -252,8 +251,7 @@ class _RecordingsPageState extends State<RecordingsPage> with SingleTickerProvid
   Future<void> deleteStopwatch(int id, String name) async {
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Stopwatch '$name' has been removed")));
-    _recordingCards
-        .removeWhere((element) => element.recordingModel.id == id);
+    _recordingCards.removeWhere((element) => element.recordingModel.id == id);
     createHistoryList();
     final prefs = await SharedPreferences.getInstance();
     List<String> recordings = prefs.getStringList("recordings") ?? [];

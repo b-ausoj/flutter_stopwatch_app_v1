@@ -16,7 +16,6 @@ class _StopwatchIconState extends State<StopwatchIcon> {
   void initState() {
     super.initState();
     //isIconBadgeRequired(widget.name).then((value) => setState(() => badgeVisible = value));
-
   }
 
   @override

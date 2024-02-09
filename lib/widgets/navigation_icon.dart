@@ -11,13 +11,14 @@ class NavIcon extends StatefulWidget {
 }
 
 class _NavIconState extends State<NavIcon> with SingleTickerProviderStateMixin {
-
   @override
   Widget build(BuildContext context) {
     return IconButton(
       icon: Badge(
         isLabelVisible: widget.stopwatchesPageController.badgeVisible,
-        label: widget.stopwatchesPageController.badgeLabel > 0 ? Text("${widget.stopwatchesPageController.badgeLabel}") : null,
+        label: widget.stopwatchesPageController.badgeLabel > 0
+            ? Text("${widget.stopwatchesPageController.badgeLabel}")
+            : null,
         smallSize: 8.0,
         child: const Icon(Icons.menu),
       ),

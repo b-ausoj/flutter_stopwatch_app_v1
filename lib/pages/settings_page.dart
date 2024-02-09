@@ -10,7 +10,11 @@ class SettingsPage extends StatelessWidget {
         title: const Text("Settings"),
       ),
       body: const Center(
-        child: Text("There are currently no settings \nPlease have a look at the about page \n;)", textAlign: TextAlign.center,),
-      ),);
+        child: Text(
+          "There are currently no settings \nPlease have a look at the about page \n;)",
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
   }
 }

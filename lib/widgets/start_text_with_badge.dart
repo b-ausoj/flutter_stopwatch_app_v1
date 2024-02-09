@@ -12,7 +12,6 @@ class StartTextWithBadge extends StatefulWidget {
 }
 
 class _StartTextWithBadgeState extends State<StartTextWithBadge> {
-
   @override
   Widget build(BuildContext context) {
     return Badge(
@@ -22,8 +21,9 @@ class _StartTextWithBadgeState extends State<StartTextWithBadge> {
       smallSize: 8.0,
       child: Padding(
         padding: const EdgeInsets.only(right: 16.0),
-        child: Text(widget.controller.names[widget.index],
-            ),
+        child: Text(
+          widget.controller.names[widget.index],
+        ),
       ),
     );
   }

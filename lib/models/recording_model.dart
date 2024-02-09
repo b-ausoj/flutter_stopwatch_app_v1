@@ -16,7 +16,8 @@ class RecordingModel {
   List<LapModel> splitTimes = [];
 
   // constructor
-  RecordingModel(this.id, this.name, this.startingTime, this.viewed, this.totalTime);
+  RecordingModel(
+      this.id, this.name, this.startingTime, this.viewed, this.totalTime);
 
   factory RecordingModel.fromJson(Map<String, dynamic> json) {
     RecordingModel model = RecordingModel(

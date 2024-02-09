@@ -34,7 +34,8 @@ class AboutPage extends StatelessWidget {
                     foregroundColor: Colors.black,
                     backgroundColor: const Color(0xFFEFEFEF))),
             TextButton.icon(
-                onPressed: () => showShortSnackBar(context, "Please add the app to the store first!"),
+                onPressed: () => showShortSnackBar(
+                    context, "Please add the app to the store first!"),
                 icon: const Icon(Icons.star_border_outlined),
                 label: const Text("Rate this app"),
                 style: TextButton.styleFrom(
@@ -46,16 +47,16 @@ class AboutPage extends StatelessWidget {
                 InkWell(
                   child: const Text("Terms & conditions"),
                   onTap: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => const AGBPage()));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const AGBPage()));
                   },
                 ),
                 const Text("|"),
                 InkWell(
                   child: const Text("Privacy policy"),
                   onTap: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => const AGBPage()));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const AGBPage()));
                   },
                 ),
               ],

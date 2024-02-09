@@ -15,7 +15,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 Future<void> loadScreens(List<String> screens, var update) async {
   screens.clear();
   final prefs = await SharedPreferences.getInstance();
-  log("loadScreens${prefs.getStringList("screens")}");
   screens.addAll(prefs.getStringList("screens") ?? []);
   update();
 }
@@ -27,7 +26,6 @@ Future<void> loadStopwatchesPageState(
       prefs.getStringList(stopwatchesPageController.name) ?? [];
   for (String entry in stopwatchesPage) {
     dynamic json = jsonDecode(entry);
-    log(json["name"]);
     stopwatchesPageController.stopwatchCards.add(StopwatchCard(
       json["name"],
       stopwatchesPageController.deleteStopwatch,
@@ -43,8 +41,6 @@ Future<void> loadStopwatchesPageState(
       SortCriterion.values[prefs.getInt("order") ?? 0],
       SortDirection.values[prefs.getInt("direction") ?? 0]);
   stopwatchesPageController.refreshBadgeState();
-  Timer(const Duration(milliseconds: 100),
-      () => log("after update badge${stopwatchesPageController.badgeLabel}"));
 }
 
 Future<void> logAllSharedPreferences() async {
@@ -107,7 +103,6 @@ Future<void> storeStopwatchesPageState(
   List<String> stopwatchesPage = [];
   for (StopwatchCard card in stopwatchesPageController.stopwatchCards) {
     stopwatchesPage.add(jsonEncode(card.stopwatchModel));
-    log(jsonEncode(card.stopwatchModel));
   }
   prefs.setStringList(stopwatchesPageController.name, stopwatchesPage);
   prefs.setInt("nextStopwatchId", StopwatchModel.nextId);

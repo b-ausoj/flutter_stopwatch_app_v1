@@ -13,16 +13,14 @@ class RecordingCard extends StatefulWidget {
       ? RecordingModel(0, "bla", DateTime.now(), false,
           Duration.zero) // TODO: schöner/korrekt machen
       : RecordingModel.fromJson(json);
-  RecordingCard(this.deleteRecording,
-      {super.key, this.json = const {}});
+  RecordingCard(this.deleteRecording, {super.key, this.json = const {}});
 
   @override
   State<RecordingCard> createState() => _RecordingCardState();
 }
 
 class _RecordingCardState extends State<RecordingCard> {
-  late final RecordingModel _recordingModel =
-      widget.recordingModel;
+  late final RecordingModel _recordingModel = widget.recordingModel;
 
   @override
   Widget build(BuildContext context) {

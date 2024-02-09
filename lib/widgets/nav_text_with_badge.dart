@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/utils/badge_checking.dart';
 
@@ -19,7 +17,6 @@ class _NavTextWithBadgeState extends State<NavTextWithBadge> {
 
   @override
   void initState() {
-    log("initState of text with badge in drawer?");
     super.initState();
     isTextBadgeRequired(widget.name)
         .then((value) => setState(() => badgeVisible = value));

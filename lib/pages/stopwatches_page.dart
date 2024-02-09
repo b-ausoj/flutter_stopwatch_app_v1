@@ -1,12 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_stopwatch_app_v1/controllers/stopwatches_page_controller.dart';
-import 'package:flutter_stopwatch_app_v1/enums/stopwatches_page_menu_item.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_criterion.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
+import 'package:flutter_stopwatch_app_v1/enums/stopwatches_page_menu_item.dart';
 import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/add_stopwatch_card.dart';
@@ -23,7 +21,8 @@ class StopwatchesPage extends StatefulWidget {
   State<StopwatchesPage> createState() => _StopwatchesPageState();
 }
 
-class _StopwatchesPageState extends State<StopwatchesPage> with SingleTickerProviderStateMixin {
+class _StopwatchesPageState extends State<StopwatchesPage>
+    with SingleTickerProviderStateMixin {
   late final Ticker _ticker;
   late final StopwatchesPageController _stopwatchesPageController;
   late final List<String> screens;
@@ -43,9 +42,11 @@ class _StopwatchesPageState extends State<StopwatchesPage> with SingleTickerProv
                   _stopwatchesPageController.addStopwatch();
                   break;
                 case StopwatchesPageMenuItem.saveAll:
-                  for (var element in _stopwatchesPageController.stopwatchCards) {
+                  for (var element
+                      in _stopwatchesPageController.stopwatchCards) {
                     saveStopwatch(element.stopwatchModel);
-                    storeStopwatchState(element.stopwatchModel, _stopwatchesPageController);
+                    storeStopwatchState(
+                        element.stopwatchModel, _stopwatchesPageController);
                   }
                   _stopwatchesPageController.changedState();
                   break;
@@ -92,9 +93,11 @@ class _StopwatchesPageState extends State<StopwatchesPage> with SingleTickerProv
             if (oldIndex < newIndex) {
               newIndex -= 1;
             }
-            var item = _stopwatchesPageController.stopwatchCards.removeAt(oldIndex);
+            var item =
+                _stopwatchesPageController.stopwatchCards.removeAt(oldIndex);
             _stopwatchesPageController.stopwatchCards.insert(newIndex, item);
-            storeStopwatchesPageState(_stopwatchesPageController); // TODO: a bit redundant
+            storeStopwatchesPageState(
+                _stopwatchesPageController); // TODO: a bit redundant
           },
         ),
       ),
@@ -110,8 +113,12 @@ class _StopwatchesPageState extends State<StopwatchesPage> with SingleTickerProv
   @override
   void initState() {
     super.initState();
-    loadStopwatchesPageState(_stopwatchesPageController = StopwatchesPageController(context, widget.name));
-    loadScreens(screens = [], () => setState(() {})); // do I have to do something in setState with the controller?
+    loadStopwatchesPageState(_stopwatchesPageController =
+        StopwatchesPageController(context, widget.name));
+    loadScreens(
+        screens = [],
+        () => setState(
+            () {})); // do I have to do something in setState with the controller?
     _ticker = createTicker((elapsed) {
       setState(() {});
     });

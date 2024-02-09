@@ -81,14 +81,14 @@ class _StopwatchCardState extends State<StopwatchCard>
                   children: [
                     Expanded(
                         child: InkWell(
-                          onTap: _showRenameDialog,
-                          child: Text(_stopwatchModel.name,
-                              style: const TextStyle(
-                                  fontSize: 26,
-                                  fontWeight: FontWeight.w400,
-                                  letterSpacing: 0,
-                                  height: 0)),
-                        )),
+                      onTap: _showRenameDialog,
+                      child: Text(_stopwatchModel.name,
+                          style: const TextStyle(
+                              fontSize: 26,
+                              fontWeight: FontWeight.w400,
+                              letterSpacing: 0,
+                              height: 0)),
+                    )),
                     StopwatchPopupMenuButton(
                       onSelected: (StopwatchCardMenuItem item) async {
                         switch (item) {
@@ -113,7 +113,8 @@ class _StopwatchCardState extends State<StopwatchCard>
                                 break;
                               case StopwatchState.stopped:
                                 saveStopwatch(_stopwatchModel);
-                                storeStopwatchState(_stopwatchModel, widget.stopwatchesPageController);
+                                storeStopwatchState(_stopwatchModel,
+                                    widget.stopwatchesPageController);
                                 widget.changedState();
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
@@ -123,7 +124,8 @@ class _StopwatchCardState extends State<StopwatchCard>
                                       label: "Undo reset",
                                       onPressed: () {
                                         _stopwatchModel.restore();
-                                        storeStopwatchState(_stopwatchModel, widget.stopwatchesPageController);
+                                        storeStopwatchState(_stopwatchModel,
+                                            widget.stopwatchesPageController);
                                         widget.changedState();
                                       }),
                                 ));
@@ -143,7 +145,8 @@ class _StopwatchCardState extends State<StopwatchCard>
                                 break;
                               case StopwatchState.stopped:
                                 _stopwatchModel.reset();
-                                storeStopwatchState(_stopwatchModel, widget.stopwatchesPageController);
+                                storeStopwatchState(_stopwatchModel,
+                                    widget.stopwatchesPageController);
                                 widget.changedState();
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
@@ -175,7 +178,8 @@ class _StopwatchCardState extends State<StopwatchCard>
                         StopwatchState.reseted => TextButton.icon(
                             onPressed: () {
                               _stopwatchModel.start();
-                              storeStopwatchState(_stopwatchModel, widget.stopwatchesPageController);
+                              storeStopwatchState(_stopwatchModel,
+                                  widget.stopwatchesPageController);
                               widget.changedState();
                               HapticFeedback.lightImpact();
                             },
@@ -187,7 +191,8 @@ class _StopwatchCardState extends State<StopwatchCard>
                         StopwatchState.running => TextButton.icon(
                             onPressed: () {
                               _stopwatchModel.stop();
-                              storeStopwatchState(_stopwatchModel, widget.stopwatchesPageController);
+                              storeStopwatchState(_stopwatchModel,
+                                  widget.stopwatchesPageController);
                               widget.changedState();
                               HapticFeedback.lightImpact();
                             },
@@ -199,7 +204,8 @@ class _StopwatchCardState extends State<StopwatchCard>
                         StopwatchState.stopped => TextButton.icon(
                             onPressed: () {
                               _stopwatchModel.resume();
-                              storeStopwatchState(_stopwatchModel, widget.stopwatchesPageController);
+                              storeStopwatchState(_stopwatchModel,
+                                  widget.stopwatchesPageController);
                               widget.changedState();
                               HapticFeedback.lightImpact();
                             },
@@ -215,7 +221,8 @@ class _StopwatchCardState extends State<StopwatchCard>
                             _stopwatchModel.state == StopwatchState.running
                                 ? () {
                                     _stopwatchModel.lap();
-                                    storeStopwatchState(_stopwatchModel, widget.stopwatchesPageController);
+                                    storeStopwatchState(_stopwatchModel,
+                                        widget.stopwatchesPageController);
                                     widget.changedState();
                                     HapticFeedback.lightImpact();
                                   }
@@ -263,7 +270,8 @@ class _StopwatchCardState extends State<StopwatchCard>
       builder: (BuildContext context) {
         return RenameDialog(_stopwatchModel.name, (String text) {
           _stopwatchModel.name = text;
-          storeStopwatchState(_stopwatchModel, widget.stopwatchesPageController);
+          storeStopwatchState(
+              _stopwatchModel, widget.stopwatchesPageController);
           widget.changedState();
         });
       },
