@@ -28,13 +28,13 @@ Future<List<String>> getAllRunningScreens() async {
   return runningScreens;
 }
 
-Future<int> getUnseenRecordsCount() async {
+Future<int> getUnseenRecordingsCount() async {
   int count = 0;
 
   final prefs = await SharedPreferences.getInstance();
-  List<String> history = prefs.getStringList("history") ?? [];
+  List<String> recordings = prefs.getStringList("recordings") ?? [];
 
-  for (String entry in history) {
+  for (String entry in recordings) {
     dynamic json = jsonDecode(entry);
     if (!json["viewed"]) {
       count++;
@@ -43,7 +43,7 @@ Future<int> getUnseenRecordsCount() async {
   return count;
 }
 
-// menu badge only if there are any running stopwatches or new records entries
+// menu badge only if there are any running stopwatches or new recordings entries
 Future<bool> isMenuBadgeRequired(String screen) async {
   // check if there are any running stopwatches
   List<String> runningScreens = await getAllRunningScreens();
@@ -51,9 +51,9 @@ Future<bool> isMenuBadgeRequired(String screen) async {
   if (runningScreens.isNotEmpty) {
     return true;
   }
-  // check if there are any unseen records entries
-  int unseenRecordsCount = await getUnseenRecordsCount();
-  return unseenRecordsCount > 0;
+  // check if there are any unseen recordings entries
+  int unseenRecordingsCount = await getUnseenRecordingsCount();
+  return unseenRecordingsCount > 0;
 }
 
 Future<bool> isTextBadgeRequired(String screen) async {

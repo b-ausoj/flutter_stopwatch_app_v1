@@ -7,8 +7,8 @@ void main() {
 }
 
 // TODO: at renaming stopwatches / saved stopwatches / screens, ensure that there is at least one character
-// TODO: undo in history page
-// TODO: reorganize history page
+// TODO: undo in recordings page
+// TODO: reorganize recordings page
 // TODO: settings page where user can set default order and orientation
 // TODO: decide on a default order and orientation
 // TODO: decide on order or sorting as a text
@@ -17,7 +17,7 @@ void main() {
 // TODO: write terms of service
 // TODO: write help page
 // TODO: write tutorial page
-// TODO: records instead of history
+// TODO: recordings instead of recordings
 // TODO: add introduction screen
 // TODO: add an configuration screen where I can save all the stopwatches (with name and order) and load some others
 

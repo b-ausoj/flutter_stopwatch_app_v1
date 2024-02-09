@@ -80,9 +80,9 @@ Future<void> saveStopwatch(StopwatchModel stopwatchModel) async {
   for (LapModel lap in model.lapTimes) {
     model.splitTimes.add(LapModel(lap.id, split = lap.lapTime + split));
   }
-  List<String> history = prefs.getStringList("history") ?? [];
-  history.add(jsonEncode(model));
-  prefs.setStringList("history", history);
+  List<String> recordings = prefs.getStringList("recordings") ?? [];
+  recordings.add(jsonEncode(model));
+  prefs.setStringList("recordings", recordings);
   prefs.setInt("nextSavedStopwatchId", SavedStopwatchModel.nextId);
   stopwatchModel.reset();
 }
@@ -102,12 +102,12 @@ Future<void> storeHomeState(HomeController homeController) async {
 
 Future<void> storeSavedStopwatchState(SavedStopwatchModel model) async {
   final prefs = await SharedPreferences.getInstance();
-  List<String> history = prefs.getStringList("history") ?? [];
-  history.removeWhere(
+  List<String> recordings = prefs.getStringList("recordings") ?? [];
+  recordings.removeWhere(
     (element) => jsonDecode(element)["id"] == model.id,
   );
-  history.add(jsonEncode(model));
-  prefs.setStringList("history", history);
+  recordings.add(jsonEncode(model));
+  prefs.setStringList("recordings", recordings);
 }
 
 Future<void> storeStopwatchState(StopwatchModel model, HomeController homeController) async {

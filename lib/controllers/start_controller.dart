@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter_stopwatch_app_v1/controllers/badge_controller.dart';
 import 'package:flutter_stopwatch_app_v1/utils/badge_checking.dart';
 
@@ -20,7 +18,7 @@ class StartController extends BadgeController {
     badgeVisibles = List.filled(names.length, false);
     // could do all of that in parallel instead of .then
     isMenuBadgeRequired("").then((value) => badgeVisible = value);
-    getUnseenRecordsCount().then((value) => badgeLabel = value);
+    getUnseenRecordingsCount().then((value) => badgeLabel = value);
 
     for (int i = 0; i < names.length; i++) {
       isTextBadgeRequired(names[i]).then((value) => badgeVisibles[i] = value);

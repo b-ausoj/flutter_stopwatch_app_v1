@@ -2,21 +2,21 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_stopwatch_app_v1/enums/history_card_menu_item.dart';
-import 'package:flutter_stopwatch_app_v1/enums/history_menu_item.dart';
+import 'package:flutter_stopwatch_app_v1/enums/recordings_card_menu_item.dart';
+import 'package:flutter_stopwatch_app_v1/enums/recordings_menu_item.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/saved_stopwatch_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class History extends StatefulWidget {
-  const History({super.key});
+class Recordings extends StatefulWidget {
+  const Recordings({super.key});
 
   @override
-  State<History> createState() => _HistoryState();
+  State<Recordings> createState() => _RecordingsState();
 }
 
-class _HistoryState extends State<History> with SingleTickerProviderStateMixin {
+class _RecordingsState extends State<Recordings> with SingleTickerProviderStateMixin {
   final List<SavedStopwatchCard> _savedStopwatchCards = [];
-  final List<Widget> _historyList = [];
+  final List<Widget> _recordingsList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -85,15 +85,15 @@ class _HistoryState extends State<History> with SingleTickerProviderStateMixin {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView.builder(
-          itemCount: _historyList.length,
-          itemBuilder: (context, index) => _historyList[index],
+          itemCount: _recordingsList.length,
+          itemBuilder: (context, index) => _recordingsList[index],
         ),
       ),
     );
   }
 
   void createHistoryList() {
-    _historyList.clear();
+    _recordingsList.clear();
     if (_savedStopwatchCards.isEmpty) return;
     DateTime last = _savedStopwatchCards.first.savedStopwatchModel.startingTime;
     List<Widget> list = [];
@@ -102,7 +102,7 @@ class _HistoryState extends State<History> with SingleTickerProviderStateMixin {
         list.add(card);
       } else {
         var timeStamp = last.copyWith();
-        _historyList.add(Card(
+        _recordingsList.add(Card(
           color: const Color(0xFFEFEFEF),
           elevation: 0,
           child: ExpansionTile(
@@ -159,7 +159,7 @@ class _HistoryState extends State<History> with SingleTickerProviderStateMixin {
       last = card.savedStopwatchModel.startingTime;
     }
     if (list.isNotEmpty) {
-      _historyList.add(Card(
+      _recordingsList.add(Card(
         elevation: 0,
         color: const Color(0xFFEFEFEF),
         child: ExpansionTile(
@@ -256,11 +256,11 @@ class _HistoryState extends State<History> with SingleTickerProviderStateMixin {
         .removeWhere((element) => element.savedStopwatchModel.id == id);
     createHistoryList();
     final prefs = await SharedPreferences.getInstance();
-    List<String> history = prefs.getStringList("history") ?? [];
-    history.removeWhere(
+    List<String> recordings = prefs.getStringList("recordings") ?? [];
+    recordings.removeWhere(
       (element) => jsonDecode(element)["id"] == id,
     );
-    prefs.setStringList("history", history);
+    prefs.setStringList("recordings", recordings);
     setState(() {});
   }
 
@@ -273,8 +273,8 @@ class _HistoryState extends State<History> with SingleTickerProviderStateMixin {
 
   Future<void> _loadHistory() async {
     final prefs = await SharedPreferences.getInstance();
-    List<String> history = prefs.getStringList("history") ?? [];
-    for (String entry in history.reversed) {
+    List<String> recordings = prefs.getStringList("recordings") ?? [];
+    for (String entry in recordings.reversed) {
       _savedStopwatchCards.add(SavedStopwatchCard(
         deleteStopwatch,
         json: jsonDecode(entry),
@@ -291,10 +291,10 @@ class _HistoryState extends State<History> with SingleTickerProviderStateMixin {
 
   Future<void> _storeHistoryState() async {
     final prefs = await SharedPreferences.getInstance();
-    List<String> history = [];
+    List<String> recordings = [];
     for (SavedStopwatchCard card in _savedStopwatchCards) {
-      history.add(jsonEncode(card.savedStopwatchModel));
+      recordings.add(jsonEncode(card.savedStopwatchModel));
     }
-    prefs.setStringList("history", history);
+    prefs.setStringList("recordings", recordings);
   }
 }

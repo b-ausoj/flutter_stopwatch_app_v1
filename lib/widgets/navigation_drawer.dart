@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/controllers/badge_controller.dart';
 import 'package:flutter_stopwatch_app_v1/pages/about.dart';
-import 'package:flutter_stopwatch_app_v1/pages/history.dart';
+import 'package:flutter_stopwatch_app_v1/pages/recordings.dart';
 import 'package:flutter_stopwatch_app_v1/pages/home.dart';
 import 'package:flutter_stopwatch_app_v1/pages/settings.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
@@ -50,7 +50,7 @@ class _NavDrawerState extends State<NavDrawer> {
           const Divider(),
           const NavigationDrawerDestination(
               icon: Icon(Icons.history),
-              label: NavTextWithBadge("Records", true)),
+              label: NavTextWithBadge("Recordings", true)),
           const NavigationDrawerDestination(
               icon: Icon(Icons.settings_outlined), label: Text("Settings")),
           const NavigationDrawerDestination(
@@ -82,7 +82,7 @@ class _NavDrawerState extends State<NavDrawer> {
         case 1:
           Navigator.pop(context);
           Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => const History()))
+              .push(MaterialPageRoute(builder: (context) => const Recordings()))
               .then((value) => widget.controller.refreshBadgeState());
           break;
         case 2:

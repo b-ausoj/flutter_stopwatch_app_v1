@@ -5,9 +5,9 @@ import 'package:flutter_stopwatch_app_v1/utils/badge_checking.dart';
 
 class NavTextWithBadge extends StatefulWidget {
   final String name;
-  final bool isRecords;
+  final bool isRecordings;
 
-  const NavTextWithBadge(this.name, this.isRecords, {super.key});
+  const NavTextWithBadge(this.name, this.isRecordings, {super.key});
 
   @override
   State<NavTextWithBadge> createState() => _NavTextWithBadgeState();
@@ -23,14 +23,14 @@ class _NavTextWithBadgeState extends State<NavTextWithBadge> {
     super.initState();
     isTextBadgeRequired(widget.name)
         .then((value) => setState(() => badgeVisible = value));
-    getUnseenRecordsCount().then((value) => badgeLabel = value);
+    getUnseenRecordingsCount().then((value) => badgeLabel = value);
   }
 
   @override
   Widget build(BuildContext context) {
     return Badge(
-      isLabelVisible: badgeVisible || badgeLabel > 0 && widget.isRecords,
-      label: badgeLabel > 0 && widget.isRecords ? Text("$badgeLabel") : null,
+      isLabelVisible: badgeVisible || badgeLabel > 0 && widget.isRecordings,
+      label: badgeLabel > 0 && widget.isRecordings ? Text("$badgeLabel") : null,
       alignment: Alignment.centerRight,
       offset: const Offset(8, 0),
       smallSize: 8.0,
