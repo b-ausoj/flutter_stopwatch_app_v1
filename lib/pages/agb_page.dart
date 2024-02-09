@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ABG extends StatelessWidget {
-  const ABG({super.key});
+class AGBPage extends StatelessWidget {
+  const AGBPage({super.key});
 
   @override
   Widget build(BuildContext context) {

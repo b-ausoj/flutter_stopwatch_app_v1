@@ -1,25 +1,24 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_stopwatch_app_v1/controllers/home_controller.dart';
 import 'package:flutter_stopwatch_app_v1/controllers/start_controller.dart';
-import 'package:flutter_stopwatch_app_v1/enums/start_card_menu_item.dart';
-import 'package:flutter_stopwatch_app_v1/pages/home.dart';
+import 'package:flutter_stopwatch_app_v1/enums/start_page_card_menu_item.dart';
+import 'package:flutter_stopwatch_app_v1/pages/stopwatches_page.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/navigation_drawer.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/navigation_icon.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/start_popup_menu_button.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/start_page_popup_menu_button.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/start_text_with_badge.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/stopwatch_icon.dart';
 
-class Start extends StatefulWidget {
-  const Start({super.key});
+class StartPage extends StatefulWidget {
+  const StartPage({super.key});
 
   @override
-  State<Start> createState() => _StartState();
+  State<StartPage> createState() => _StartPageState();
 }
 
-class _StartState extends State<Start> {
+class _StartPageState extends State<StartPage> {
   final List<String> screens = [];
   late final StartController startController = StartController(screens, () {
     setState(() {});
@@ -59,19 +58,19 @@ class _StartState extends State<Start> {
                           title: Center(
                               child: StartTextWithBadge(
                                   startController, screens.indexOf(screen))),
-                          trailing: StartPopupMenuButton(
-                              onSelected: (StartCardMenuItem item) {
+                          trailing: StartPagePopupMenuButton(
+                              onSelected: (StartPageCardMenuItem item) {
                             switch (item) {
-                              case StartCardMenuItem.rename:
+                              case StartPageCardMenuItem.rename:
                                 break;
-                              case StartCardMenuItem.delete:
+                              case StartPageCardMenuItem.delete:
                                 break;
                             }
                           }),
                           onTap: () {
                             Navigator.of(context)
                                 .push(MaterialPageRoute(
-                                    builder: (context) => Home(screen)))
+                                    builder: (context) => StopwatchesPage(screen)))
                                 .then((value) {
                               startController.refreshBadgeState();
                               setState(() {});
@@ -95,7 +94,7 @@ class _StartState extends State<Start> {
                         Navigator.of(context)
                             .push(MaterialPageRoute(
                                 builder: (context) =>
-                                    Home("Screen ${screens.length}")))
+                                    StopwatchesPage("Screen ${screens.length}")))
                             .then((value) {
                           startController.refreshBadgeState();
                           setState(() {});

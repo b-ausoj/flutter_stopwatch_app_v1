@@ -1,4 +1,4 @@
-enum HomeMenuItem {
+enum StopwatchesPageMenuItem {
   addStopwatch,
   saveAll,
   resetAll,

@@ -1,0 +1,1 @@
+enum RecordingsPageCardMenuItem { deleteAll, exportAll }

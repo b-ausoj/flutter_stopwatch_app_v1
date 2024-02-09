@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stopwatch_app_v1/enums/saved_stopwatch_card_menu_item.dart';
+import 'package:flutter_stopwatch_app_v1/enums/recording_card_menu_item.dart';
 
-class SavedStopwatchPopupMenuButton extends StatelessWidget {
-  final Function(SavedStopwatchCardMenuItem) onSelected;
+class RecordingPopupMenuButton extends StatelessWidget {
+  final Function(RecordingCardMenuItem) onSelected;
 
-  const SavedStopwatchPopupMenuButton({required this.onSelected, super.key});
+  const RecordingPopupMenuButton({required this.onSelected, super.key});
 
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
         onSelected: onSelected,
         itemBuilder: (BuildContext context) =>
-            <PopupMenuEntry<SavedStopwatchCardMenuItem>>[
-              const PopupMenuItem<SavedStopwatchCardMenuItem>(
-                value: SavedStopwatchCardMenuItem.rename,
+            <PopupMenuEntry<RecordingCardMenuItem>>[
+              const PopupMenuItem<RecordingCardMenuItem>(
+                value: RecordingCardMenuItem.rename,
                 child: Row(
                   children: [
                     Icon(Icons.edit_outlined),
@@ -24,8 +24,8 @@ class SavedStopwatchPopupMenuButton extends StatelessWidget {
                   ],
                 ),
               ),
-              const PopupMenuItem<SavedStopwatchCardMenuItem>(
-                value: SavedStopwatchCardMenuItem.export,
+              const PopupMenuItem<RecordingCardMenuItem>(
+                value: RecordingCardMenuItem.export,
                 child: Row(
                   children: [
                     Icon(Icons.save_alt),
@@ -36,8 +36,8 @@ class SavedStopwatchPopupMenuButton extends StatelessWidget {
                   ],
                 ),
               ),
-              const PopupMenuItem<SavedStopwatchCardMenuItem>(
-                value: SavedStopwatchCardMenuItem.share,
+              const PopupMenuItem<RecordingCardMenuItem>(
+                value: RecordingCardMenuItem.share,
                 child: Row(
                   children: [
                     Icon(Icons.share),
@@ -48,8 +48,8 @@ class SavedStopwatchPopupMenuButton extends StatelessWidget {
                   ],
                 ),
               ),
-              const PopupMenuItem<SavedStopwatchCardMenuItem>(
-                value: SavedStopwatchCardMenuItem.delete,
+              const PopupMenuItem<RecordingCardMenuItem>(
+                value: RecordingCardMenuItem.delete,
                 child: Row(
                   children: [
                     Icon(Icons.delete_outline),

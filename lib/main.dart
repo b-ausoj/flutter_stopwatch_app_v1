@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stopwatch_app_v1/pages/start.dart';
+import 'package:flutter_stopwatch_app_v1/pages/start_page.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 
 void main() {
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
           surfaceTintColor: Color.fromARGB(255, 255, 255, 255),
         ),
       ),
-      home: const Start(),
+      home: const StartPage(),
     );
   }
 }

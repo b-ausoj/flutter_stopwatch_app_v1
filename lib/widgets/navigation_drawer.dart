@@ -2,10 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/controllers/badge_controller.dart';
-import 'package:flutter_stopwatch_app_v1/pages/about.dart';
-import 'package:flutter_stopwatch_app_v1/pages/recordings.dart';
-import 'package:flutter_stopwatch_app_v1/pages/home.dart';
-import 'package:flutter_stopwatch_app_v1/pages/settings.dart';
+import 'package:flutter_stopwatch_app_v1/pages/about_page.dart';
+import 'package:flutter_stopwatch_app_v1/pages/recordings_page.dart';
+import 'package:flutter_stopwatch_app_v1/pages/stopwatches_page.dart';
+import 'package:flutter_stopwatch_app_v1/pages/settings_page.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/stopwatch_icon.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/nav_text_with_badge.dart';
@@ -65,7 +65,7 @@ class _NavDrawerState extends State<NavDrawer> {
     if (selectedScreen != null) {
       Navigator.pop(context);
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => Home(selectedScreen)))
+          .push(MaterialPageRoute(builder: (context) => StopwatchesPage(selectedScreen)))
           .then((value) => widget.controller.refreshBadgeState());
     } else {
       int base = _screens.length;
@@ -76,24 +76,24 @@ class _NavDrawerState extends State<NavDrawer> {
           storeScreens(_screens);
           Navigator.of(context)
               .push(MaterialPageRoute(
-                  builder: (context) => Home("Screen ${_screens.length}")))
+                  builder: (context) => StopwatchesPage("Screen ${_screens.length}")))
               .then((value) => widget.controller.refreshBadgeState());
           break;
         case 1:
           Navigator.pop(context);
           Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => const Recordings()))
+              .push(MaterialPageRoute(builder: (context) => const RecordingsPage()))
               .then((value) => widget.controller.refreshBadgeState());
           break;
         case 2:
           Navigator.pop(context);
           Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => const Settings()));
+              .push(MaterialPageRoute(builder: (context) => const SettingsPage()));
           break;
         case 3:
           Navigator.pop(context);
           Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => const About()));
+              .push(MaterialPageRoute(builder: (context) => const AboutPage()));
           break;
         default:
           throw Exception("Invalid selectedScreen state");

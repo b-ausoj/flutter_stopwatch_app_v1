@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_stopwatch_app_v1/models/lap_model.dart';
 
-class SavedStopwatchModel {
+class RecordingModel {
   // fields
   static int nextId = 1;
   final int id;
@@ -16,10 +16,10 @@ class SavedStopwatchModel {
   List<LapModel> splitTimes = [];
 
   // constructor
-  SavedStopwatchModel(this.id, this.name, this.startingTime, this.viewed, this.totalTime);
+  RecordingModel(this.id, this.name, this.startingTime, this.viewed, this.totalTime);
 
-  factory SavedStopwatchModel.fromJson(Map<String, dynamic> json) {
-    SavedStopwatchModel model = SavedStopwatchModel(
+  factory RecordingModel.fromJson(Map<String, dynamic> json) {
+    RecordingModel model = RecordingModel(
         json["id"],
         json["name"],
         DateTime.fromMillisecondsSinceEpoch(json["startingTime"]),

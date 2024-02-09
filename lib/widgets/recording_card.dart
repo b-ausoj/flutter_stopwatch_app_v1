@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stopwatch_app_v1/enums/saved_stopwatch_card_menu_item.dart';
-import 'package:flutter_stopwatch_app_v1/models/saved_stopwatch_model.dart';
+import 'package:flutter_stopwatch_app_v1/enums/recording_card_menu_item.dart';
+import 'package:flutter_stopwatch_app_v1/models/recording_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/utils/times_formatting_utils.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/saved_stopwatch_popup_menu_button.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/recording_popup_menu_button.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/rename_dialog.dart';
 
-class SavedStopwatchCard extends StatefulWidget {
+class RecordingCard extends StatefulWidget {
   final Map<String, dynamic> json;
-  final void Function(int id, String name) deleteSavedStopwatch;
-  late final SavedStopwatchModel savedStopwatchModel = (json.isEmpty)
-      ? SavedStopwatchModel(0, "bla", DateTime.now(), false,
+  final void Function(int id, String name) deleteRecording;
+  late final RecordingModel recordingModel = (json.isEmpty)
+      ? RecordingModel(0, "bla", DateTime.now(), false,
           Duration.zero) // TODO: schöner/korrekt machen
-      : SavedStopwatchModel.fromJson(json);
-  SavedStopwatchCard(this.deleteSavedStopwatch,
+      : RecordingModel.fromJson(json);
+  RecordingCard(this.deleteRecording,
       {super.key, this.json = const {}});
 
   @override
-  State<SavedStopwatchCard> createState() => _SavedStopwatchCardState();
+  State<RecordingCard> createState() => _RecordingCardState();
 }
 
-class _SavedStopwatchCardState extends State<SavedStopwatchCard> {
-  late final SavedStopwatchModel _savedStopwatchModel =
-      widget.savedStopwatchModel;
+class _RecordingCardState extends State<RecordingCard> {
+  late final RecordingModel _recordingModel =
+      widget.recordingModel;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class _SavedStopwatchCardState extends State<SavedStopwatchCard> {
                   flex: 4,
                   child: InkWell(
                     onTap: _showRenameDialog,
-                    child: Text(_savedStopwatchModel.name,
+                    child: Text(_recordingModel.name,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                             fontSize: 26,
@@ -49,25 +49,25 @@ class _SavedStopwatchCardState extends State<SavedStopwatchCard> {
                             height: 0)),
                   ),
                 ),
-                Text(durationToString(_savedStopwatchModel.totalTime),
+                Text(durationToString(_recordingModel.totalTime),
                     style: const TextStyle(
                         fontSize: 28, fontWeight: FontWeight.w600, height: 0)),
                 const Spacer(
                   flex: 1,
                 ),
-                SavedStopwatchPopupMenuButton(
-                  onSelected: (SavedStopwatchCardMenuItem item) {
+                RecordingPopupMenuButton(
+                  onSelected: (RecordingCardMenuItem item) {
                     switch (item) {
-                      case SavedStopwatchCardMenuItem.rename:
+                      case RecordingCardMenuItem.rename:
                         _showRenameDialog();
                         break;
-                      case SavedStopwatchCardMenuItem.export:
+                      case RecordingCardMenuItem.export:
                         break;
-                      case SavedStopwatchCardMenuItem.share:
+                      case RecordingCardMenuItem.share:
                         break;
-                      case SavedStopwatchCardMenuItem.delete:
-                        widget.deleteSavedStopwatch(
-                            _savedStopwatchModel.id, _savedStopwatchModel.name);
+                      case RecordingCardMenuItem.delete:
+                        widget.deleteRecording(
+                            _recordingModel.id, _recordingModel.name);
                         break;
                       default:
                     }
@@ -79,7 +79,7 @@ class _SavedStopwatchCardState extends State<SavedStopwatchCard> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(formatLapCount(_savedStopwatchModel.lapTimes),
+                Text(formatLapCount(_recordingModel.lapTimes),
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w400, height: 0)),
                 const SizedBox(
@@ -92,7 +92,7 @@ class _SavedStopwatchCardState extends State<SavedStopwatchCard> {
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
                             height: 0)),
-                    Text(formatLapTimes(_savedStopwatchModel.lapTimes),
+                    Text(formatLapTimes(_recordingModel.lapTimes),
                         style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
@@ -109,7 +109,7 @@ class _SavedStopwatchCardState extends State<SavedStopwatchCard> {
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
                             height: 0)),
-                    Text(formatLapTimes(_savedStopwatchModel.splitTimes),
+                    Text(formatLapTimes(_recordingModel.splitTimes),
                         style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
@@ -129,11 +129,11 @@ class _SavedStopwatchCardState extends State<SavedStopwatchCard> {
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        return RenameDialog(_savedStopwatchModel.name, (String text) {
+        return RenameDialog(_recordingModel.name, (String text) {
           setState(() {
-            _savedStopwatchModel.name = text;
+            _recordingModel.name = text;
           });
-          storeSavedStopwatchState(_savedStopwatchModel);
+          storeRecordingState(_recordingModel);
         });
       },
     );

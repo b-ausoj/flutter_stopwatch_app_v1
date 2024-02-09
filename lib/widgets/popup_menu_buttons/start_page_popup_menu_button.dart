@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stopwatch_app_v1/enums/start_card_menu_item.dart';
+import 'package:flutter_stopwatch_app_v1/enums/start_page_card_menu_item.dart';
 
-class StartPopupMenuButton extends StatelessWidget {
-  final Function(StartCardMenuItem) onSelected;
+class StartPagePopupMenuButton extends StatelessWidget {
+  final Function(StartPageCardMenuItem) onSelected;
 
-  const StartPopupMenuButton({required this.onSelected, super.key});
+  const StartPagePopupMenuButton({required this.onSelected, super.key});
 
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
       onSelected: onSelected,
       itemBuilder: (BuildContext context) =>
-          <PopupMenuEntry<StartCardMenuItem>>[
-        const PopupMenuItem<StartCardMenuItem>(
-          value: StartCardMenuItem.rename,
+          <PopupMenuEntry<StartPageCardMenuItem>>[
+        const PopupMenuItem<StartPageCardMenuItem>(
+          value: StartPageCardMenuItem.rename,
           child: Row(
             children: [
               Icon(Icons.edit_outlined),
@@ -24,8 +24,8 @@ class StartPopupMenuButton extends StatelessWidget {
             ],
           ),
         ),
-        const PopupMenuItem<StartCardMenuItem>(
-          value: StartCardMenuItem.delete,
+        const PopupMenuItem<StartPageCardMenuItem>(
+          value: StartPageCardMenuItem.delete,
           child: Row(
             children: [
               Icon(Icons.delete_outlined),

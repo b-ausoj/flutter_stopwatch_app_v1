@@ -11,20 +11,20 @@ import 'package:flutter_stopwatch_app_v1/utils/snackbar_utils.dart';
 import 'package:flutter_stopwatch_app_v1/utils/sorting.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/stopwatch_card.dart';
 
-class HomeController extends BadgeController {
+class StopwatchesPageController extends BadgeController {
   // TODO: auf github schauen wo überall die cardsCount aktualisiert wird
 
   BuildContext context;
 
   final List<StopwatchCard> _stopwatchCards = [];
-  final List<String> _oldHome = [];
+  final List<String> _oldStopwatchesPage = [];
   String name;
 
   int _cardsCount = 0;
   SortCriterion _order = SortCriterion.creationDate;
   SortDirection _direction = SortDirection.ascending;
 
-  HomeController(this.context, this.name);
+  StopwatchesPageController(this.context, this.name);
 
   get order => _order;
   get orientation => _direction;
@@ -36,9 +36,9 @@ class HomeController extends BadgeController {
     // TODO: not taking the card count but the highest number a stopwatch has in "Athlete X" or cardsCount (whatever is bigger)
     _stopwatchCards.add(StopwatchCard("Athlete ${++_cardsCount}",
         (int id, String name) => deleteStopwatch(id, name), changedState, id,
-        key: Key("$id"), homeController: this));
+        key: Key("$id"), stopwatchesPageController: this));
     _cardsCount = _stopwatchCards.length;
-    storeHomeState(this);
+    storeStopwatchesPageState(this);
     changedState();
   }
 
@@ -48,22 +48,22 @@ class HomeController extends BadgeController {
   }
 
   void deleteAllStopwatches() {
-    _oldHome.clear();
+    _oldStopwatchesPage.clear();
     for (StopwatchCard card in _stopwatchCards) {
       if (card.stopwatchModel.state == StopwatchState.running) {
         showShortSnackBar(context, "Can't delete while running");
         return;
       }
-      _oldHome.add(jsonEncode(card.stopwatchModel));
+      _oldStopwatchesPage.add(jsonEncode(card.stopwatchModel));
     }
     _stopwatchCards.clear();
     _cardsCount = 0;
-    storeHomeState(this);
+    storeStopwatchesPageState(this);
     showLongSnackBar(context, "All stopwatches have been removed",
         action: SnackBarAction(
             label: "Undo",
             onPressed: () {
-              restoreAllStopwatches(_oldHome);
+              restoreAllStopwatches(_oldStopwatchesPage);
               changedState();
             }));
   }
@@ -78,7 +78,7 @@ class HomeController extends BadgeController {
     }
     StopwatchCard deleted = _stopwatchCards.removeAt(index);
     _cardsCount = _stopwatchCards.length;
-    storeHomeState(this);
+    storeStopwatchesPageState(this);
     showLongSnackBar(context, "'$name' has been removed",
         action: SnackBarAction(
             label: "Undo",
@@ -86,7 +86,7 @@ class HomeController extends BadgeController {
               _stopwatchCards.add(deleted);
               _cardsCount = _stopwatchCards.length;
               changedState();
-              storeHomeState(this);
+              storeStopwatchesPageState(this);
             }));
   }
 
@@ -109,21 +109,21 @@ class HomeController extends BadgeController {
     for (StopwatchCard card in _stopwatchCards) {
       card.stopwatchModel.reset();
     }
-    storeHomeState(this);
+    storeStopwatchesPageState(this);
     showLongSnackBar(context, "All stopwatches has been reseted",
         action: SnackBarAction(
             label: "Undo",
             onPressed: () {
               for (var element in _stopwatchCards) {
                 element.stopwatchModel.restore();
-                storeHomeState(this);
+                storeStopwatchesPageState(this);
               }
             }));
   }
 
-  void restoreAllStopwatches(List<String> oldHome) {
+  void restoreAllStopwatches(List<String> oldStopwatchesPage) {
     _stopwatchCards.clear();
-    for (String entry in oldHome) {
+    for (String entry in oldStopwatchesPage) {
       dynamic json = jsonDecode(entry);
       _stopwatchCards.add(StopwatchCard(
         json["name"],
@@ -132,24 +132,24 @@ class HomeController extends BadgeController {
         json["id"],
         key: Key("${json["id"]}"),
         json: json,
-        homeController: this,
+        stopwatchesPageController: this,
       ));
     }
     _cardsCount = _stopwatchCards.length;
-    storeHomeState(this);
+    storeStopwatchesPageState(this);
   }
 
   void setSorting(SortCriterion order, SortDirection direction) {
     _order = order;
     _direction = direction;
     changedState();
-    storeHomeState(this); // TODO: a bit redundant
+    storeStopwatchesPageState(this); // TODO: a bit redundant
   }
 
   void startAllStopwatches() {
     for (var element in _stopwatchCards) {
       element.stopwatchModel.start();
     }
-    storeHomeState(this);
+    storeStopwatchesPageState(this);
   }
 }

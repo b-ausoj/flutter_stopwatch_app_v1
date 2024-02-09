@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stopwatch_app_v1/enums/home_menu_item.dart';
+import 'package:flutter_stopwatch_app_v1/enums/stopwatches_page_menu_item.dart';
 
-class HomePopupMenuButton extends StatelessWidget {
-  final Function(HomeMenuItem) onSelected;
+class StopwatchesPagePopupMenuButton extends StatelessWidget {
+  final Function(StopwatchesPageMenuItem) onSelected;
 
-  const HomePopupMenuButton({required this.onSelected, super.key});
+  const StopwatchesPagePopupMenuButton({required this.onSelected, super.key});
 
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
       onSelected: onSelected,
-      itemBuilder: (BuildContext context) => <PopupMenuEntry<HomeMenuItem>>[
-        const PopupMenuItem<HomeMenuItem>(
-          value: HomeMenuItem.addStopwatch,
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<StopwatchesPageMenuItem>>[
+        const PopupMenuItem<StopwatchesPageMenuItem>(
+          value: StopwatchesPageMenuItem.addStopwatch,
           child: Row(
             children: [
               Icon(Icons.add_circle_outline),
@@ -23,8 +23,8 @@ class HomePopupMenuButton extends StatelessWidget {
             ],
           ),
         ),
-        const PopupMenuItem<HomeMenuItem>(
-          value: HomeMenuItem.saveAll,
+        const PopupMenuItem<StopwatchesPageMenuItem>(
+          value: StopwatchesPageMenuItem.saveAll,
           child: Row(
             children: [
               Icon(Icons.save_outlined),
@@ -35,8 +35,8 @@ class HomePopupMenuButton extends StatelessWidget {
             ],
           ),
         ),
-        const PopupMenuItem<HomeMenuItem>(
-          value: HomeMenuItem.resetAll,
+        const PopupMenuItem<StopwatchesPageMenuItem>(
+          value: StopwatchesPageMenuItem.resetAll,
           child: Row(
             children: [
               Icon(Icons.refresh),
@@ -47,8 +47,8 @@ class HomePopupMenuButton extends StatelessWidget {
             ],
           ),
         ),
-        const PopupMenuItem<HomeMenuItem>(
-          value: HomeMenuItem.deleteAll,
+        const PopupMenuItem<StopwatchesPageMenuItem>(
+          value: StopwatchesPageMenuItem.deleteAll,
           child: Row(
             children: [
               Icon(Icons.delete_outline),
@@ -59,8 +59,8 @@ class HomePopupMenuButton extends StatelessWidget {
             ],
           ),
         ),
-        const PopupMenuItem<HomeMenuItem>(
-          value: HomeMenuItem.changeOrder,
+        const PopupMenuItem<StopwatchesPageMenuItem>(
+          value: StopwatchesPageMenuItem.changeOrder,
           child: Row(
             children: [
               Icon(Icons.sort),
@@ -71,8 +71,8 @@ class HomePopupMenuButton extends StatelessWidget {
             ],
           ),
         ),
-        const PopupMenuItem<HomeMenuItem>(
-          value: HomeMenuItem.settings,
+        const PopupMenuItem<StopwatchesPageMenuItem>(
+          value: StopwatchesPageMenuItem.settings,
           child: Row(
             children: [
               Icon(Icons.settings_outlined),

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stopwatch_app_v1/pages/agb.dart';
+import 'package:flutter_stopwatch_app_v1/pages/agb_page.dart';
 import 'package:flutter_stopwatch_app_v1/services/launch_url_service.dart';
 import 'package:flutter_stopwatch_app_v1/utils/snackbar_utils.dart';
 
-class About extends StatelessWidget {
-  const About({super.key});
+class AboutPage extends StatelessWidget {
+  const AboutPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class About extends StatelessWidget {
                   child: const Text("Terms & conditions"),
                   onTap: () {
                     Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => const ABG()));
+                        MaterialPageRoute(builder: (context) => const AGBPage()));
                   },
                 ),
                 const Text("|"),
@@ -55,7 +55,7 @@ class About extends StatelessWidget {
                   child: const Text("Privacy policy"),
                   onTap: () {
                     Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => const ABG()));
+                        MaterialPageRoute(builder: (context) => const AGBPage()));
                   },
                 ),
               ],

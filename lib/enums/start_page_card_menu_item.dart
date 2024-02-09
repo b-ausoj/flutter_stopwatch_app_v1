@@ -1,0 +1,1 @@
+enum StartPageCardMenuItem { rename, delete }

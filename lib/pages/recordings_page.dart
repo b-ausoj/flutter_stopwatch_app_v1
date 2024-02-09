@@ -2,20 +2,20 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_stopwatch_app_v1/enums/recordings_card_menu_item.dart';
-import 'package:flutter_stopwatch_app_v1/enums/recordings_menu_item.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/saved_stopwatch_card.dart';
+import 'package:flutter_stopwatch_app_v1/enums/recordings_page_card_menu_item.dart';
+import 'package:flutter_stopwatch_app_v1/enums/recordings_page_menu_item.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/recording_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Recordings extends StatefulWidget {
-  const Recordings({super.key});
+class RecordingsPage extends StatefulWidget {
+  const RecordingsPage({super.key});
 
   @override
-  State<Recordings> createState() => _RecordingsState();
+  State<RecordingsPage> createState() => _RecordingsPageState();
 }
 
-class _RecordingsState extends State<Recordings> with SingleTickerProviderStateMixin {
-  final List<SavedStopwatchCard> _savedStopwatchCards = [];
+class _RecordingsPageState extends State<RecordingsPage> with SingleTickerProviderStateMixin {
+  final List<RecordingCard> _recordingCards = [];
   final List<Widget> _recordingsList = [];
 
   @override
@@ -26,24 +26,24 @@ class _RecordingsState extends State<Recordings> with SingleTickerProviderStateM
         title: const Text("History"),
         actions: [
           PopupMenuButton(
-            onSelected: (HistoryMenuItem item) {
+            onSelected: (RecordingsPageMenuItem item) {
               // addStopwatch, saveAll, resetAll, deleteAll, changeOrder, settings
               switch (item) {
-                case HistoryMenuItem.deleteAll:
+                case RecordingsPageMenuItem.deleteAll:
                   deleteAllStopwatches();
                   break;
-                case HistoryMenuItem.exportAll:
+                case RecordingsPageMenuItem.exportAll:
                   break;
-                case HistoryMenuItem.settings:
+                case RecordingsPageMenuItem.settings:
                   break;
                 default:
                   throw Exception("Invalid HistoryMenuItem state");
               }
             },
             itemBuilder: (BuildContext context) =>
-                <PopupMenuEntry<HistoryMenuItem>>[
-              const PopupMenuItem<HistoryMenuItem>(
-                value: HistoryMenuItem.deleteAll,
+                <PopupMenuEntry<RecordingsPageMenuItem>>[
+              const PopupMenuItem<RecordingsPageMenuItem>(
+                value: RecordingsPageMenuItem.deleteAll,
                 child: Row(
                   children: [
                     Icon(Icons.delete_outlined),
@@ -54,8 +54,8 @@ class _RecordingsState extends State<Recordings> with SingleTickerProviderStateM
                   ],
                 ),
               ),
-              const PopupMenuItem<HistoryMenuItem>(
-                value: HistoryMenuItem.exportAll,
+              const PopupMenuItem<RecordingsPageMenuItem>(
+                value: RecordingsPageMenuItem.exportAll,
                 child: Row(
                   children: [
                     Icon(Icons.save_alt_outlined),
@@ -66,8 +66,8 @@ class _RecordingsState extends State<Recordings> with SingleTickerProviderStateM
                   ],
                 ),
               ),
-              const PopupMenuItem<HistoryMenuItem>(
-                value: HistoryMenuItem.settings,
+              const PopupMenuItem<RecordingsPageMenuItem>(
+                value: RecordingsPageMenuItem.settings,
                 child: Row(
                   children: [
                     Icon(Icons.settings_outlined),
@@ -94,11 +94,11 @@ class _RecordingsState extends State<Recordings> with SingleTickerProviderStateM
 
   void createHistoryList() {
     _recordingsList.clear();
-    if (_savedStopwatchCards.isEmpty) return;
-    DateTime last = _savedStopwatchCards.first.savedStopwatchModel.startingTime;
+    if (_recordingCards.isEmpty) return;
+    DateTime last = _recordingCards.first.recordingModel.startingTime;
     List<Widget> list = [];
-    for (SavedStopwatchCard card in _savedStopwatchCards) {
-      if (last == card.savedStopwatchModel.startingTime) {
+    for (RecordingCard card in _recordingCards) {
+      if (last == card.recordingModel.startingTime) {
         list.add(card);
       } else {
         var timeStamp = last.copyWith();
@@ -110,12 +110,12 @@ class _RecordingsState extends State<Recordings> with SingleTickerProviderStateM
             shape: const Border(),
             controlAffinity: ListTileControlAffinity.leading,
             trailing: PopupMenuButton(
-              onSelected: (HistoryCardMenuItem item) {
+              onSelected: (RecordingsPageCardMenuItem item) {
                 switch (item) {
-                  case HistoryCardMenuItem.deleteAll:
+                  case RecordingsPageCardMenuItem.deleteAll:
                     deleteCardStopwatches(timeStamp);
                     break;
-                  case HistoryCardMenuItem.exportAll:
+                  case RecordingsPageCardMenuItem.exportAll:
                     break;
                 }
                 setState(() {
@@ -123,9 +123,9 @@ class _RecordingsState extends State<Recordings> with SingleTickerProviderStateM
                 });
               },
               itemBuilder: (BuildContext context) =>
-                  <PopupMenuEntry<HistoryCardMenuItem>>[
-                const PopupMenuItem<HistoryCardMenuItem>(
-                  value: HistoryCardMenuItem.deleteAll,
+                  <PopupMenuEntry<RecordingsPageCardMenuItem>>[
+                const PopupMenuItem<RecordingsPageCardMenuItem>(
+                  value: RecordingsPageCardMenuItem.deleteAll,
                   child: Row(
                     children: [
                       Icon(Icons.delete_outlined),
@@ -136,8 +136,8 @@ class _RecordingsState extends State<Recordings> with SingleTickerProviderStateM
                     ],
                   ),
                 ),
-                const PopupMenuItem<HistoryCardMenuItem>(
-                  value: HistoryCardMenuItem.exportAll,
+                const PopupMenuItem<RecordingsPageCardMenuItem>(
+                  value: RecordingsPageCardMenuItem.exportAll,
                   child: Row(
                     children: [
                       Icon(Icons.save_alt_outlined),
@@ -156,7 +156,7 @@ class _RecordingsState extends State<Recordings> with SingleTickerProviderStateM
         ));
         list = [card];
       }
-      last = card.savedStopwatchModel.startingTime;
+      last = card.recordingModel.startingTime;
     }
     if (list.isNotEmpty) {
       _recordingsList.add(Card(
@@ -167,12 +167,12 @@ class _RecordingsState extends State<Recordings> with SingleTickerProviderStateM
           shape: const Border(),
           controlAffinity: ListTileControlAffinity.leading,
           trailing: PopupMenuButton(
-            onSelected: (HistoryCardMenuItem item) {
+            onSelected: (RecordingsPageCardMenuItem item) {
               switch (item) {
-                case HistoryCardMenuItem.deleteAll:
+                case RecordingsPageCardMenuItem.deleteAll:
                   deleteCardStopwatches(last);
                   break;
-                case HistoryCardMenuItem.exportAll:
+                case RecordingsPageCardMenuItem.exportAll:
                   break;
               }
               setState(() {
@@ -180,9 +180,9 @@ class _RecordingsState extends State<Recordings> with SingleTickerProviderStateM
               });
             },
             itemBuilder: (BuildContext context) =>
-                <PopupMenuEntry<HistoryCardMenuItem>>[
-              const PopupMenuItem<HistoryCardMenuItem>(
-                value: HistoryCardMenuItem.deleteAll,
+                <PopupMenuEntry<RecordingsPageCardMenuItem>>[
+              const PopupMenuItem<RecordingsPageCardMenuItem>(
+                value: RecordingsPageCardMenuItem.deleteAll,
                 child: Row(
                   children: [
                     Icon(Icons.delete_outlined),
@@ -193,8 +193,8 @@ class _RecordingsState extends State<Recordings> with SingleTickerProviderStateM
                   ],
                 ),
               ),
-              const PopupMenuItem<HistoryCardMenuItem>(
-                value: HistoryCardMenuItem.exportAll,
+              const PopupMenuItem<RecordingsPageCardMenuItem>(
+                value: RecordingsPageCardMenuItem.exportAll,
                 child: Row(
                   children: [
                     Icon(Icons.save_alt_outlined),
@@ -226,22 +226,22 @@ class _RecordingsState extends State<Recordings> with SingleTickerProviderStateM
   }
 
   void deleteAllStopwatches() {
-    _savedStopwatchCards.removeRange(0, _savedStopwatchCards.length);
+    _recordingCards.removeRange(0, _recordingCards.length);
     createHistoryList();
     _storeHistoryState();
   }
 
   void deleteCardStopwatches(DateTime timestamp) {
-    _savedStopwatchCards.removeWhere(
-        (element) => element.savedStopwatchModel.startingTime == timestamp);
+    _recordingCards.removeWhere(
+        (element) => element.recordingModel.startingTime == timestamp);
     createHistoryList();
     _storeHistoryState();
   }
 
   void setViewedToTrue(DateTime timestamp) {
-    for (SavedStopwatchCard card in _savedStopwatchCards) {
-      if (card.savedStopwatchModel.startingTime == timestamp) {
-        card.savedStopwatchModel.viewed = true;
+    for (RecordingCard card in _recordingCards) {
+      if (card.recordingModel.startingTime == timestamp) {
+        card.recordingModel.viewed = true;
         log("messageeeeeeeeeeeeeeeeee");
       }
     }
@@ -252,8 +252,8 @@ class _RecordingsState extends State<Recordings> with SingleTickerProviderStateM
   Future<void> deleteStopwatch(int id, String name) async {
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Stopwatch '$name' has been removed")));
-    _savedStopwatchCards
-        .removeWhere((element) => element.savedStopwatchModel.id == id);
+    _recordingCards
+        .removeWhere((element) => element.recordingModel.id == id);
     createHistoryList();
     final prefs = await SharedPreferences.getInstance();
     List<String> recordings = prefs.getStringList("recordings") ?? [];
@@ -275,15 +275,15 @@ class _RecordingsState extends State<Recordings> with SingleTickerProviderStateM
     final prefs = await SharedPreferences.getInstance();
     List<String> recordings = prefs.getStringList("recordings") ?? [];
     for (String entry in recordings.reversed) {
-      _savedStopwatchCards.add(SavedStopwatchCard(
+      _recordingCards.add(RecordingCard(
         deleteStopwatch,
         json: jsonDecode(entry),
         key: Key(entry),
       ));
     }
-    _savedStopwatchCards.sort(
-      (a, b) => -a.savedStopwatchModel.startingTime
-          .compareTo(b.savedStopwatchModel.startingTime),
+    _recordingCards.sort(
+      (a, b) => -a.recordingModel.startingTime
+          .compareTo(b.recordingModel.startingTime),
     );
     createHistoryList();
     setState(() {});
@@ -292,8 +292,8 @@ class _RecordingsState extends State<Recordings> with SingleTickerProviderStateM
   Future<void> _storeHistoryState() async {
     final prefs = await SharedPreferences.getInstance();
     List<String> recordings = [];
-    for (SavedStopwatchCard card in _savedStopwatchCards) {
-      recordings.add(jsonEncode(card.savedStopwatchModel));
+    for (RecordingCard card in _recordingCards) {
+      recordings.add(jsonEncode(card.recordingModel));
     }
     prefs.setStringList("recordings", recordings);
   }
