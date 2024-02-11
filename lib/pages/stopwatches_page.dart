@@ -125,6 +125,7 @@ class _StopwatchesPageState extends State<StopwatchesPage>
     _ticker.start();
   }
 
+  // TODO: move to controller
   bool isFabActive() {
     return _stopwatchesPageController.stopwatchCards.isNotEmpty &&
         _stopwatchesPageController.stopwatchCards.every((element) =>

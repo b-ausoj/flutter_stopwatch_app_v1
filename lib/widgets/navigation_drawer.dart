@@ -5,7 +5,7 @@ import 'package:flutter_stopwatch_app_v1/pages/recordings_page.dart';
 import 'package:flutter_stopwatch_app_v1/pages/settings_page.dart';
 import 'package:flutter_stopwatch_app_v1/pages/stopwatches_page.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/nav_text_with_badge.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/text_with_badge/nav_text_with_badge.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/stopwatch_icon.dart';
 
 class NavDrawer extends StatefulWidget {

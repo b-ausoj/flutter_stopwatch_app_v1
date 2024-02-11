@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_stopwatch_app_v1/controllers/recordings_controller.dart';
 import 'package:flutter_stopwatch_app_v1/controllers/stopwatches_page_controller.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_criterion.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
 import 'package:flutter_stopwatch_app_v1/models/lap_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/recording_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/recording_card.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/stopwatch_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,6 +19,35 @@ Future<void> loadScreens(List<String> screens, var update) async {
   final prefs = await SharedPreferences.getInstance();
   screens.addAll(prefs.getStringList("screens") ?? []);
   update();
+}
+
+Future<void> loadRecordings(
+    RecordingsPageController recordingsPageController) async {
+  final prefs = await SharedPreferences.getInstance();
+  List<String> recordings = prefs.getStringList("recordings") ?? [];
+  for (String entry in recordings.reversed) {
+    recordingsPageController.recordingCards.add(RecordingCard(
+      recordingsPageController.deleteRecoding,
+      json: jsonDecode(entry),
+      key: Key(entry),
+    ));
+  }
+  recordingsPageController.recordingCards.sort(
+    (a, b) =>
+        -a.recordingModel.startingTime.compareTo(b.recordingModel.startingTime),
+  );
+  recordingsPageController.createRecordingList();
+  recordingsPageController.refresh();
+}
+
+Future<void> storeRecordingsState(
+    RecordingsPageController recordingsPageController) async {
+  final prefs = await SharedPreferences.getInstance();
+  List<String> recordings = [];
+  for (RecordingCard card in recordingsPageController.recordingCards) {
+    recordings.add(jsonEncode(card.recordingModel));
+  }
+  prefs.setStringList("recordings", recordings);
 }
 
 Future<void> loadStopwatchesPageState(

@@ -1,5 +1,16 @@
 import 'package:flutter_stopwatch_app_v1/models/lap_model.dart';
 
+String dateTimeToString(DateTime dateTime) {
+  String d = dateTime.day < 10 ? "0${dateTime.day}" : "${dateTime.day}";
+  String m = dateTime.month < 10 ? "0${dateTime.month}" : "${dateTime.month}";
+  String y = "${dateTime.year}";
+  String h = dateTime.hour < 10 ? "0${dateTime.hour}" : "${dateTime.hour}";
+  String min =
+      dateTime.minute < 10 ? "0${dateTime.minute}" : "${dateTime.minute}";
+  //String sec = dateTime.second < 10 ? "0${dateTime.second}" : "${dateTime.second}";
+  return "$h:$min $d.$m.$y";
+}
+
 String durationToString(Duration duration) {
   int minutes = duration.inMinutes;
   int seconds = duration.inSeconds % 60;

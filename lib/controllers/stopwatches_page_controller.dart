@@ -20,7 +20,6 @@ class StopwatchesPageController extends BadgeController {
   final List<String> _oldStopwatchesPage = [];
   String name;
 
-  int _cardsCount = 0;
   SortCriterion _order = SortCriterion.creationDate;
   SortDirection _direction = SortDirection.ascending;
 
@@ -34,10 +33,9 @@ class StopwatchesPageController extends BadgeController {
   Future<void> addStopwatch() async {
     int id = StopwatchModel.nextId++;
     // TODO: not taking the card count but the highest number a stopwatch has in "Athlete X" or cardsCount (whatever is bigger)
-    _stopwatchCards.add(StopwatchCard("Athlete ${++_cardsCount}",
+    _stopwatchCards.add(StopwatchCard("Athlete ${_stopwatchCards.length+1}",
         (int id, String name) => deleteStopwatch(id, name), changedState, id,
         key: Key("$id"), stopwatchesPageController: this));
-    _cardsCount = _stopwatchCards.length;
     storeStopwatchesPageState(this);
     changedState();
   }
@@ -57,7 +55,6 @@ class StopwatchesPageController extends BadgeController {
       _oldStopwatchesPage.add(jsonEncode(card.stopwatchModel));
     }
     _stopwatchCards.clear();
-    _cardsCount = 0;
     storeStopwatchesPageState(this);
     showLongSnackBar(context, "All stopwatches have been removed",
         action: SnackBarAction(
@@ -77,14 +74,13 @@ class StopwatchesPageController extends BadgeController {
       return;
     }
     StopwatchCard deleted = _stopwatchCards.removeAt(index);
-    _cardsCount = _stopwatchCards.length;
     storeStopwatchesPageState(this);
     showLongSnackBar(context, "'$name' has been removed",
         action: SnackBarAction(
             label: "Undo",
             onPressed: () {
               _stopwatchCards.add(deleted);
-              _cardsCount = _stopwatchCards.length;
+              _stopwatchCards.length;
               changedState();
               storeStopwatchesPageState(this);
             }));
@@ -135,7 +131,6 @@ class StopwatchesPageController extends BadgeController {
         stopwatchesPageController: this,
       ));
     }
-    _cardsCount = _stopwatchCards.length;
     storeStopwatchesPageState(this);
   }
 
