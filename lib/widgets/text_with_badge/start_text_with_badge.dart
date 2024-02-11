@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stopwatch_app_v1/controllers/start_controller.dart';
+import 'package:flutter_stopwatch_app_v1/controllers/start_page_controller.dart';
 
 class StartTextWithBadge extends StatefulWidget {
   final StartController controller;

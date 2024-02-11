@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stopwatch_app_v1/controllers/start_controller.dart';
+import 'package:flutter_stopwatch_app_v1/controllers/start_page_controller.dart';
 import 'package:flutter_stopwatch_app_v1/enums/start_page_card_menu_item.dart';
 import 'package:flutter_stopwatch_app_v1/pages/stopwatches_page.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';

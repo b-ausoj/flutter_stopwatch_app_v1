@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_stopwatch_app_v1/controllers/recordings_controller.dart';
+import 'package:flutter_stopwatch_app_v1/controllers/recordings_page_controller.dart';
 import 'package:flutter_stopwatch_app_v1/controllers/stopwatches_page_controller.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_criterion.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';

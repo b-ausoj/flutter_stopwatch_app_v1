@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stopwatch_app_v1/controllers/recordings_controller.dart';
+import 'package:flutter_stopwatch_app_v1/controllers/recordings_page_controller.dart';
 import 'package:flutter_stopwatch_app_v1/enums/recordings_page_menu_item.dart';
 import 'package:flutter_stopwatch_app_v1/pages/settings_page.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
