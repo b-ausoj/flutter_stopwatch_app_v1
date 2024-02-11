@@ -6,7 +6,7 @@ import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dar
 import 'package:flutter_stopwatch_app_v1/widgets/navigation_drawer.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/navigation_icon.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/start_page_popup_menu_button.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/start_text_with_badge.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/text_with_badge/start_text_with_badge.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/stopwatch_icon.dart';
 
 class StartPage extends StatefulWidget {

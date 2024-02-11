@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/enums/recordings_set_menu_item.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
-import 'package:flutter_stopwatch_app_v1/utils/times_formatting_utils.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/recordings_set_popup_menu_button.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/recording_card.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/text_with_badge/recordings_set_text_with_badge.dart';
@@ -48,9 +47,9 @@ class RecordingsPageController {
               //selectedMenu = item;
               refresh();
             }),
-            title: Center(
-                child: RecordingsSetTextWithBadge(list, timeStamp)),
-            // TODO: subtitle: Center(child: Text("from Screen 1")),
+            title: Center(child: RecordingsSetTextWithBadge(list, timeStamp)),
+            subtitle: Center(
+                child: Text("from ${list.first.recordingModel.fromScreen}")),
             children: list,
           ),
         ));
@@ -81,9 +80,9 @@ class RecordingsPageController {
             //selectedMenu = item;
             refresh();
           }),
-          title: Center(
-              child: RecordingsSetTextWithBadge(list, last)),
-          // TODO: subtitle: Center(child: Text("from Screen 1")),
+          title: Center(child: RecordingsSetTextWithBadge(list, last)),
+          subtitle: Center(
+              child: Text("from ${list.first.recordingModel.fromScreen}")),
           children: list,
         ),
       ));

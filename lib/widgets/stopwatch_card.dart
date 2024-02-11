@@ -112,7 +112,8 @@ class _StopwatchCardState extends State<StopwatchCard>
                                 ));
                                 break;
                               case StopwatchState.stopped:
-                                saveStopwatch(_stopwatchModel);
+                                saveStopwatch(_stopwatchModel,
+                                    widget.stopwatchesPageController.name);
                                 storeStopwatchState(_stopwatchModel,
                                     widget.stopwatchesPageController);
                                 widget.changedState();

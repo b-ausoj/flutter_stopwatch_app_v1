@@ -10,7 +10,7 @@ class RecordingCard extends StatefulWidget {
   final Map<String, dynamic> json;
   final void Function(int id, String name) deleteRecording;
   late final RecordingModel recordingModel = (json.isEmpty)
-      ? RecordingModel(0, "bla", DateTime.now(), false,
+      ? RecordingModel(0, "bla", DateTime.now(), false, "test",
           Duration.zero) // TODO: schöner/korrekt machen
       : RecordingModel.fromJson(json);
   RecordingCard(this.deleteRecording, {super.key, this.json = const {}});

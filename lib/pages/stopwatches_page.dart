@@ -44,7 +44,7 @@ class _StopwatchesPageState extends State<StopwatchesPage>
                 case StopwatchesPageMenuItem.saveAll:
                   for (var element
                       in _stopwatchesPageController.stopwatchCards) {
-                    saveStopwatch(element.stopwatchModel);
+                    saveStopwatch(element.stopwatchModel, widget.name);
                     storeStopwatchState(
                         element.stopwatchModel, _stopwatchesPageController);
                   }

@@ -9,18 +9,20 @@ class RecordingsSetTextWithBadge extends StatefulWidget {
   const RecordingsSetTextWithBadge(this.list, this.timeStamp, {super.key});
 
   @override
-  State<RecordingsSetTextWithBadge> createState() => _RecordingsSetTextWithBadgeState();
+  State<RecordingsSetTextWithBadge> createState() =>
+      _RecordingsSetTextWithBadgeState();
 }
 
-class _RecordingsSetTextWithBadgeState extends State<RecordingsSetTextWithBadge> {
+class _RecordingsSetTextWithBadgeState
+    extends State<RecordingsSetTextWithBadge> {
   @override
   Widget build(BuildContext context) {
     return Badge(
-            alignment: Alignment.centerRight,
-            offset: const Offset(24, -1),
-            isLabelVisible: !widget.list.first.recordingModel.viewed,
-            label: Text("${widget.list.length}"),
-            child: Text(dateTimeToString(widget.timeStamp)),
-          );
+      alignment: Alignment.centerRight,
+      offset: const Offset(24, 0),
+      isLabelVisible: !widget.list.first.recordingModel.viewed,
+      label: Text("${widget.list.length}"),
+      child: Text(dateTimeToString(widget.timeStamp)),
+    );
   }
 }

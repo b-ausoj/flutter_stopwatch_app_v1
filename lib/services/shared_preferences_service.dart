@@ -90,7 +90,8 @@ Future<void> resetSharedPreferences() async {
   prefs.clear();
 }
 
-Future<void> saveStopwatch(StopwatchModel stopwatchModel) async {
+Future<void> saveStopwatch(
+    StopwatchModel stopwatchModel, String screenName) async {
   final prefs = await SharedPreferences.getInstance();
   RecordingModel.nextId = prefs.getInt("nextRecordingId") ?? 1;
   RecordingModel model = RecordingModel(
@@ -98,6 +99,7 @@ Future<void> saveStopwatch(StopwatchModel stopwatchModel) async {
       stopwatchModel.name,
       stopwatchModel.startTimestamp,
       false,
+      screenName,
       stopwatchModel.elapsedTime);
   model.lapTimes = stopwatchModel.lapList;
   model.lapTimes.add(
