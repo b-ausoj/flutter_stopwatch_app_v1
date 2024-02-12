@@ -12,8 +12,6 @@ import 'package:flutter_stopwatch_app_v1/utils/sorting.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/stopwatch_card.dart';
 
 class StopwatchesPageController extends BadgeController {
-  // TODO: auf github schauen wo überall die cardsCount aktualisiert wird
-
   BuildContext context;
 
   final List<StopwatchCard> _stopwatchCards = [];
@@ -86,6 +84,12 @@ class StopwatchesPageController extends BadgeController {
             }));
   }
 
+  bool isFabActive() {
+    return stopwatchCards.isNotEmpty &&
+        stopwatchCards.every((element) =>
+            element.stopwatchModel.state == StopwatchState.reseted);
+  }
+
   @override
   void refreshBadgeState() {
     isMenuBadgeRequired(name).then((value) => badgeVisible = value);
@@ -146,11 +150,5 @@ class StopwatchesPageController extends BadgeController {
       element.stopwatchModel.start();
     }
     storeStopwatchesPageState(this);
-  }
-
-  bool isFabActive() {
-    return stopwatchCards.isNotEmpty &&
-        stopwatchCards.every((element) =>
-            element.stopwatchModel.state == StopwatchState.reseted);
   }
 }

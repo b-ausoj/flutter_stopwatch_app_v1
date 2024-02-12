@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_stopwatch_app_v1/controllers/badge_controller.dart';
 import 'package:flutter_stopwatch_app_v1/enums/recordings_set_menu_item.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
+import 'package:flutter_stopwatch_app_v1/utils/badge_checking.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/recordings_set_popup_menu_button.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/recording_card.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/text_with_badge/recordings_set_text_with_badge.dart';
 
-class RecordingsPageController {
+class RecordingsPageController extends BadgeController {
   BuildContext context;
   void Function() refresh;
   final List<RecordingCard> recordingCards = [];
@@ -128,5 +130,10 @@ class RecordingsPageController {
       storeRecordingsState(this);
       refresh();
     }
+  }
+  
+  @override
+  void refreshBadgeState() {
+    isMenuBadgeRequired("").then((value) => badgeVisible = value);
   }
 }
