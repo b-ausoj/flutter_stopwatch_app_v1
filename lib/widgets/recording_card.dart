@@ -4,7 +4,7 @@ import 'package:flutter_stopwatch_app_v1/models/recording_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/utils/times_formatting_utils.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/recording_popup_menu_button.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/rename_dialog.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/dialogs/rename_dialog.dart';
 
 class RecordingCard extends StatefulWidget {
   final Map<String, dynamic> json;

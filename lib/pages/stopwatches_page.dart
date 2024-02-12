@@ -6,12 +6,14 @@ import 'package:flutter_stopwatch_app_v1/enums/sort_criterion.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
 import 'package:flutter_stopwatch_app_v1/enums/stopwatches_page_menu_item.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
+import 'package:flutter_stopwatch_app_v1/utils/snackbar_utils.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/add_stopwatch_card.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/dialogs/delete_screen_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/navigation_drawer.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/navigation_icon.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/stopwatches_page_popup_menu_button.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/rename_dialog.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/sort_dialog.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/dialogs/rename_dialog.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/dialogs/sort_dialog.dart';
 
 class StopwatchesPage extends StatefulWidget {
   final String name;
@@ -45,8 +47,7 @@ class _StopwatchesPageState extends State<StopwatchesPage>
                   _showRenameDialog();
                   break;
                 case StopwatchesPageMenuItem.deleteScreen:
-                  deleteScreen(_stopwatchesPageController.name);
-                  Navigator.pop(context); // somehow have to update the start screen
+                  _showDeleteScreenDialog();
                   break;
                 case StopwatchesPageMenuItem.saveAll:
                   for (var element
@@ -72,8 +73,8 @@ class _StopwatchesPageState extends State<StopwatchesPage>
           )
         ],
       ),
-      drawer: NavDrawer(
-          screens, _stopwatchesPageController, _stopwatchesPageController.name, false),
+      drawer: NavDrawer(screens, _stopwatchesPageController,
+          _stopwatchesPageController.name, false),
       floatingActionButton: _stopwatchesPageController.isFabActive()
           ? FloatingActionButton.extended(
               foregroundColor: Colors.white,
@@ -159,6 +160,22 @@ class _StopwatchesPageState extends State<StopwatchesPage>
             screens[indexToReplace] = newName;
           }
         });
+      },
+    );
+  }
+
+  Future<void> _showDeleteScreenDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return DeleteScreenDialog(
+          _stopwatchesPageController.name,
+          onAccept: () {
+            deleteScreen(_stopwatchesPageController.name);
+            Navigator.pop(context);
+          },
+        );
       },
     );
   }

@@ -7,7 +7,7 @@ import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/utils/times_formatting_utils.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/stopwatch_popup_menu_button.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/rename_dialog.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/dialogs/rename_dialog.dart';
 
 class StopwatchCard extends StatefulWidget {
   final int id;
@@ -98,6 +98,7 @@ class _StopwatchCardState extends State<StopwatchCard>
                           case StopwatchCardMenuItem.save:
                             switch (_stopwatchModel.state) {
                               case StopwatchState.running:
+                                // TODO: use my snackbar functions
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(const SnackBar(
                                   content: Text("Can't save while running"),
@@ -105,6 +106,7 @@ class _StopwatchCardState extends State<StopwatchCard>
                                 ));
                                 break;
                               case StopwatchState.reseted:
+                                // TODO: use my snackbar functions
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(const SnackBar(
                                   content: Text("Can't save empty stopwatch"),
@@ -117,6 +119,7 @@ class _StopwatchCardState extends State<StopwatchCard>
                                 storeStopwatchState(_stopwatchModel,
                                     widget.stopwatchesPageController);
                                 widget.changedState();
+                                // TODO: use my snackbar functions
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
                                   content: Text(
@@ -149,6 +152,7 @@ class _StopwatchCardState extends State<StopwatchCard>
                                 storeStopwatchState(_stopwatchModel,
                                     widget.stopwatchesPageController);
                                 widget.changedState();
+                                // TODO: use my snackbar functions
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
                                   content: Text(

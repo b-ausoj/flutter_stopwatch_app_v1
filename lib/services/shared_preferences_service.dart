@@ -33,18 +33,26 @@ Future<void> renameScreen(String oldName, String newName, var update) async {
 
   List<String> stopwatchesPage = prefs.getStringList(oldName) ?? [];
   prefs.setStringList(newName, stopwatchesPage);
+  prefs.remove(oldName);
 
   update();
 }
 
-Future<void> deleteScreen(String name) async {
+Future<String> deleteScreen(String name) async {
   final prefs = await SharedPreferences.getInstance();
 
   List<String> screens = prefs.getStringList("screens") ?? [];
-  screens.remove(name);
+  String screen = screens.elementAt(screens.indexOf(name));
+  bool successful = screens.remove(name); //TODO: shoudl always be true
   prefs.setStringList("screens", screens);
 
   prefs.remove(name);
+
+  return screen;
+}
+
+Future<void> restoreScreen(String name, String screen) async {
+
 }
 
 Future<void> loadRecordings(

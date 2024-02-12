@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_stopwatch_app_v1/controllers/start_page_controller.dart';
 import 'package:flutter_stopwatch_app_v1/enums/start_page_card_menu_item.dart';
 import 'package:flutter_stopwatch_app_v1/pages/stopwatches_page.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/dialogs/delete_screen_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/navigation_drawer.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/navigation_icon.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/start_page_popup_menu_button.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/rename_dialog.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/dialogs/rename_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/text_with_badge/start_text_with_badge.dart';
 
 class StartPage extends StatefulWidget {
@@ -16,7 +18,8 @@ class StartPage extends StatefulWidget {
   State<StartPage> createState() => _StartPageState();
 }
 
-class _StartPageState extends State<StartPage> {
+class _StartPageState extends State<StartPage>
+    with SingleTickerProviderStateMixin {
   late final StartController startController = StartController(() {
     setState(() {});
   });
@@ -26,7 +29,7 @@ class _StartPageState extends State<StartPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("Stopwatch by Josua"),
+        title: const Text("MultiStopwatches by Josua"),
         leading: NavIcon(startController),
       ),
       drawer: NavDrawer(startController.names, startController, "Start", true),
@@ -34,11 +37,9 @@ class _StartPageState extends State<StartPage> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            const Text("Welcome to Stopwatch by Josua"),
-            const Text("This is the start page"),
-            const Text(
-              "Here you can see an overview of all your stopwatch screens (each one stores it's configuration and timers). Cou can also rename, delete or add a new screen",
-              textAlign: TextAlign.center,
+            const Text("Welcome to the MultiStopwatches app by Josua"),
+            const SizedBox(
+              height: 10,
             ),
             Expanded(
               child: ListView(
@@ -61,8 +62,7 @@ class _StartPageState extends State<StartPage> {
                                 _showRenameDialog(screen);
                                 break;
                               case StartPageCardMenuItem.delete:
-                                startController.removeScreen(screen);
-                                setState(() {});
+                                _showDeleteScreenDialog(screen);
                                 break;
                             }
                           }),
@@ -128,6 +128,22 @@ class _StartPageState extends State<StartPage> {
             startController.names[indexToReplace] = newName;
           }
         });
+      },
+    );
+  }
+
+  Future<void> _showDeleteScreenDialog(String name) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return DeleteScreenDialog(
+          name,
+          onAccept: () {
+            startController.removeScreen(name);
+            setState(() {});
+          },
+        );
       },
     );
   }
