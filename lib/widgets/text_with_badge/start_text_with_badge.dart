@@ -20,7 +20,7 @@ class _StartTextWithBadgeState extends State<StartTextWithBadge> {
       offset: const Offset(8, 0),
       smallSize: 8.0,
       child: Padding(
-        padding: const EdgeInsets.only(right: 16.0),
+        padding: const EdgeInsets.only(right: 16.0, left: 16.0),
         child: Text(
           widget.controller.names[widget.index],
         ),

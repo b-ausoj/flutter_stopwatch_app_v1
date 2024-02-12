@@ -12,6 +12,18 @@ class StopwatchesPagePopupMenuButton extends StatelessWidget {
       onSelected: onSelected,
       itemBuilder: (BuildContext context) => <PopupMenuEntry<StopwatchesPageMenuItem>>[
         const PopupMenuItem<StopwatchesPageMenuItem>(
+          value: StopwatchesPageMenuItem.rename,
+          child: Row(
+            children: [
+              Icon(Icons.edit_outlined),
+              SizedBox(
+                width: 12,
+              ),
+              Text('Rename'),
+            ],
+          ),
+        ),
+        const PopupMenuItem<StopwatchesPageMenuItem>(
           value: StopwatchesPageMenuItem.addStopwatch,
           child: Row(
             children: [

@@ -1,4 +1,5 @@
 import 'package:flutter_stopwatch_app_v1/controllers/badge_controller.dart';
+import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/utils/badge_checking.dart';
 
 class StartController extends BadgeController {
@@ -9,8 +10,8 @@ class StartController extends BadgeController {
 
   void Function() update;
 
-  StartController(this.names, this.update) {
-    refreshBadgeState();
+  StartController(this.update) {
+    loadScreens(names, update).then((value) => refreshBadgeState());
   }
 
   @override
@@ -24,5 +25,9 @@ class StartController extends BadgeController {
       isTextBadgeRequired(names[i]).then((value) => badgeVisibles[i] = value);
     }
     update(); // calls set state because start badge doesn't have a ticker with setState
+  }
+
+  void refreshNames() {
+    loadScreens(names, update);
   }
 }

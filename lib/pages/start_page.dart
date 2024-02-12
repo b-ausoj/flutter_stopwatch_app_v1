@@ -6,8 +6,8 @@ import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dar
 import 'package:flutter_stopwatch_app_v1/widgets/navigation_drawer.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/navigation_icon.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/start_page_popup_menu_button.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/rename_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/text_with_badge/start_text_with_badge.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/stopwatch_icon.dart';
 
 class StartPage extends StatefulWidget {
   const StartPage({super.key});
@@ -17,8 +17,7 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPageState extends State<StartPage> {
-  final List<String> screens = [];
-  late final StartController startController = StartController(screens, () {
+  late final StartController startController = StartController(() {
     setState(() {});
   });
 
@@ -30,7 +29,7 @@ class _StartPageState extends State<StartPage> {
         title: const Text("Stopwatch by Josua"),
         leading: NavIcon(startController),
       ),
-      drawer: NavDrawer(screens, startController, "Start"),
+      drawer: NavDrawer(startController.names, startController, "Start", true),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -45,20 +44,21 @@ class _StartPageState extends State<StartPage> {
               child: ListView(
                 shrinkWrap: true,
                 children: [
-                  ...screens.map((String screen) => Card(
+                  ...startController.names.map((String screen) => Card(
                         color: const Color(0xFFEFEFEF),
                         elevation: 0,
                         child: ListTile(
                           contentPadding:
                               const EdgeInsets.only(left: 16.0, right: 8.0),
-                          leading: StopwatchIcon(screen),
+                          leading: const Icon(Icons.timer_outlined),
                           title: Center(
-                              child: StartTextWithBadge(
-                                  startController, screens.indexOf(screen))),
+                              child: StartTextWithBadge(startController,
+                                  startController.names.indexOf(screen))),
                           trailing: StartPagePopupMenuButton(
                               onSelected: (StartPageCardMenuItem item) {
                             switch (item) {
                               case StartPageCardMenuItem.rename:
+                                _showRenameDialog(screen);
                                 break;
                               case StartPageCardMenuItem.delete:
                                 break;
@@ -71,12 +71,14 @@ class _StartPageState extends State<StartPage> {
                                         StopwatchesPage(screen)))
                                 .then((value) {
                               startController.refreshBadgeState();
+                              startController.refreshNames();
                               setState(() {});
                             });
                           },
                         ),
                       )),
                   Card(
+                    // Add new Screen
                     margin: const EdgeInsets.symmetric(
                         horizontal: 8.0, vertical: 4.0),
                     color: const Color(0xFFEFEFEF),
@@ -85,16 +87,18 @@ class _StartPageState extends State<StartPage> {
                       leading: const Icon(Icons.add_to_photos_outlined),
                       title: const Text("Add new Screen"),
                       onTap: () {
-                        screens.add("Screen ${screens.length + 1}");
+                        startController.names
+                            .add("Screen ${startController.names.length + 1}");
                         startController.refreshBadgeState();
-                        storeScreens(screens);
+                        storeScreens(startController.names);
                         setState(() {});
                         Navigator.of(context)
                             .push(MaterialPageRoute(
                                 builder: (context) => StopwatchesPage(
-                                    "Screen ${screens.length}")))
+                                    "Screen ${startController.names.length}")))
                             .then((value) {
                           startController.refreshBadgeState();
+                          startController.refreshNames();
                           setState(() {});
                         });
                       },
@@ -109,13 +113,20 @@ class _StartPageState extends State<StartPage> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    loadScreens(
-        screens,
-        () => setState(() {
-              startController.refreshBadgeState();
-            }));
+  Future<String?> _showRenameDialog(String oldName) async {
+    return showDialog<String>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return RenameDialog(oldName, (String newName) {
+          setState(() {});
+          renameScreen(oldName, newName, () => setState(() {}));
+          int indexToReplace = startController.names.indexOf(oldName);
+          if (indexToReplace != -1) {
+            startController.names[indexToReplace] = newName;
+          }
+        });
+      },
+    );
   }
 }

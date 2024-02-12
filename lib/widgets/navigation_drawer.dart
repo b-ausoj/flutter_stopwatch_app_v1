@@ -6,7 +6,6 @@ import 'package:flutter_stopwatch_app_v1/pages/settings_page.dart';
 import 'package:flutter_stopwatch_app_v1/pages/stopwatches_page.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/text_with_badge/nav_text_with_badge.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/stopwatch_icon.dart';
 
 class NavDrawer extends StatefulWidget {
   final List<String> screens;
@@ -15,7 +14,9 @@ class NavDrawer extends StatefulWidget {
   // the badge will be updated
   final BadgeController controller;
   final String name;
-  const NavDrawer(this.screens, this.controller, this.name, {super.key});
+  final bool isStartPage;
+  const NavDrawer(this.screens, this.controller, this.name, this.isStartPage,
+      {super.key});
 
   @override
   State<NavDrawer> createState() => _NavDrawerState();
@@ -41,7 +42,7 @@ class _NavDrawerState extends State<NavDrawer> {
             ),
           ),
           ..._screens.map((String screen) => NavigationDrawerDestination(
-              icon: StopwatchIcon(screen),
+              icon: const Icon(Icons.timer_outlined),
               label: NavTextWithBadge(screen, false))),
           const NavigationDrawerDestination(
               icon: Icon(Icons.add), label: Text("Add Screen")),
@@ -60,7 +61,11 @@ class _NavDrawerState extends State<NavDrawer> {
     String? selectedScreen = _screens.elementAtOrNull(selectedIndex);
 
     if (selectedScreen != null) {
+      // screen x
       Navigator.pop(context);
+      if (!widget.isStartPage) {
+        Navigator.pop(context);
+      }
       Navigator.of(context)
           .push(MaterialPageRoute(
               builder: (context) => StopwatchesPage(selectedScreen)))
@@ -69,7 +74,11 @@ class _NavDrawerState extends State<NavDrawer> {
       int base = _screens.length;
       switch (selectedIndex - base) {
         case 0:
+          // add screen
           Navigator.pop(context);
+          if (!widget.isStartPage) {
+            Navigator.pop(context);
+          }
           _screens.add("Screen ${_screens.length + 1}");
           storeScreens(_screens);
           Navigator.of(context)
@@ -79,6 +88,7 @@ class _NavDrawerState extends State<NavDrawer> {
               .then((value) => widget.controller.refreshBadgeState());
           break;
         case 1:
+          // recordings
           Navigator.pop(context);
           Navigator.of(context)
               .push(MaterialPageRoute(
@@ -86,11 +96,13 @@ class _NavDrawerState extends State<NavDrawer> {
               .then((value) => widget.controller.refreshBadgeState());
           break;
         case 2:
+          // settings
           Navigator.pop(context);
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => const SettingsPage()));
           break;
         case 3:
+          // about
           Navigator.pop(context);
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) => const AboutPage()));

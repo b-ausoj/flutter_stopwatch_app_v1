@@ -33,7 +33,7 @@ class StopwatchesPageController extends BadgeController {
   Future<void> addStopwatch() async {
     int id = StopwatchModel.nextId++;
     // TODO: not taking the card count but the highest number a stopwatch has in "Athlete X" or cardsCount (whatever is bigger)
-    _stopwatchCards.add(StopwatchCard("Athlete ${_stopwatchCards.length+1}",
+    _stopwatchCards.add(StopwatchCard("Athlete ${_stopwatchCards.length + 1}",
         (int id, String name) => deleteStopwatch(id, name), changedState, id,
         key: Key("$id"), stopwatchesPageController: this));
     storeStopwatchesPageState(this);
@@ -146,5 +146,11 @@ class StopwatchesPageController extends BadgeController {
       element.stopwatchModel.start();
     }
     storeStopwatchesPageState(this);
+  }
+
+  bool isFabActive() {
+    return stopwatchCards.isNotEmpty &&
+        stopwatchCards.every((element) =>
+            element.stopwatchModel.state == StopwatchState.reseted);
   }
 }

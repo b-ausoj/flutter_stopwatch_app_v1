@@ -5,12 +5,12 @@ import 'package:flutter_stopwatch_app_v1/controllers/stopwatches_page_controller
 import 'package:flutter_stopwatch_app_v1/enums/sort_criterion.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
 import 'package:flutter_stopwatch_app_v1/enums/stopwatches_page_menu_item.dart';
-import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/add_stopwatch_card.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/navigation_drawer.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/navigation_icon.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/stopwatches_page_popup_menu_button.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/rename_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/sort_dialog.dart';
 
 class StopwatchesPage extends StatefulWidget {
@@ -32,19 +32,25 @@ class _StopwatchesPageState extends State<StopwatchesPage>
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(widget.name),
+        title: InkWell(
+            onTap: _showRenameDialog,
+            child: Text(_stopwatchesPageController.name)),
         leading: NavIcon(_stopwatchesPageController),
         actions: [
           StopwatchesPagePopupMenuButton(
             onSelected: (StopwatchesPageMenuItem item) {
               switch (item) {
+                case StopwatchesPageMenuItem.rename:
+                  _showRenameDialog();
+                  break;
                 case StopwatchesPageMenuItem.addStopwatch:
                   _stopwatchesPageController.addStopwatch();
                   break;
                 case StopwatchesPageMenuItem.saveAll:
                   for (var element
                       in _stopwatchesPageController.stopwatchCards) {
-                    saveStopwatch(element.stopwatchModel, widget.name);
+                    saveStopwatch(element.stopwatchModel,
+                        _stopwatchesPageController.name);
                     storeStopwatchState(
                         element.stopwatchModel, _stopwatchesPageController);
                   }
@@ -62,15 +68,14 @@ class _StopwatchesPageState extends State<StopwatchesPage>
                 case StopwatchesPageMenuItem.settings:
                   resetSharedPreferences(); // TODO: here can easy reset only for debugging
                   break;
-                default:
-                  throw Exception("Invalid StopwatchesPageMenuItem state");
               }
             },
           )
         ],
       ),
-      drawer: NavDrawer(screens, _stopwatchesPageController, widget.name),
-      floatingActionButton: isFabActive()
+      drawer: NavDrawer(
+          screens, _stopwatchesPageController, _stopwatchesPageController.name, false),
+      floatingActionButton: _stopwatchesPageController.isFabActive()
           ? FloatingActionButton.extended(
               foregroundColor: Colors.white,
               backgroundColor: const Color(0xFF1E7927),
@@ -125,13 +130,6 @@ class _StopwatchesPageState extends State<StopwatchesPage>
     _ticker.start();
   }
 
-  // TODO: move to controller
-  bool isFabActive() {
-    return _stopwatchesPageController.stopwatchCards.isNotEmpty &&
-        _stopwatchesPageController.stopwatchCards.every((element) =>
-            element.stopwatchModel.state == StopwatchState.reseted);
-  }
-
   Future<void> _showOrderDialog() async {
     return showDialog<void>(
       context: context,
@@ -142,6 +140,26 @@ class _StopwatchesPageState extends State<StopwatchesPage>
             _stopwatchesPageController.orientation,
             (SortCriterion order, SortDirection orientation) =>
                 _stopwatchesPageController.setSorting(order, orientation));
+      },
+    );
+  }
+
+  Future<String?> _showRenameDialog() async {
+    String oldName = _stopwatchesPageController.name;
+    return showDialog<String>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return RenameDialog(oldName, (String newName) {
+          setState(() {
+            _stopwatchesPageController.name = newName;
+          });
+          renameScreen(oldName, newName, () => setState(() {}));
+          int indexToReplace = screens.indexOf(oldName);
+          if (indexToReplace != -1) {
+            screens[indexToReplace] = newName;
+          }
+        });
       },
     );
   }

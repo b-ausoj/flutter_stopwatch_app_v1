@@ -21,6 +21,22 @@ Future<void> loadScreens(List<String> screens, var update) async {
   update();
 }
 
+Future<void> renameScreen(String oldName, String newName, var update) async {
+  final prefs = await SharedPreferences.getInstance();
+
+  List<String> screens = prefs.getStringList("screens") ?? [];
+  int indexToReplace = screens.indexOf(oldName);
+  if (indexToReplace != -1) {
+    screens[indexToReplace] = newName;
+  }
+  prefs.setStringList("screens", screens);
+
+  List<String> stopwatchesPage = prefs.getStringList(oldName) ?? [];
+  prefs.setStringList(newName, stopwatchesPage);
+
+  update();
+}
+
 Future<void> loadRecordings(
     RecordingsPageController recordingsPageController) async {
   final prefs = await SharedPreferences.getInstance();
