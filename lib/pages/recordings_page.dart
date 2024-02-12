@@ -22,7 +22,7 @@ class _RecordingsPageState extends State<RecordingsPage>
     return Scaffold(
       appBar: AppBar(
         title: const Text("Recordings"),
-        leading: BackIcon(recordingsPageController),
+        leading: BackIcon(recordingsPageController.badgeVisible),
         actions: [
           RecordingsPagePopupMenuButton(
               onSelected: (RecordingsPageMenuItem item) {
@@ -51,7 +51,8 @@ class _RecordingsPageState extends State<RecordingsPage>
   void initState() {
     super.initState();
     loadRecordings(recordingsPageController =
-        RecordingsPageController(context, () => setState(() {})));
+            RecordingsPageController(context, () => setState(() {})))
+        .then((value) => null);
     recordingsPageController.refreshBadgeState();
   }
 }

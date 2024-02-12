@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stopwatch_app_v1/controllers/recordings_page_controller.dart';
 
 class BackIcon extends StatelessWidget {
-  final RecordingsPageController recordingsPageController;
+  final bool isBadgeVisible;
 
-  const BackIcon(this.recordingsPageController, {super.key});
+  const BackIcon(this.isBadgeVisible, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +13,7 @@ class BackIcon extends StatelessWidget {
         },
         icon: Badge(
             smallSize: 8.0,
-            isLabelVisible: recordingsPageController.badgeVisible,
+            isLabelVisible: isBadgeVisible,
             child: const Icon(Icons.arrow_back)));
   }
 }

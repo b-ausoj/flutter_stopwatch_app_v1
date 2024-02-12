@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/pages/agb_page.dart';
 import 'package:flutter_stopwatch_app_v1/services/launch_url_service.dart';
 import 'package:flutter_stopwatch_app_v1/utils/snackbar_utils.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/back_icon.dart';
 
 class AboutPage extends StatelessWidget {
-  const AboutPage({super.key});
+  final bool isBadgeVisible;
+  const AboutPage(this.isBadgeVisible, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("About"),
+        leading: BackIcon(isBadgeVisible),
       ),
       body: Center(
         child: Column(

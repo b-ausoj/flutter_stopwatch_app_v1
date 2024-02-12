@@ -98,6 +98,15 @@ class RecordingsPageController extends BadgeController {
     refresh();
   }
 
+  Future<void> deleteRecoding(int id, String name) async {
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Stopwatch '$name' has been removed")));
+    recordingCards.removeWhere((element) => element.recordingModel.id == id);
+    createRecordingList();
+    storeRecordingsState(this);
+    refresh();
+  }
+
   void deleteRecordingsSet(DateTime timestamp) {
     recordingCards.removeWhere(
         (element) => element.recordingModel.startingTime == timestamp);
@@ -106,13 +115,9 @@ class RecordingsPageController extends BadgeController {
     refresh();
   }
 
-  Future<void> deleteRecoding(int id, String name) async {
-    ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Stopwatch '$name' has been removed")));
-    recordingCards.removeWhere((element) => element.recordingModel.id == id);
-    createRecordingList();
-    storeRecordingsState(this);
-    refresh();
+  @override
+  void refreshBadgeState() {
+    isBackBadgeRequired().then((value) => badgeVisible = value);
   }
 
   void setViewedToTrue(DateTime timestamp) {
@@ -130,10 +135,5 @@ class RecordingsPageController extends BadgeController {
       storeRecordingsState(this);
       refresh();
     }
-  }
-  
-  @override
-  void refreshBadgeState() {
-    isMenuBadgeRequired("").then((value) => badgeVisible = value);
   }
 }

@@ -43,6 +43,10 @@ Future<int> getUnseenRecordingsCount() async {
   return count;
 }
 
+Future<bool> isBackBadgeRequired() async {
+  return (await getAllRunningScreens()).isNotEmpty;
+}
+
 // menu badge only if there are any running stopwatches or new recordings entries
 Future<bool> isMenuBadgeRequired(String screen) async {
   // check if there are any running stopwatches
