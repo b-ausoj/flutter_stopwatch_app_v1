@@ -43,7 +43,7 @@ Future<String> deleteScreen(String name) async {
 
   List<String> screens = prefs.getStringList("screens") ?? [];
   String screen = screens.elementAt(screens.indexOf(name));
-  bool successful = screens.remove(name); //TODO: shoudl always be true
+  screens.remove(name); //TODO: shoudl always be true
   prefs.setStringList("screens", screens);
 
   prefs.remove(name);
@@ -51,9 +51,7 @@ Future<String> deleteScreen(String name) async {
   return screen;
 }
 
-Future<void> restoreScreen(String name, String screen) async {
-
-}
+Future<void> restoreScreen(String name, String screen) async {}
 
 Future<void> loadRecordings(
     RecordingsPageController recordingsPageController) async {

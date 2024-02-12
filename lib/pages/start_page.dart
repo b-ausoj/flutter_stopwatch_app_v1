@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_stopwatch_app_v1/controllers/start_page_controller.dart';
 import 'package:flutter_stopwatch_app_v1/enums/start_page_card_menu_item.dart';
 import 'package:flutter_stopwatch_app_v1/pages/stopwatches_page.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/dialogs/delete_screen_dialog.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/dialogs/rename_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/navigation_drawer.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/navigation_icon.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/start_page_popup_menu_button.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/dialogs/rename_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/text_with_badge/start_text_with_badge.dart';
 
 class StartPage extends StatefulWidget {
