@@ -37,6 +37,16 @@ Future<void> renameScreen(String oldName, String newName, var update) async {
   update();
 }
 
+Future<void> deleteScreen(String name) async {
+  final prefs = await SharedPreferences.getInstance();
+
+  List<String> screens = prefs.getStringList("screens") ?? [];
+  screens.remove(name);
+  prefs.setStringList("screens", screens);
+
+  prefs.remove(name);
+}
+
 Future<void> loadRecordings(
     RecordingsPageController recordingsPageController) async {
   final prefs = await SharedPreferences.getInstance();

@@ -1,1 +1,1 @@
-enum RecordingsPageMenuItem { deleteAll, exportAll, settings }
+enum RecordingsPageMenuItem { deleteAll, exportAll }

@@ -31,10 +31,6 @@ class _RecordingsPageState extends State<RecordingsPage>
                 break;
               case RecordingsPageMenuItem.exportAll:
                 break;
-              case RecordingsPageMenuItem.settings:
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const SettingsPage()));
-                break;
             }
           })
         ],

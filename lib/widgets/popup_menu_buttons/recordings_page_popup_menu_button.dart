@@ -36,18 +36,6 @@ class RecordingsPagePopupMenuButton extends StatelessWidget {
             ],
           ),
         ),
-        const PopupMenuItem<RecordingsPageMenuItem>(
-          value: RecordingsPageMenuItem.settings,
-          child: Row(
-            children: [
-              Icon(Icons.settings_outlined),
-              SizedBox(
-                width: 12,
-              ),
-              Text('Settings'),
-            ],
-          ),
-        ),
       ],
     );
   }

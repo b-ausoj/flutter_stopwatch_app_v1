@@ -38,13 +38,15 @@ class _StopwatchesPageState extends State<StopwatchesPage>
         leading: NavIcon(_stopwatchesPageController),
         actions: [
           StopwatchesPagePopupMenuButton(
+            _stopwatchesPageController.name,
             onSelected: (StopwatchesPageMenuItem item) {
               switch (item) {
                 case StopwatchesPageMenuItem.rename:
                   _showRenameDialog();
                   break;
-                case StopwatchesPageMenuItem.addStopwatch:
-                  _stopwatchesPageController.addStopwatch();
+                case StopwatchesPageMenuItem.deleteScreen:
+                  deleteScreen(_stopwatchesPageController.name);
+                  Navigator.pop(context); // somehow have to update the start screen
                   break;
                 case StopwatchesPageMenuItem.saveAll:
                   for (var element
@@ -64,9 +66,6 @@ class _StopwatchesPageState extends State<StopwatchesPage>
                   break;
                 case StopwatchesPageMenuItem.changeOrder:
                   _showOrderDialog();
-                  break;
-                case StopwatchesPageMenuItem.settings:
-                  resetSharedPreferences(); // TODO: here can easy reset only for debugging
                   break;
               }
             },

@@ -30,4 +30,11 @@ class StartController extends BadgeController {
   void refreshNames() {
     loadScreens(names, update);
   }
+
+  void removeScreen(String name) {
+    deleteScreen(name).then((value) {
+      names.remove(name);
+      refreshBadgeState();
+    });
+  }
 }

@@ -61,6 +61,8 @@ class _StartPageState extends State<StartPage> {
                                 _showRenameDialog(screen);
                                 break;
                               case StartPageCardMenuItem.delete:
+                                startController.removeScreen(screen);
+                                setState(() {});
                                 break;
                             }
                           }),
