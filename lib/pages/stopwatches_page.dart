@@ -5,6 +5,7 @@ import 'package:flutter_stopwatch_app_v1/controllers/stopwatches_page_controller
 import 'package:flutter_stopwatch_app_v1/enums/sort_criterion.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
 import 'package:flutter_stopwatch_app_v1/enums/stopwatches_page_menu_item.dart';
+import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/add_stopwatch_card.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/dialogs/delete_screen_dialog.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_stopwatch_app_v1/widgets/dialogs/sort_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/navigation_drawer.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/navigation_icon.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/stopwatches_page_popup_menu_button.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/stopwatch_card.dart';
 
 class StopwatchesPage extends StatefulWidget {
   final String name;
@@ -49,12 +51,15 @@ class _StopwatchesPageState extends State<StopwatchesPage>
                   _showDeleteScreenDialog();
                   break;
                 case StopwatchesPageMenuItem.saveAll:
-                  for (var element
+                  for (StopwatchCard element
                       in _stopwatchesPageController.stopwatchCards) {
-                    saveStopwatch(element.stopwatchModel,
-                        _stopwatchesPageController.name);
-                    storeStopwatchState(
-                        element.stopwatchModel, _stopwatchesPageController);
+                    if (element.stopwatchModel.state ==
+                        StopwatchState.stopped) {
+                      saveStopwatch(element.stopwatchModel,
+                          _stopwatchesPageController.name);
+                      storeStopwatchState(
+                          element.stopwatchModel, _stopwatchesPageController);
+                    }
                   }
                   _stopwatchesPageController.changedState();
                   break;
@@ -129,6 +134,22 @@ class _StopwatchesPageState extends State<StopwatchesPage>
     _ticker.start();
   }
 
+  Future<void> _showDeleteScreenDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return DeleteScreenDialog(
+          _stopwatchesPageController.name,
+          onAccept: () {
+            deleteScreen(_stopwatchesPageController.name);
+            Navigator.pop(context);
+          },
+        );
+      },
+    );
+  }
+
   Future<void> _showOrderDialog() async {
     return showDialog<void>(
       context: context,
@@ -159,22 +180,6 @@ class _StopwatchesPageState extends State<StopwatchesPage>
             screens[indexToReplace] = newName;
           }
         });
-      },
-    );
-  }
-
-  Future<void> _showDeleteScreenDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return DeleteScreenDialog(
-          _stopwatchesPageController.name,
-          onAccept: () {
-            deleteScreen(_stopwatchesPageController.name);
-            Navigator.pop(context);
-          },
-        );
       },
     );
   }
