@@ -28,7 +28,7 @@ class StopwatchesPagePopupMenuButton extends StatelessWidget {
           ),
         ),
         PopupMenuItem<StopwatchesPageMenuItem>(
-          value: StopwatchesPageMenuItem.deleteScreen,
+          value: StopwatchesPageMenuItem.deleteConfiguration,
           child: Row(
             children: [
               const Icon(Icons.delete_forever_outlined),

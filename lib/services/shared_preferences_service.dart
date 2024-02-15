@@ -14,22 +14,22 @@ import 'package:flutter_stopwatch_app_v1/widgets/recording_card.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/stopwatch_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<void> loadScreens(List<String> screens, var update) async {
-  screens.clear();
+Future<void> loadConfigurations(List<String> configurations, var update) async {
+  configurations.clear();
   final prefs = await SharedPreferences.getInstance();
-  screens.addAll(prefs.getStringList("screens") ?? []);
+  configurations.addAll(prefs.getStringList("configurations") ?? []);
   update();
 }
 
-Future<void> renameScreen(String oldName, String newName, var update) async {
+Future<void> renameConfiguration(String oldName, String newName, var update) async {
   final prefs = await SharedPreferences.getInstance();
 
-  List<String> screens = prefs.getStringList("screens") ?? [];
-  int indexToReplace = screens.indexOf(oldName);
+  List<String> configurations = prefs.getStringList("configurations") ?? [];
+  int indexToReplace = configurations.indexOf(oldName);
   if (indexToReplace != -1) {
-    screens[indexToReplace] = newName;
+    configurations[indexToReplace] = newName;
   }
-  prefs.setStringList("screens", screens);
+  prefs.setStringList("configurations", configurations);
 
   List<String> stopwatchesPage = prefs.getStringList(oldName) ?? [];
   prefs.setStringList(newName, stopwatchesPage);
@@ -38,20 +38,20 @@ Future<void> renameScreen(String oldName, String newName, var update) async {
   update();
 }
 
-Future<String> deleteScreen(String name) async {
+Future<String> deleteConfiguration(String name) async {
   final prefs = await SharedPreferences.getInstance();
 
-  List<String> screens = prefs.getStringList("screens") ?? [];
-  String screen = screens.elementAt(screens.indexOf(name));
-  screens.remove(name); //TODO: shoudl always be true
-  prefs.setStringList("screens", screens);
+  List<String> configurations = prefs.getStringList("configurations") ?? [];
+  String configuration = configurations.elementAt(configurations.indexOf(name));
+  configurations.remove(name); //TODO: shoudl always be true
+  prefs.setStringList("configurations", configurations);
 
   prefs.remove(name);
 
-  return screen;
+  return configuration;
 }
 
-Future<void> restoreScreen(String name, String screen) async {}
+Future<void> restoreConfiguration(String name, String configuration) async {}
 
 Future<void> loadRecordings(
     RecordingsPageController recordingsPageController) async {
@@ -123,7 +123,7 @@ Future<void> resetSharedPreferences() async {
 }
 
 Future<void> saveStopwatch(
-    StopwatchModel stopwatchModel, String screenName) async {
+    StopwatchModel stopwatchModel, String configurationName) async {
   final prefs = await SharedPreferences.getInstance();
   RecordingModel.nextId = prefs.getInt("nextRecordingId") ?? 1;
   RecordingModel model = RecordingModel(
@@ -131,7 +131,7 @@ Future<void> saveStopwatch(
       stopwatchModel.name,
       stopwatchModel.startTimestamp,
       false,
-      screenName,
+      configurationName,
       stopwatchModel.elapsedTime);
   model.lapTimes = stopwatchModel.lapList;
   model.lapTimes.add(
@@ -157,9 +157,9 @@ Future<void> storeRecordingState(RecordingModel model) async {
   prefs.setStringList("recordings", recordings);
 }
 
-Future<void> storeScreens(List<String> screens) async {
+Future<void> storeConfigurations(List<String> configurations) async {
   final prefs = await SharedPreferences.getInstance();
-  prefs.setStringList("screens", screens);
+  prefs.setStringList("configurations", configurations);
 }
 
 Future<void> storeStopwatchesPageState(

@@ -3,7 +3,7 @@ import 'package:flutter_stopwatch_app_v1/controllers/start_page_controller.dart'
 import 'package:flutter_stopwatch_app_v1/enums/start_page_card_menu_item.dart';
 import 'package:flutter_stopwatch_app_v1/pages/stopwatches_page.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/dialogs/delete_screen_dialog.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/dialogs/delete_configuration_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/dialogs/rename_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/navigation_drawer.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/navigation_icon.dart';
@@ -44,7 +44,7 @@ class _StartPageState extends State<StartPage>
               child: ListView(
                 shrinkWrap: true,
                 children: [
-                  ...startController.names.map((String screen) => Card(
+                  ...startController.names.map((String configuration) => Card(
                         color: const Color(0xFFEFEFEF),
                         elevation: 0,
                         child: ListTile(
@@ -53,15 +53,15 @@ class _StartPageState extends State<StartPage>
                           leading: const Icon(Icons.timer_outlined),
                           title: Center(
                               child: StartTextWithBadge(startController,
-                                  startController.names.indexOf(screen))),
+                                  startController.names.indexOf(configuration))),
                           trailing: StartPagePopupMenuButton(
                               onSelected: (StartPageCardMenuItem item) {
                             switch (item) {
                               case StartPageCardMenuItem.rename:
-                                _showRenameDialog(screen);
+                                _showRenameDialog(configuration);
                                 break;
                               case StartPageCardMenuItem.delete:
-                                _showDeleteScreenDialog(screen);
+                                _showDeleteConfigurationDialog(configuration);
                                 break;
                             }
                           }),
@@ -69,7 +69,7 @@ class _StartPageState extends State<StartPage>
                             Navigator.of(context)
                                 .push(MaterialPageRoute(
                                     builder: (context) =>
-                                        StopwatchesPage(screen)))
+                                        StopwatchesPage(configuration)))
                                 .then((value) {
                               startController.refreshBadgeState();
                               startController.refreshNames();
@@ -79,24 +79,24 @@ class _StartPageState extends State<StartPage>
                         ),
                       )),
                   Card(
-                    // Add new Screen
+                    // Add new Configuration
                     margin: const EdgeInsets.symmetric(
                         horizontal: 8.0, vertical: 4.0),
                     color: const Color(0xFFEFEFEF),
                     elevation: 0,
                     child: ListTile(
                       leading: const Icon(Icons.add_to_photos_outlined),
-                      title: const Text("Add new Screen"),
+                      title: const Text("Add new Configuration"),
                       onTap: () {
                         startController.names
-                            .add("Screen ${startController.names.length + 1}");
+                            .add("Configuration ${startController.names.length + 1}");
                         startController.refreshBadgeState();
-                        storeScreens(startController.names);
+                        storeConfigurations(startController.names);
                         setState(() {});
                         Navigator.of(context)
                             .push(MaterialPageRoute(
                                 builder: (context) => StopwatchesPage(
-                                    "Screen ${startController.names.length}")))
+                                    "Configuration ${startController.names.length}")))
                             .then((value) {
                           startController.refreshBadgeState();
                           startController.refreshNames();
@@ -121,7 +121,7 @@ class _StartPageState extends State<StartPage>
       builder: (BuildContext context) {
         return RenameDialog(oldName, (String newName) {
           setState(() {});
-          renameScreen(oldName, newName, () => setState(() {}));
+          renameConfiguration(oldName, newName, () => setState(() {}));
           int indexToReplace = startController.names.indexOf(oldName);
           if (indexToReplace != -1) {
             startController.names[indexToReplace] = newName;
@@ -131,15 +131,15 @@ class _StartPageState extends State<StartPage>
     );
   }
 
-  Future<void> _showDeleteScreenDialog(String name) async {
+  Future<void> _showDeleteConfigurationDialog(String name) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        return DeleteScreenDialog(
+        return DeleteConfigurationDialog(
           name,
           onAccept: () {
-            startController.removeScreen(name);
+            startController.removeConfiguration(name);
             setState(() {});
           },
         );

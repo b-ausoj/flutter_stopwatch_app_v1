@@ -16,10 +16,10 @@ class StopwatchesPageController extends BadgeController {
 
   final List<StopwatchCard> _stopwatchCards = [];
   final List<String> _oldStopwatchesPage = [];
-  String name;
+  String name; // added
 
-  SortCriterion _order = SortCriterion.creationDate;
-  SortDirection _direction = SortDirection.ascending;
+  SortCriterion _order = SortCriterion.creationDate; // added
+  SortDirection _direction = SortDirection.ascending; // added
 
   StopwatchesPageController(this.context, this.name);
 

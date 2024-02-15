@@ -1,31 +1,31 @@
-// get all screens and for every screen get all stopwatches
+// get all configurations and for every configuration get all stopwatches
 // check for every stopwatch if it is running
-// if one is running and its not the current screen, show a badge at the menu burger
-// if the navdrawer is open, show a badge at the corresponding screen where the stopwatch is running
+// if one is running and its not the current configuration, show a badge at the menu burger
+// if the navdrawer is open, show a badge at the corresponding configuration where the stopwatch is running
 
 import 'dart:convert';
 
 import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<List<String>> getAllRunningScreens() async {
-  List<String> runningScreens = [];
+Future<List<String>> getAllRunningConfigurations() async {
+  List<String> runningConfigurations = [];
 
   final prefs = await SharedPreferences.getInstance();
-  List<String> allScreens = prefs.getStringList("screens") ?? [];
+  List<String> allConfigurations = prefs.getStringList("configurations") ?? [];
 
-  for (String screen in allScreens) {
-    List<String> allStopwatches = prefs.getStringList(screen) ?? [];
+  for (String configuration in allConfigurations) {
+    List<String> allStopwatches = prefs.getStringList(configuration) ?? [];
     for (String stopwatch in allStopwatches) {
       dynamic json = jsonDecode(stopwatch);
       if (json["state"] == "${StopwatchState.running}") {
-        runningScreens.add(screen);
+        runningConfigurations.add(configuration);
         break;
       }
     }
   }
 
-  return runningScreens;
+  return runningConfigurations;
 }
 
 Future<int> getUnseenRecordingsCount() async {
@@ -44,15 +44,15 @@ Future<int> getUnseenRecordingsCount() async {
 }
 
 Future<bool> isBackBadgeRequired() async {
-  return (await getAllRunningScreens()).isNotEmpty;
+  return (await getAllRunningConfigurations()).isNotEmpty;
 }
 
 // menu badge only if there are any running stopwatches or new recordings entries
-Future<bool> isMenuBadgeRequired(String screen) async {
+Future<bool> isMenuBadgeRequired(String configuration) async {
   // check if there are any running stopwatches
-  List<String> runningScreens = await getAllRunningScreens();
-  runningScreens.remove(screen);
-  if (runningScreens.isNotEmpty) {
+  List<String> runningConfigurations = await getAllRunningConfigurations();
+  runningConfigurations.remove(configuration);
+  if (runningConfigurations.isNotEmpty) {
     return true;
   }
   // check if there are any unseen recordings entries
@@ -60,8 +60,8 @@ Future<bool> isMenuBadgeRequired(String screen) async {
   return unseenRecordingsCount > 0;
 }
 
-Future<bool> isTextBadgeRequired(String screen) async {
+Future<bool> isTextBadgeRequired(String configuration) async {
   // check if there are any running stopwatches
-  List<String> runningScreens = await getAllRunningScreens();
-  return runningScreens.contains(screen);
+  List<String> runningConfigurations = await getAllRunningConfigurations();
+  return runningConfigurations.contains(configuration);
 }

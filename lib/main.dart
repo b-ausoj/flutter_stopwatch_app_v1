@@ -6,7 +6,7 @@ void main() {
   runApp(const MyApp());
 }
 
-// TODO: at renaming stopwatches / saved stopwatches / screens, ensure that there is at least one character
+// TODO: at renaming stopwatches / saved stopwatches / configurations, ensure that there is at least one character
 // TODO: undo in recordings page
 // TODO: reorganize recordings page
 // TODO: settings page where user can set default order and orientation
@@ -18,7 +18,7 @@ void main() {
 // TODO: write help page
 // TODO: write tutorial page
 // TODO: recordings instead of recordings
-// TODO: add introduction screen
+// TODO: add introduction configuration
 // TODO: add an configuration screen where I can save all the stopwatches (with name and order) and load some others
 
 class MyApp extends StatelessWidget {

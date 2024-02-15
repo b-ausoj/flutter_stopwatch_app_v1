@@ -9,14 +9,14 @@ import 'package:flutter_stopwatch_app_v1/utils/badge_checking.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/text_with_badge/nav_text_with_badge.dart';
 
 class NavDrawer extends StatefulWidget {
-  final List<String> screens;
+  final List<String> configurations;
   // add list of startControllers so that if we open the drawer from start page and
-  // then navigate to a screen and go back per arrows (back wishing)
+  // then navigate to a configuration and go back per arrows (back wishing)
   // the badge will be updated
   final BadgeController controller;
   final String name;
   final bool isStartPage;
-  const NavDrawer(this.screens, this.controller, this.name, this.isStartPage,
+  const NavDrawer(this.configurations, this.controller, this.name, this.isStartPage,
       {super.key});
 
   @override
@@ -24,13 +24,13 @@ class NavDrawer extends StatefulWidget {
 }
 
 class _NavDrawerState extends State<NavDrawer> {
-  late int _selectedIndex = widget.screens.indexOf(widget.name);
-  late final List<String> _screens = widget.screens;
+  late int _selectedIndex = widget.configurations.indexOf(widget.name);
+  late final List<String> _configurations = widget.configurations;
 
   @override
   Widget build(BuildContext context) {
     return NavigationDrawer(
-        onDestinationSelected: handleScreenChanged,
+        onDestinationSelected: handleConfigurationChanged,
         selectedIndex: _selectedIndex,
         backgroundColor: const Color(0xFFDFDFDF),
         indicatorColor: const Color(0xFFBFBFBF),
@@ -42,11 +42,11 @@ class _NavDrawerState extends State<NavDrawer> {
               style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
-          ..._screens.map((String screen) => NavigationDrawerDestination(
+          ..._configurations.map((String configuration) => NavigationDrawerDestination(
               icon: const Icon(Icons.timer_outlined),
-              label: NavTextWithBadge(screen, false))),
+              label: NavTextWithBadge(configuration, false))),
           const NavigationDrawerDestination(
-              icon: Icon(Icons.add), label: Text("Add Screen")),
+              icon: Icon(Icons.add), label: Text("Add Configuration")),
           const Divider(),
           const NavigationDrawerDestination(
               icon: Icon(Icons.history),
@@ -58,34 +58,34 @@ class _NavDrawerState extends State<NavDrawer> {
         ]);
   }
 
-  void handleScreenChanged(int selectedIndex) {
-    String? selectedScreen = _screens.elementAtOrNull(selectedIndex);
+  void handleConfigurationChanged(int selectedIndex) {
+    String? selectedConfiguration = _configurations.elementAtOrNull(selectedIndex);
 
-    if (selectedScreen != null) {
-      // screen x
+    if (selectedConfiguration != null) {
+      // configuration x
       Navigator.pop(context);
       if (!widget.isStartPage) {
         Navigator.pop(context);
       }
       Navigator.of(context)
           .push(MaterialPageRoute(
-              builder: (context) => StopwatchesPage(selectedScreen)))
+              builder: (context) => StopwatchesPage(selectedConfiguration)))
           .then((value) => widget.controller.refreshBadgeState());
     } else {
-      int base = _screens.length;
+      int base = _configurations.length;
       switch (selectedIndex - base) {
         case 0:
-          // add screen
+          // add configuration
           Navigator.pop(context);
           if (!widget.isStartPage) {
             Navigator.pop(context);
           }
-          _screens.add("Screen ${_screens.length + 1}");
-          storeScreens(_screens);
+          _configurations.add("Configuration ${_configurations.length + 1}");
+          storeConfigurations(_configurations);
           Navigator.of(context)
               .push(MaterialPageRoute(
                   builder: (context) =>
-                      StopwatchesPage("Screen ${_screens.length}")))
+                      StopwatchesPage("Configuration ${_configurations.length}")))
               .then((value) => widget.controller.refreshBadgeState());
           break;
         case 1:
@@ -110,7 +110,7 @@ class _NavDrawerState extends State<NavDrawer> {
 
           break;
         default:
-          throw Exception("Invalid selectedScreen state");
+          throw Exception("Invalid selectedConfiguration state");
       }
     }
 

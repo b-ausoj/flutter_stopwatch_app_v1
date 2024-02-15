@@ -4,14 +4,14 @@ import 'package:flutter_stopwatch_app_v1/utils/badge_checking.dart';
 
 class StartController extends BadgeController {
   List<String> names = [];
-  // needs the label/visible for the menu(drawr) icon an the screen list items
+  // needs the label/visible for the menu(drawr) icon an the configuration list items
   // TODO: use better naming for the list
   List<bool> badgeVisibles = [];
 
   void Function() update;
 
   StartController(this.update) {
-    loadScreens(names, update).then((value) => refreshBadgeState());
+    loadConfigurations(names, update).then((value) => refreshBadgeState());
   }
 
   @override
@@ -28,11 +28,11 @@ class StartController extends BadgeController {
   }
 
   void refreshNames() {
-    loadScreens(names, update);
+    loadConfigurations(names, update);
   }
 
-  void removeScreen(String name) {
-    deleteScreen(name).then((value) {
+  void removeConfiguration(String name) {
+    deleteConfiguration(name).then((value) {
       names.remove(name);
       refreshBadgeState();
     });

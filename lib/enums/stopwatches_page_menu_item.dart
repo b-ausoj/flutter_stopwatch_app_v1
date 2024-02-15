@@ -1,6 +1,6 @@
 enum StopwatchesPageMenuItem {
   rename,
-  deleteScreen,
+  deleteConfiguration,
   saveAll,
   resetAll,
   deleteAll,

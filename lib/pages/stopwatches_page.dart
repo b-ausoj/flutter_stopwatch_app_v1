@@ -8,7 +8,7 @@ import 'package:flutter_stopwatch_app_v1/enums/stopwatches_page_menu_item.dart';
 import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/add_stopwatch_card.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/dialogs/delete_screen_dialog.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/dialogs/delete_configuration_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/dialogs/rename_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/dialogs/sort_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/navigation_drawer.dart';
@@ -28,7 +28,7 @@ class _StopwatchesPageState extends State<StopwatchesPage>
     with SingleTickerProviderStateMixin {
   late final Ticker _ticker;
   late final StopwatchesPageController _stopwatchesPageController;
-  late final List<String> screens;
+  late final List<String> configurations;
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +47,8 @@ class _StopwatchesPageState extends State<StopwatchesPage>
                 case StopwatchesPageMenuItem.rename:
                   _showRenameDialog();
                   break;
-                case StopwatchesPageMenuItem.deleteScreen:
-                  _showDeleteScreenDialog();
+                case StopwatchesPageMenuItem.deleteConfiguration:
+                  _showDeleteConfigurationDialog();
                   break;
                 case StopwatchesPageMenuItem.saveAll:
                   for (StopwatchCard element
@@ -77,7 +77,7 @@ class _StopwatchesPageState extends State<StopwatchesPage>
           )
         ],
       ),
-      drawer: NavDrawer(screens, _stopwatchesPageController,
+      drawer: NavDrawer(configurations, _stopwatchesPageController,
           _stopwatchesPageController.name, false),
       floatingActionButton: _stopwatchesPageController.isFabActive()
           ? FloatingActionButton.extended(
@@ -124,8 +124,8 @@ class _StopwatchesPageState extends State<StopwatchesPage>
     super.initState();
     loadStopwatchesPageState(_stopwatchesPageController =
         StopwatchesPageController(context, widget.name));
-    loadScreens(
-        screens = [],
+    loadConfigurations(
+        configurations = [],
         () => setState(
             () {})); // do I have to do something in setState with the controller?
     _ticker = createTicker((elapsed) {
@@ -134,15 +134,15 @@ class _StopwatchesPageState extends State<StopwatchesPage>
     _ticker.start();
   }
 
-  Future<void> _showDeleteScreenDialog() async {
+  Future<void> _showDeleteConfigurationDialog() async {
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        return DeleteScreenDialog(
+        return DeleteConfigurationDialog(
           _stopwatchesPageController.name,
           onAccept: () {
-            deleteScreen(_stopwatchesPageController.name);
+            deleteConfiguration(_stopwatchesPageController.name);
             Navigator.pop(context);
           },
         );
@@ -174,10 +174,10 @@ class _StopwatchesPageState extends State<StopwatchesPage>
           setState(() {
             _stopwatchesPageController.name = newName;
           });
-          renameScreen(oldName, newName, () => setState(() {}));
-          int indexToReplace = screens.indexOf(oldName);
+          renameConfiguration(oldName, newName, () => setState(() {}));
+          int indexToReplace = configurations.indexOf(oldName);
           if (indexToReplace != -1) {
-            screens[indexToReplace] = newName;
+            configurations[indexToReplace] = newName;
           }
         });
       },
