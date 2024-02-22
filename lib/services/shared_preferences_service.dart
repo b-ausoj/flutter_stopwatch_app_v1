@@ -10,8 +10,8 @@ import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
 import 'package:flutter_stopwatch_app_v1/models/lap_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/recording_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/recording_card.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/stopwatch_card.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/cards/recording_card.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/cards/stopwatch_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> loadConfigurations(List<String> configurations, var update) async {
@@ -108,12 +108,12 @@ Future<void> loadStopwatchesPageState(
 
 Future<void> logAllSharedPreferences() async {
   final prefs = await SharedPreferences.getInstance();
-  log("logAllSharedPreferences");
+  log("\nlogAllSharedPreferences\n\n");
   var keys = prefs.getKeys();
   for (var key in keys) {
     log("$key: ${prefs.get(key)}");
   }
-  log("logAllSharedPreferences end");
+  log("\nlogAllSharedPreferences end\n\n");
 }
 
 Future<void> resetSharedPreferences() async {

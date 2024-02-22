@@ -7,14 +7,14 @@ import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
 import 'package:flutter_stopwatch_app_v1/enums/stopwatches_page_menu_item.dart';
 import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/add_stopwatch_card.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/cards/add_stopwatch_card.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/dialogs/delete_configuration_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/dialogs/rename_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/dialogs/sort_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/navigation_drawer.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/navigation_icon.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/icons/navigation_icon.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/stopwatches_page_popup_menu_button.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/stopwatch_card.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/cards/stopwatch_card.dart';
 
 class StopwatchesPage extends StatefulWidget {
   final String name;

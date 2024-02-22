@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/pages/agb_page.dart';
 import 'package:flutter_stopwatch_app_v1/services/launch_url_service.dart';
 import 'package:flutter_stopwatch_app_v1/utils/snackbar_utils.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/back_icon.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/icons/back_icon.dart';
 
 class AboutPage extends StatelessWidget {
   final bool isBadgeVisible;

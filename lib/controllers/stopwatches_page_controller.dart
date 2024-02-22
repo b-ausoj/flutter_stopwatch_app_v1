@@ -9,7 +9,7 @@ import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dar
 import 'package:flutter_stopwatch_app_v1/utils/badge_checking.dart';
 import 'package:flutter_stopwatch_app_v1/utils/snackbar_utils.dart';
 import 'package:flutter_stopwatch_app_v1/utils/sorting.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/stopwatch_card.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/cards/stopwatch_card.dart';
 
 class StopwatchesPageController extends BadgeController {
   BuildContext context;

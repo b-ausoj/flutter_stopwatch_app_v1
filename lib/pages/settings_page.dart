@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/back_icon.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/icons/back_icon.dart';
 
 class SettingsPage extends StatelessWidget {
   final bool isBadgeVisible;

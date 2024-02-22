@@ -10,7 +10,7 @@ import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
 // the controller only has the cards and the model
 // every screen has an unique id and order and direction
 // TODO: rename order to criterion
-class Configuration {
+class ConfigurationModel {
   static int nextId = 1;
   final int id;
   
@@ -21,5 +21,5 @@ class Configuration {
 
   List<StopwatchModel> stopwatches;
 
-  Configuration(this.name, this.id, this.order, this.direction, this.stopwatches);
+  ConfigurationModel(this.name, this.id, this.order, this.direction, this.stopwatches);
 }
