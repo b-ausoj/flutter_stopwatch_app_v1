@@ -5,20 +5,23 @@ import 'package:flutter_stopwatch_app_v1/controllers/stopwatches_page_controller
 import 'package:flutter_stopwatch_app_v1/enums/sort_criterion.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
 import 'package:flutter_stopwatch_app_v1/enums/stopwatches_page_menu_item.dart';
+import 'package:flutter_stopwatch_app_v1/models/configuration_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/cards/add_stopwatch_card.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/cards/stopwatch_card.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/dialogs/delete_configuration_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/dialogs/rename_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/dialogs/sort_dialog.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/navigation_drawer.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/icons/navigation_icon.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/navigation_drawer.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/stopwatches_page_popup_menu_button.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/cards/stopwatch_card.dart';
 
 class StopwatchesPage extends StatefulWidget {
-  final String name;
-  const StopwatchesPage(this.name, {super.key});
+  final ConfigurationModel configurationModel;
+  final List<ConfigurationModel> configurations;
+  const StopwatchesPage(this.configurationModel, this.configurations,
+      {super.key});
 
   @override
   State<StopwatchesPage> createState() => _StopwatchesPageState();
@@ -28,7 +31,6 @@ class _StopwatchesPageState extends State<StopwatchesPage>
     with SingleTickerProviderStateMixin {
   late final Ticker _ticker;
   late final StopwatchesPageController _stopwatchesPageController;
-  late final List<String> configurations;
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +59,6 @@ class _StopwatchesPageState extends State<StopwatchesPage>
                         StopwatchState.stopped) {
                       saveStopwatch(element.stopwatchModel,
                           _stopwatchesPageController.name);
-                      storeStopwatchState(
-                          element.stopwatchModel, _stopwatchesPageController);
                     }
                   }
                   _stopwatchesPageController.changedState();
@@ -77,8 +77,8 @@ class _StopwatchesPageState extends State<StopwatchesPage>
           )
         ],
       ),
-      drawer: NavDrawer(configurations, _stopwatchesPageController,
-          _stopwatchesPageController.name, false),
+      drawer: NavDrawer(widget.configurations, _stopwatchesPageController,
+          _stopwatchesPageController.configurationModel, false),
       floatingActionButton: _stopwatchesPageController.isFabActive()
           ? FloatingActionButton.extended(
               foregroundColor: Colors.white,
@@ -105,8 +105,6 @@ class _StopwatchesPageState extends State<StopwatchesPage>
             var item =
                 _stopwatchesPageController.stopwatchCards.removeAt(oldIndex);
             _stopwatchesPageController.stopwatchCards.insert(newIndex, item);
-            storeStopwatchesPageState(
-                _stopwatchesPageController); // TODO: a bit redundant
           },
         ),
       ),
@@ -122,12 +120,8 @@ class _StopwatchesPageState extends State<StopwatchesPage>
   @override
   void initState() {
     super.initState();
-    loadStopwatchesPageState(_stopwatchesPageController =
-        StopwatchesPageController(context, widget.name));
-    loadConfigurations(
-        configurations = [],
-        () => setState(
-            () {})); // do I have to do something in setState with the controller?
+    _stopwatchesPageController =
+        StopwatchesPageController(context, widget.configurationModel);
     _ticker = createTicker((elapsed) {
       setState(() {});
     });
@@ -142,7 +136,7 @@ class _StopwatchesPageState extends State<StopwatchesPage>
         return DeleteConfigurationDialog(
           _stopwatchesPageController.name,
           onAccept: () {
-            deleteConfiguration(_stopwatchesPageController.name);
+            widget.configurations.remove(widget.configurationModel);
             Navigator.pop(context);
           },
         );
@@ -157,7 +151,7 @@ class _StopwatchesPageState extends State<StopwatchesPage>
       builder: (BuildContext context) {
         return SortDialog(
             _stopwatchesPageController.order,
-            _stopwatchesPageController.orientation,
+            _stopwatchesPageController.direction,
             (SortCriterion order, SortDirection orientation) =>
                 _stopwatchesPageController.setSorting(order, orientation));
       },
@@ -174,11 +168,6 @@ class _StopwatchesPageState extends State<StopwatchesPage>
           setState(() {
             _stopwatchesPageController.name = newName;
           });
-          renameConfiguration(oldName, newName, () => setState(() {}));
-          int indexToReplace = configurations.indexOf(oldName);
-          if (indexToReplace != -1) {
-            configurations[indexToReplace] = newName;
-          }
         });
       },
     );

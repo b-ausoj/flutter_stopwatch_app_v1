@@ -4,54 +4,23 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/controllers/recordings_page_controller.dart';
-import 'package:flutter_stopwatch_app_v1/controllers/stopwatches_page_controller.dart';
-import 'package:flutter_stopwatch_app_v1/enums/sort_criterion.dart';
-import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
+import 'package:flutter_stopwatch_app_v1/models/configuration_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/lap_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/recording_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/cards/recording_card.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/cards/stopwatch_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<void> loadConfigurations(List<String> configurations, var update) async {
-  configurations.clear();
+// This function is only executed once per app lifecycle namely for the initialization
+Future<void> loadData(
+    List<ConfigurationModel> configurations, String key) async {
   final prefs = await SharedPreferences.getInstance();
-  configurations.addAll(prefs.getStringList("configurations") ?? []);
-  update();
-}
-
-Future<void> renameConfiguration(String oldName, String newName, var update) async {
-  final prefs = await SharedPreferences.getInstance();
-
-  List<String> configurations = prefs.getStringList("configurations") ?? [];
-  int indexToReplace = configurations.indexOf(oldName);
-  if (indexToReplace != -1) {
-    configurations[indexToReplace] = newName;
+  StopwatchModel.nextId = prefs.getInt("nextStopwatchId") ?? 1;
+  List<String> jsons = prefs.getStringList(key) ?? [];
+  for (String json in jsons) {
+    configurations.add(ConfigurationModel.fromJson(jsonDecode(json)));
   }
-  prefs.setStringList("configurations", configurations);
-
-  List<String> stopwatchesPage = prefs.getStringList(oldName) ?? [];
-  prefs.setStringList(newName, stopwatchesPage);
-  prefs.remove(oldName);
-
-  update();
 }
-
-Future<String> deleteConfiguration(String name) async {
-  final prefs = await SharedPreferences.getInstance();
-
-  List<String> configurations = prefs.getStringList("configurations") ?? [];
-  String configuration = configurations.elementAt(configurations.indexOf(name));
-  configurations.remove(name); //TODO: shoudl always be true
-  prefs.setStringList("configurations", configurations);
-
-  prefs.remove(name);
-
-  return configuration;
-}
-
-Future<void> restoreConfiguration(String name, String configuration) async {}
 
 Future<void> loadRecordings(
     RecordingsPageController recordingsPageController) async {
@@ -70,40 +39,6 @@ Future<void> loadRecordings(
   );
   recordingsPageController.createRecordingList();
   recordingsPageController.refresh();
-}
-
-Future<void> storeRecordingsState(
-    RecordingsPageController recordingsPageController) async {
-  final prefs = await SharedPreferences.getInstance();
-  List<String> recordings = [];
-  for (RecordingCard card in recordingsPageController.recordingCards) {
-    recordings.add(jsonEncode(card.recordingModel));
-  }
-  prefs.setStringList("recordings", recordings);
-}
-
-Future<void> loadStopwatchesPageState(
-    StopwatchesPageController stopwatchesPageController) async {
-  final prefs = await SharedPreferences.getInstance();
-  List<String> stopwatchesPage =
-      prefs.getStringList(stopwatchesPageController.name) ?? [];
-  for (String entry in stopwatchesPage) {
-    dynamic json = jsonDecode(entry);
-    stopwatchesPageController.stopwatchCards.add(StopwatchCard(
-      json["name"],
-      stopwatchesPageController.deleteStopwatch,
-      stopwatchesPageController.changedState,
-      json["id"],
-      key: Key("${json["id"]}"),
-      json: json,
-      stopwatchesPageController: stopwatchesPageController,
-    ));
-  }
-  StopwatchModel.nextId = prefs.getInt("nextStopwatchId") ?? 1;
-  stopwatchesPageController.setSorting(
-      SortCriterion.values[prefs.getInt("order") ?? 0],
-      SortDirection.values[prefs.getInt("direction") ?? 0]);
-  stopwatchesPageController.refreshBadgeState();
 }
 
 Future<void> logAllSharedPreferences() async {
@@ -147,6 +82,28 @@ Future<void> saveStopwatch(
   stopwatchModel.reset();
 }
 
+// TODO: Should test this function
+Future<void> storeData(
+    List<ConfigurationModel> configurations, String key) async {
+  final prefs = await SharedPreferences.getInstance();
+  prefs.setInt("nextStopwatchId", StopwatchModel.nextId);
+  List<String> jsons = [];
+  for (ConfigurationModel configurationModel in configurations) {
+    jsons.add(jsonEncode(configurationModel));
+  }
+  prefs.setStringList(key, jsons);
+}
+
+Future<void> storeRecordingsState(
+    RecordingsPageController recordingsPageController) async {
+  final prefs = await SharedPreferences.getInstance();
+  List<String> recordings = [];
+  for (RecordingCard card in recordingsPageController.recordingCards) {
+    recordings.add(jsonEncode(card.recordingModel));
+  }
+  prefs.setStringList("recordings", recordings);
+}
+
 Future<void> storeRecordingState(RecordingModel model) async {
   final prefs = await SharedPreferences.getInstance();
   List<String> recordings = prefs.getStringList("recordings") ?? [];
@@ -155,36 +112,4 @@ Future<void> storeRecordingState(RecordingModel model) async {
   );
   recordings.add(jsonEncode(model));
   prefs.setStringList("recordings", recordings);
-}
-
-Future<void> storeConfigurations(List<String> configurations) async {
-  final prefs = await SharedPreferences.getInstance();
-  prefs.setStringList("configurations", configurations);
-}
-
-Future<void> storeStopwatchesPageState(
-    StopwatchesPageController stopwatchesPageController) async {
-  final prefs = await SharedPreferences.getInstance();
-  List<String> stopwatchesPage = [];
-  for (StopwatchCard card in stopwatchesPageController.stopwatchCards) {
-    stopwatchesPage.add(jsonEncode(card.stopwatchModel));
-  }
-  prefs.setStringList(stopwatchesPageController.name, stopwatchesPage);
-  prefs.setInt("nextStopwatchId", StopwatchModel.nextId);
-  prefs.setInt(
-      "order", SortCriterion.values.indexOf(stopwatchesPageController.order));
-  prefs.setInt("direction",
-      SortDirection.values.indexOf(stopwatchesPageController.orientation));
-}
-
-Future<void> storeStopwatchState(StopwatchModel model,
-    StopwatchesPageController stopwatchesPageController) async {
-  final prefs = await SharedPreferences.getInstance();
-  List<String> stopwatchesPage =
-      prefs.getStringList(stopwatchesPageController.name) ?? [];
-  stopwatchesPage.removeWhere(
-    (element) => jsonDecode(element)["id"] == model.id,
-  );
-  stopwatchesPage.add(jsonEncode(model));
-  prefs.setStringList(stopwatchesPageController.name, stopwatchesPage);
 }

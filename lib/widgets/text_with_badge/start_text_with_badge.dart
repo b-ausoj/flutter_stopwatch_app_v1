@@ -22,7 +22,7 @@ class _StartTextWithBadgeState extends State<StartTextWithBadge> {
       child: Padding(
         padding: const EdgeInsets.only(right: 16.0, left: 16.0),
         child: Text(
-          widget.controller.names[widget.index],
+          widget.controller.configurations[widget.index].name,
         ),
       ),
     );

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/pages/start_page.dart';
-import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,7 +25,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //resetSharedPreferences();
-    logAllSharedPreferences();
+    //logAllSharedPreferences();
     return MaterialApp(
       title: "Stopwatch by Josua",
       theme: ThemeData(
@@ -44,7 +43,9 @@ class MyApp extends StatelessWidget {
           surfaceTintColor: Color.fromARGB(255, 255, 255, 255),
         ),
       ),
-      home: const StartPage(),
+      home: const StartPage(
+        sharedPreferencesKey: "key_v5",
+      ),
     );
   }
 }

@@ -6,21 +6,17 @@ import 'package:flutter_stopwatch_app_v1/enums/stopwatch_card_menu_item.dart';
 import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/utils/times_formatting_utils.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/stopwatch_popup_menu_button.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/dialogs/rename_dialog.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/stopwatch_popup_menu_button.dart';
 
 class StopwatchCard extends StatefulWidget {
-  final int id;
-  final String name;
-  final dynamic json;
   final StopwatchesPageController stopwatchesPageController;
-  final void Function(int id, String name) deleteStopwatch;
   final void Function() changedState;
-  late final StopwatchModel stopwatchModel =
-      (json == null) ? StopwatchModel(name, id) : StopwatchModel.fromJson(json);
+  
+  final StopwatchModel stopwatchModel;
 
-  StopwatchCard(this.name, this.deleteStopwatch, this.changedState, this.id,
-      {super.key, this.json, required this.stopwatchesPageController});
+  const StopwatchCard(this.stopwatchModel, this.changedState,
+      {super.key, required this.stopwatchesPageController});
 
   @override
   State createState() => _StopwatchCardState();
@@ -116,8 +112,6 @@ class _StopwatchCardState extends State<StopwatchCard>
                               case StopwatchState.stopped:
                                 saveStopwatch(_stopwatchModel,
                                     widget.stopwatchesPageController.name);
-                                storeStopwatchState(_stopwatchModel,
-                                    widget.stopwatchesPageController);
                                 widget.changedState();
                                 // TODO: use my snackbar functions
                                 ScaffoldMessenger.of(context)
@@ -128,8 +122,6 @@ class _StopwatchCardState extends State<StopwatchCard>
                                       label: "Undo reset",
                                       onPressed: () {
                                         _stopwatchModel.restore();
-                                        storeStopwatchState(_stopwatchModel,
-                                            widget.stopwatchesPageController);
                                         widget.changedState();
                                       }),
                                 ));
@@ -149,8 +141,6 @@ class _StopwatchCardState extends State<StopwatchCard>
                                 break;
                               case StopwatchState.stopped:
                                 _stopwatchModel.reset();
-                                storeStopwatchState(_stopwatchModel,
-                                    widget.stopwatchesPageController);
                                 widget.changedState();
                                 // TODO: use my snackbar functions
                                 ScaffoldMessenger.of(context)
@@ -168,7 +158,7 @@ class _StopwatchCardState extends State<StopwatchCard>
                             }
                             break;
                           case StopwatchCardMenuItem.delete:
-                            widget.deleteStopwatch(widget.id, widget.name);
+                            widget.stopwatchesPageController.deleteStopwatch(widget.stopwatchModel.id, widget.stopwatchModel.name);
                             break;
                         }
                       },
@@ -183,8 +173,6 @@ class _StopwatchCardState extends State<StopwatchCard>
                         StopwatchState.reseted => TextButton.icon(
                             onPressed: () {
                               _stopwatchModel.start();
-                              storeStopwatchState(_stopwatchModel,
-                                  widget.stopwatchesPageController);
                               widget.changedState();
                               HapticFeedback.lightImpact();
                             },
@@ -196,8 +184,6 @@ class _StopwatchCardState extends State<StopwatchCard>
                         StopwatchState.running => TextButton.icon(
                             onPressed: () {
                               _stopwatchModel.stop();
-                              storeStopwatchState(_stopwatchModel,
-                                  widget.stopwatchesPageController);
                               widget.changedState();
                               HapticFeedback.lightImpact();
                             },
@@ -209,8 +195,6 @@ class _StopwatchCardState extends State<StopwatchCard>
                         StopwatchState.stopped => TextButton.icon(
                             onPressed: () {
                               _stopwatchModel.resume();
-                              storeStopwatchState(_stopwatchModel,
-                                  widget.stopwatchesPageController);
                               widget.changedState();
                               HapticFeedback.lightImpact();
                             },
@@ -226,8 +210,6 @@ class _StopwatchCardState extends State<StopwatchCard>
                             _stopwatchModel.state == StopwatchState.running
                                 ? () {
                                     _stopwatchModel.lap();
-                                    storeStopwatchState(_stopwatchModel,
-                                        widget.stopwatchesPageController);
                                     widget.changedState();
                                     HapticFeedback.lightImpact();
                                   }
@@ -262,7 +244,7 @@ class _StopwatchCardState extends State<StopwatchCard>
   void initState() {
     super.initState();
     _ticker = createTicker((elapsed) {
-      assert(widget.id == _stopwatchModel.id); // TODO: remove for deployment
+      assert(widget.stopwatchModel.id == _stopwatchModel.id); // TODO: remove for deployment
       setState(() {});
     });
     _ticker.start();
@@ -275,8 +257,6 @@ class _StopwatchCardState extends State<StopwatchCard>
       builder: (BuildContext context) {
         return RenameDialog(_stopwatchModel.name, (String text) {
           _stopwatchModel.name = text;
-          storeStopwatchState(
-              _stopwatchModel, widget.stopwatchesPageController);
           widget.changedState();
         });
       },

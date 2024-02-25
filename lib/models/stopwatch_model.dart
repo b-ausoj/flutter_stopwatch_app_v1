@@ -11,11 +11,11 @@ class StopwatchModel {
   String name;
 
   StopwatchState state;
-  DateTime startedTime = DateTime.now();
+  DateTime startedTime = DateTime.now(); // when the stopwatch was started/resumed
   Duration savedTime;
-  DateTime startedLapTime = DateTime.now();
+  DateTime startedLapTime = DateTime.now(); // when the lap was started/resumed
   Duration savedLapTime;
-  DateTime startTimestamp = DateTime.now();
+  DateTime startTimestamp = DateTime.now(); // when the stopwatch was started for the recording
 
   int lapCount = 0;
   List<LapModel> lapList = [];
@@ -99,6 +99,15 @@ class StopwatchModel {
       json["${lap.id}"] = lap.lapTime.inMilliseconds;
     }
     return json;
+  }
+
+  @override
+  String toString() {
+    String string = "StopwatchModel: id: $id, name: $name, state: $state, startedTime: $startedTime, savedTime: $savedTime, startedLapTime: $startedLapTime, savedLapTime: $savedLapTime, startTimestamp: $startTimestamp, lapCount: $lapCount, lapList: \n\t\t";
+    for (var lap in lapList) {
+      string += "${lap.lapTime} ";
+    }
+    return string;
   }
 
   void start() {

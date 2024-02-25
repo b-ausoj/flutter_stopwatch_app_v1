@@ -5,8 +5,8 @@ import 'package:flutter_stopwatch_app_v1/widgets/cards/stopwatch_card.dart';
 buildSort(SortCriterion order, SortDirection orientation) => ((StopwatchCard a, StopwatchCard b) {
   int sign = orientation == SortDirection.ascending ? 1 : -1;
   switch (order) {
-    case SortCriterion.creationDate:
-      return sign * a.id.compareTo(b.id);
+    case SortCriterion.creationDate: // TODO: delete this case
+      return 0;
     case SortCriterion.name:
       return sign * a.stopwatchModel.name.compareTo(b.stopwatchModel.name);
     case SortCriterion.longestTime:
