@@ -5,7 +5,7 @@ void main() {
   runApp(const MyApp());
 }
 
-// TODO: at renaming stopwatches / saved stopwatches / configurations, ensure that there is at least one character
+// TODO: at renaming stopwatches / saved stopwatches / setups, ensure that there is at least one character
 // TODO: undo in recordings page
 // TODO: reorganize recordings page
 // TODO: settings page where user can set default order and orientation

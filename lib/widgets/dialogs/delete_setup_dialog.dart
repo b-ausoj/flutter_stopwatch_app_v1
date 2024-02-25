@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-class DeleteConfigurationDialog extends StatefulWidget {
+class DeleteSetupDialog extends StatefulWidget {
   final void Function() onAccept;
   final String name;
 
-  const DeleteConfigurationDialog(this.name, {required this.onAccept, super.key});
+  const DeleteSetupDialog(this.name, {required this.onAccept, super.key});
 
   @override
-  State<DeleteConfigurationDialog> createState() => _DeleteConfigurationDialogState();
+  State<DeleteSetupDialog> createState() => _DeleteSetupDialogState();
 }
 
-class _DeleteConfigurationDialogState extends State<DeleteConfigurationDialog> {
+class _DeleteSetupDialogState extends State<DeleteSetupDialog> {
   bool confirmed = false;
   bool red = false;
 

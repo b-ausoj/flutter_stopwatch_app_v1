@@ -3,9 +3,9 @@ import 'package:flutter_stopwatch_app_v1/controllers/start_page_controller.dart'
 import 'package:flutter_stopwatch_app_v1/enums/sort_criterion.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
 import 'package:flutter_stopwatch_app_v1/enums/start_page_card_menu_item.dart';
-import 'package:flutter_stopwatch_app_v1/models/configuration_model.dart';
+import 'package:flutter_stopwatch_app_v1/models/setup_model.dart';
 import 'package:flutter_stopwatch_app_v1/pages/stopwatches_page.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/dialogs/delete_configuration_dialog.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/dialogs/delete_setup_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/dialogs/rename_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/icons/navigation_icon.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/navigation_drawer.dart';
@@ -34,7 +34,7 @@ class _StartPageState extends State<StartPage>
         leading: NavIcon(_startController),
       ),
       drawer: NavDrawer(
-          _startController.configurations, _startController, null, true),
+          _startController.setups, _startController, null, true),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -47,8 +47,8 @@ class _StartPageState extends State<StartPage>
               child: ListView(
                 shrinkWrap: true,
                 children: [
-                  ..._startController.configurations
-                      .map((ConfigurationModel configuration) => Card(
+                  ..._startController.setups
+                      .map((SetupModel setup) => Card(
                             color: const Color(0xFFEFEFEF),
                             elevation: 0,
                             child: ListTile(
@@ -58,17 +58,17 @@ class _StartPageState extends State<StartPage>
                               title: Center(
                                   child: StartTextWithBadge(
                                       _startController,
-                                      _startController.configurations
-                                          .indexOf(configuration))),
+                                      _startController.setups
+                                          .indexOf(setup))),
                               trailing: StartPagePopupMenuButton(
                                   onSelected: (StartPageCardMenuItem item) {
                                 switch (item) {
                                   case StartPageCardMenuItem.rename:
-                                    _showRenameDialog(configuration);
+                                    _showRenameDialog(setup);
                                     break;
                                   case StartPageCardMenuItem.delete:
-                                    _showDeleteConfigurationDialog(
-                                        configuration);
+                                    _showDeleteSetupDialog(
+                                        setup);
                                     break;
                                 }
                               }),
@@ -76,8 +76,8 @@ class _StartPageState extends State<StartPage>
                                 Navigator.of(context)
                                     .push(MaterialPageRoute(
                                         builder: (context) => StopwatchesPage(
-                                            configuration,
-                                            _startController.configurations)))
+                                            setup,
+                                            _startController.setups)))
                                     .then((value) {
                                   _startController.refreshBadgeState();
                                   setState(() {});
@@ -86,28 +86,28 @@ class _StartPageState extends State<StartPage>
                             ),
                           )),
                   Card(
-                    // Add new Configuration
+                    // Add new Setup
                     margin: const EdgeInsets.symmetric(
                         horizontal: 8.0, vertical: 4.0),
                     color: const Color(0xFFEFEFEF),
                     elevation: 0,
                     child: ListTile(
                       leading: const Icon(Icons.add_to_photos_outlined),
-                      title: const Text("Add new Configuration"),
+                      title: const Text("Add new Setup"),
                       onTap: () {
-                        ConfigurationModel newConfiguration = ConfigurationModel(
-                            "Configuration ${_startController.configurations.length + 1}",
+                        SetupModel newSetup = SetupModel(
+                            "Setup ${_startController.setups.length + 1}",
                             0,
                             SortCriterion.creationDate,
                             SortDirection.ascending, []);
-                        _startController.configurations.add(newConfiguration);
+                        _startController.setups.add(newSetup);
                         _startController.refreshBadgeState();
                         setState(() {});
                         Navigator.of(context)
                             .push(MaterialPageRoute(
                                 builder: (context) => StopwatchesPage(
-                                    newConfiguration,
-                                    _startController.configurations)))
+                                    newSetup,
+                                    _startController.setups)))
                             .then((value) {
                           _startController.refreshBadgeState();
                           setState(() {});
@@ -124,16 +124,16 @@ class _StartPageState extends State<StartPage>
     );
   }
 
-  Future<void> _showDeleteConfigurationDialog(
-      ConfigurationModel configurationModel) async {
+  Future<void> _showDeleteSetupDialog(
+      SetupModel setupModel) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        return DeleteConfigurationDialog(
-          configurationModel.name,
+        return DeleteSetupDialog(
+          setupModel.name,
           onAccept: () {
-            _startController.removeConfiguration(configurationModel);
+            _startController.removeSetup(setupModel);
             setState(() {});
           },
         );
@@ -142,13 +142,13 @@ class _StartPageState extends State<StartPage>
   }
 
   Future<String?> _showRenameDialog(
-      ConfigurationModel configurationModel) async {
+      SetupModel setupModel) async {
     return showDialog<String>(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        return RenameDialog(configurationModel.name, (String newName) {
-          configurationModel.name = newName;
+        return RenameDialog(setupModel.name, (String newName) {
+          setupModel.name = newName;
           setState(() {});
         });
       },

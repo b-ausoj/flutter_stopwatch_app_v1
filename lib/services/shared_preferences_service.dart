@@ -4,7 +4,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/controllers/recordings_page_controller.dart';
-import 'package:flutter_stopwatch_app_v1/models/configuration_model.dart';
+import 'package:flutter_stopwatch_app_v1/models/setup_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/lap_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/recording_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
@@ -13,12 +13,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // This function is only executed once per app lifecycle namely for the initialization
 Future<void> loadData(
-    List<ConfigurationModel> configurations, String key) async {
+    List<SetupModel> setups, String key) async {
   final prefs = await SharedPreferences.getInstance();
   StopwatchModel.nextId = prefs.getInt("nextStopwatchId") ?? 1;
   List<String> jsons = prefs.getStringList(key) ?? [];
   for (String json in jsons) {
-    configurations.add(ConfigurationModel.fromJson(jsonDecode(json)));
+    setups.add(SetupModel.fromJson(jsonDecode(json)));
   }
 }
 
@@ -58,7 +58,7 @@ Future<void> resetSharedPreferences() async {
 }
 
 Future<void> saveStopwatch(
-    StopwatchModel stopwatchModel, String configurationName) async {
+    StopwatchModel stopwatchModel, String setupName) async {
   final prefs = await SharedPreferences.getInstance();
   RecordingModel.nextId = prefs.getInt("nextRecordingId") ?? 1;
   RecordingModel model = RecordingModel(
@@ -66,7 +66,7 @@ Future<void> saveStopwatch(
       stopwatchModel.name,
       stopwatchModel.startTimestamp,
       false,
-      configurationName,
+      setupName,
       stopwatchModel.elapsedTime);
   model.lapTimes = stopwatchModel.lapList;
   model.lapTimes.add(
@@ -84,12 +84,12 @@ Future<void> saveStopwatch(
 
 // TODO: Should test this function
 Future<void> storeData(
-    List<ConfigurationModel> configurations, String key) async {
+    List<SetupModel> setups, String key) async {
   final prefs = await SharedPreferences.getInstance();
   prefs.setInt("nextStopwatchId", StopwatchModel.nextId);
   List<String> jsons = [];
-  for (ConfigurationModel configurationModel in configurations) {
-    jsons.add(jsonEncode(configurationModel));
+  for (SetupModel setupModel in setups) {
+    jsons.add(jsonEncode(setupModel));
   }
   prefs.setStringList(key, jsons);
 }

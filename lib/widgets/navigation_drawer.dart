@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/controllers/badge_controller.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_criterion.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
-import 'package:flutter_stopwatch_app_v1/models/configuration_model.dart';
+import 'package:flutter_stopwatch_app_v1/models/setup_model.dart';
 import 'package:flutter_stopwatch_app_v1/pages/about_page.dart';
 import 'package:flutter_stopwatch_app_v1/pages/recordings_page.dart';
 import 'package:flutter_stopwatch_app_v1/pages/settings_page.dart';
@@ -11,14 +11,14 @@ import 'package:flutter_stopwatch_app_v1/utils/badge_checking.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/text_with_badge/nav_text_with_badge.dart';
 
 class NavDrawer extends StatefulWidget {
-  final List<ConfigurationModel> configurations;
+  final List<SetupModel> allSetups;
   // add list of startControllers so that if we open the drawer from start page and
-  // then navigate to a configuration and go back per arrows (back wishing)
+  // then navigate to a setup and go back per arrows (back wishing)
   // the badge will be updated
   final BadgeController controller;
-  final ConfigurationModel? configurationModel;
+  final SetupModel? setup;
   final bool isStartPage;
-  const NavDrawer(this.configurations, this.controller, this.configurationModel,
+  const NavDrawer(this.allSetups, this.controller, this.setup,
       this.isStartPage,
       {super.key});
 
@@ -27,15 +27,14 @@ class NavDrawer extends StatefulWidget {
 }
 
 class _NavDrawerState extends State<NavDrawer> {
-  late int _selectedIndex = widget.configurationModel == null
+  late int _selectedIndex = widget.setup == null
       ? -1
-      : widget.configurations.indexOf(widget.configurationModel!);
-  late final List<ConfigurationModel> _configurations = widget.configurations;
+      : widget.allSetups.indexOf(widget.setup!);
 
   @override
   Widget build(BuildContext context) {
     return NavigationDrawer(
-        onDestinationSelected: handleConfigurationChanged,
+        onDestinationSelected: handleSetupChanged,
         selectedIndex: _selectedIndex,
         backgroundColor: const Color(0xFFDFDFDF),
         indicatorColor: const Color(0xFFBFBFBF),
@@ -47,12 +46,12 @@ class _NavDrawerState extends State<NavDrawer> {
               style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
-          ..._configurations.map((ConfigurationModel configuration) =>
+          ...widget.allSetups.map((SetupModel setup) =>
               NavigationDrawerDestination(
                   icon: const Icon(Icons.timer_outlined),
-                  label: NavTextWithBadge(configuration.name, false))),
+                  label: NavTextWithBadge(setup.name, false))),
           const NavigationDrawerDestination(
-              icon: Icon(Icons.add), label: Text("Add Configuration")),
+              icon: Icon(Icons.add), label: Text("Add new Setup")),
           const Divider(),
           const NavigationDrawerDestination(
               icon: Icon(Icons.history),
@@ -64,12 +63,12 @@ class _NavDrawerState extends State<NavDrawer> {
         ]);
   }
 
-  void handleConfigurationChanged(int selectedIndex) {
-    ConfigurationModel? selectedConfiguration =
-        _configurations.elementAtOrNull(selectedIndex);
+  void handleSetupChanged(int selectedIndex) {
+    SetupModel? selectedSetup =
+        widget.allSetups.elementAtOrNull(selectedIndex);
 
-    if (selectedConfiguration != null) {
-      // configuration x
+    if (selectedSetup != null) {
+      // setup x
       Navigator.pop(context);
       if (!widget.isStartPage) {
         Navigator.pop(context);
@@ -77,28 +76,28 @@ class _NavDrawerState extends State<NavDrawer> {
       Navigator.of(context)
           .push(MaterialPageRoute(
               builder: (context) => StopwatchesPage(
-                  selectedConfiguration, widget.configurations)))
+                  selectedSetup, widget.allSetups)))
           .then((value) => widget.controller.refreshBadgeState());
     } else {
-      int base = _configurations.length;
+      int base = widget.allSetups.length;
       switch (selectedIndex - base) {
         case 0:
-          // add configuration
+          // add setup
           Navigator.pop(context);
           if (!widget.isStartPage) {
             Navigator.pop(context);
           }
-          ConfigurationModel newConfiguration = ConfigurationModel(
-              "Configuration ${_configurations.length + 1}",
+          SetupModel newSetup = SetupModel(
+              "Setup ${widget.allSetups.length + 1}",
               0,
               SortCriterion.creationDate,
               SortDirection.ascending,
               []); // TODO: get the default orientation and criterion from somewhere
-          _configurations.add(newConfiguration);
+          widget.allSetups.add(newSetup);
           Navigator.of(context)
               .push(MaterialPageRoute(
                   builder: (context) =>
-                      StopwatchesPage(newConfiguration, widget.configurations)))
+                      StopwatchesPage(newSetup, widget.allSetups)))
               .then((value) => widget.controller.refreshBadgeState());
           break;
         case 1:
@@ -123,7 +122,7 @@ class _NavDrawerState extends State<NavDrawer> {
 
           break;
         default:
-          throw Exception("Invalid selectedConfiguration state");
+          throw Exception("Invalid selectedSetup state");
       }
     }
 

@@ -51,7 +51,7 @@ class RecordingsPageController extends BadgeController {
             }),
             title: Center(child: RecordingsSetTextWithBadge(list, timeStamp)),
             subtitle: Center(
-                child: Text("from ${list.first.recordingModel.fromConfiguration}")),
+                child: Text("from ${list.first.recordingModel.fromSetup}")),
             children: list,
           ),
         ));
@@ -84,7 +84,7 @@ class RecordingsPageController extends BadgeController {
           }),
           title: Center(child: RecordingsSetTextWithBadge(list, last)),
           subtitle: Center(
-              child: Text("from ${list.first.recordingModel.fromConfiguration}")),
+              child: Text("from ${list.first.recordingModel.fromSetup}")),
           children: list,
         ),
       ));

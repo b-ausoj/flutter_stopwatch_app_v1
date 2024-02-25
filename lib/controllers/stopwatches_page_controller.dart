@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/controllers/badge_controller.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_criterion.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
-import 'package:flutter_stopwatch_app_v1/models/configuration_model.dart';
+import 'package:flutter_stopwatch_app_v1/models/setup_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
 import 'package:flutter_stopwatch_app_v1/utils/badge_checking.dart';
 import 'package:flutter_stopwatch_app_v1/utils/snackbar_utils.dart';
@@ -16,10 +16,10 @@ class StopwatchesPageController extends BadgeController {
 
   final List<StopwatchCard> _stopwatchCards = [];
   final List<String> _oldStopwatchesPage = [];
-  ConfigurationModel configurationModel;
+  SetupModel setupModel;
 
-  StopwatchesPageController(this.context, this.configurationModel) {
-    for (var element in configurationModel.stopwatches) {
+  StopwatchesPageController(this.context, this.setupModel) {
+    for (var element in setupModel.stopwatches) {
       _stopwatchCards.add(StopwatchCard(
         element,
         changedState,
@@ -29,10 +29,10 @@ class StopwatchesPageController extends BadgeController {
     }
   }
 
-  get direction => configurationModel.direction;
-  String get name => configurationModel.name;
-  set name(String value) => configurationModel.name = value;
-  get order => configurationModel.order;
+  get direction => setupModel.direction;
+  String get name => setupModel.name;
+  set name(String value) => setupModel.name = value;
+  get order => setupModel.order;
   get stopwatchCards => _stopwatchCards;
 
   Future<void> addStopwatch() async {
@@ -42,13 +42,13 @@ class StopwatchesPageController extends BadgeController {
     StopwatchModel model = StopwatchModel("Athlete ${_stopwatchCards.length + 1}", id);
     _stopwatchCards.add(StopwatchCard(model, changedState,
         key: Key("$id"), stopwatchesPageController: this));
-    configurationModel.stopwatches.add(model);
+    setupModel.stopwatches.add(model);
     changedState();
   }
 
   void changedState() {
-    sortAndListCards(_stopwatchCards, configurationModel.order,
-        configurationModel.direction);
+    sortAndListCards(_stopwatchCards, setupModel.order,
+        setupModel.direction);
     refreshBadgeState();
   }
 
@@ -98,7 +98,7 @@ class StopwatchesPageController extends BadgeController {
 
   @override
   void refreshBadgeState() {
-    isMenuBadgeRequired(configurationModel.name)
+    isMenuBadgeRequired(setupModel.name)
         .then((value) => badgeVisible = value);
     getUnseenRecordingsCount().then((value) => badgeLabel = value);
   }
@@ -141,8 +141,8 @@ class StopwatchesPageController extends BadgeController {
   }
 
   void setSorting(SortCriterion order, SortDirection direction) {
-    configurationModel.order = order;
-    configurationModel.direction = direction;
+    setupModel.order = order;
+    setupModel.direction = direction;
     changedState();
   }
 

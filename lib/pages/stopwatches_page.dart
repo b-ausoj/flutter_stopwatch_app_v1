@@ -5,12 +5,12 @@ import 'package:flutter_stopwatch_app_v1/controllers/stopwatches_page_controller
 import 'package:flutter_stopwatch_app_v1/enums/sort_criterion.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
 import 'package:flutter_stopwatch_app_v1/enums/stopwatches_page_menu_item.dart';
-import 'package:flutter_stopwatch_app_v1/models/configuration_model.dart';
+import 'package:flutter_stopwatch_app_v1/models/setup_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/cards/add_stopwatch_card.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/cards/stopwatch_card.dart';
-import 'package:flutter_stopwatch_app_v1/widgets/dialogs/delete_configuration_dialog.dart';
+import 'package:flutter_stopwatch_app_v1/widgets/dialogs/delete_setup_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/dialogs/rename_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/dialogs/sort_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/icons/navigation_icon.dart';
@@ -18,9 +18,9 @@ import 'package:flutter_stopwatch_app_v1/widgets/navigation_drawer.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/stopwatches_page_popup_menu_button.dart';
 
 class StopwatchesPage extends StatefulWidget {
-  final ConfigurationModel configurationModel;
-  final List<ConfigurationModel> configurations;
-  const StopwatchesPage(this.configurationModel, this.configurations,
+  final SetupModel setup;
+  final List<SetupModel> allSetups;
+  const StopwatchesPage(this.setup, this.allSetups,
       {super.key});
 
   @override
@@ -49,8 +49,8 @@ class _StopwatchesPageState extends State<StopwatchesPage>
                 case StopwatchesPageMenuItem.rename:
                   _showRenameDialog();
                   break;
-                case StopwatchesPageMenuItem.deleteConfiguration:
-                  _showDeleteConfigurationDialog();
+                case StopwatchesPageMenuItem.deleteSetup:
+                  _showDeleteSetupDialog();
                   break;
                 case StopwatchesPageMenuItem.saveAll:
                   for (StopwatchCard element
@@ -77,8 +77,8 @@ class _StopwatchesPageState extends State<StopwatchesPage>
           )
         ],
       ),
-      drawer: NavDrawer(widget.configurations, _stopwatchesPageController,
-          _stopwatchesPageController.configurationModel, false),
+      drawer: NavDrawer(widget.allSetups, _stopwatchesPageController,
+          _stopwatchesPageController.setupModel, false),
       floatingActionButton: _stopwatchesPageController.isFabActive()
           ? FloatingActionButton.extended(
               foregroundColor: Colors.white,
@@ -121,22 +121,22 @@ class _StopwatchesPageState extends State<StopwatchesPage>
   void initState() {
     super.initState();
     _stopwatchesPageController =
-        StopwatchesPageController(context, widget.configurationModel);
+        StopwatchesPageController(context, widget.setup);
     _ticker = createTicker((elapsed) {
       setState(() {});
     });
     _ticker.start();
   }
 
-  Future<void> _showDeleteConfigurationDialog() async {
+  Future<void> _showDeleteSetupDialog() async {
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        return DeleteConfigurationDialog(
+        return DeleteSetupDialog(
           _stopwatchesPageController.name,
           onAccept: () {
-            widget.configurations.remove(widget.configurationModel);
+            widget.allSetups.remove(widget.setup);
             Navigator.pop(context);
           },
         );
