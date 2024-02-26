@@ -33,7 +33,7 @@ class _NavTextWithBadgeState extends State<NavTextWithBadge> {
       smallSize: 8.0,
       child: Padding(
         padding: const EdgeInsets.only(right: 16.0),
-        child: Text(widget.name),
+        child: Text(widget.name, overflow: TextOverflow.ellipsis,),
       ),
     );
   }

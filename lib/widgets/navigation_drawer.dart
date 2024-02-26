@@ -49,9 +49,9 @@ class _NavDrawerState extends State<NavDrawer> {
           ...widget.allSetups.map((SetupModel setup) =>
               NavigationDrawerDestination(
                   icon: const Icon(Icons.timer_outlined),
-                  label: NavTextWithBadge(setup.name, false))),
+                  label: Flexible(child: NavTextWithBadge(setup.name, false)))),
           const NavigationDrawerDestination(
-              icon: Icon(Icons.add), label: Text("Add new Setup")),
+              icon: Icon(Icons.add), label: Text("Add a new setup")),
           const Divider(),
           const NavigationDrawerDestination(
               icon: Icon(Icons.history),

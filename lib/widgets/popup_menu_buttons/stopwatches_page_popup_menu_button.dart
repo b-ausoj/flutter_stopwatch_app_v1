@@ -37,7 +37,7 @@ class StopwatchesPagePopupMenuButton extends StatelessWidget {
               ),
               Container(
                 constraints: const BoxConstraints(maxWidth: 140),
-                child: Text("Delete $name"), // TODO: not a perfect name
+                child: const Text("Delete this setup", overflow: TextOverflow.ellipsis,), // TODO: not a perfect name
               ),
             ],
           ),

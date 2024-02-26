@@ -12,7 +12,7 @@ import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/stopwatch_po
 class StopwatchCard extends StatefulWidget {
   final StopwatchesPageController stopwatchesPageController;
   final void Function() changedState;
-  
+
   final StopwatchModel stopwatchModel;
 
   const StopwatchCard(this.stopwatchModel, this.changedState,
@@ -78,12 +78,15 @@ class _StopwatchCardState extends State<StopwatchCard>
                     Expanded(
                         child: InkWell(
                       onTap: _showRenameDialog,
-                      child: Text(_stopwatchModel.name,
-                          style: const TextStyle(
-                              fontSize: 26,
-                              fontWeight: FontWeight.w400,
-                              letterSpacing: 0,
-                              height: 0)),
+                      child: Text(
+                        _stopwatchModel.name,
+                        style: const TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: 0,
+                            height: 0),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     )),
                     StopwatchPopupMenuButton(
                       onSelected: (StopwatchCardMenuItem item) async {
@@ -158,7 +161,9 @@ class _StopwatchCardState extends State<StopwatchCard>
                             }
                             break;
                           case StopwatchCardMenuItem.delete:
-                            widget.stopwatchesPageController.deleteStopwatch(widget.stopwatchModel.id, widget.stopwatchModel.name);
+                            widget.stopwatchesPageController.deleteStopwatch(
+                                widget.stopwatchModel.id,
+                                widget.stopwatchModel.name);
                             break;
                         }
                       },
@@ -244,7 +249,8 @@ class _StopwatchCardState extends State<StopwatchCard>
   void initState() {
     super.initState();
     _ticker = createTicker((elapsed) {
-      assert(widget.stopwatchModel.id == _stopwatchModel.id); // TODO: remove for deployment
+      assert(widget.stopwatchModel.id ==
+          _stopwatchModel.id); // TODO: remove for deployment
       setState(() {});
     });
     _ticker.start();
