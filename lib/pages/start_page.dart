@@ -34,7 +34,7 @@ class _StartPageState extends State<StartPage>
         leading: NavIcon(_startController),
       ),
       drawer:
-          NavDrawer(_startController.allSetups, _startController, null, true),
+          NavDrawer(_startController.allSetups, _startController, null),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(

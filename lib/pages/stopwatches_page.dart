@@ -77,7 +77,7 @@ class _StopwatchesPageState extends State<StopwatchesPage>
         ],
       ),
       drawer: NavDrawer(widget.allSetups, _stopwatchesPageController,
-          _stopwatchesPageController.setupModel, false),
+          _stopwatchesPageController.setupModel),
       floatingActionButton: _stopwatchesPageController.isFabActive()
           ? FloatingActionButton.extended(
               foregroundColor: Colors.white,

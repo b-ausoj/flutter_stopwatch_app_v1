@@ -17,8 +17,7 @@ class NavDrawer extends StatefulWidget {
   // the badge will be updated
   final BadgeController controller;
   final SetupModel? setup;
-  final bool isStartPage;
-  const NavDrawer(this.allSetups, this.controller, this.setup, this.isStartPage,
+  const NavDrawer(this.allSetups, this.controller, this.setup,
       {super.key});
 
   @override
@@ -69,9 +68,6 @@ class _NavDrawerState extends State<NavDrawer> {
     if (selectedSetup != null) {
       // setup x
       Navigator.pop(context);
-      if (!widget.isStartPage) {
-        Navigator.pop(context);
-      }
       Navigator.of(context)
           .push(MaterialPageRoute(
               builder: (context) =>
@@ -83,9 +79,6 @@ class _NavDrawerState extends State<NavDrawer> {
         case 0:
           // add setup
           Navigator.pop(context);
-          if (!widget.isStartPage) {
-            Navigator.pop(context);
-          }
           SetupModel newSetup = SetupModel(
               "Setup ${widget.allSetups.length + 1}",
               0,
