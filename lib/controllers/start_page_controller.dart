@@ -9,7 +9,7 @@ import 'package:flutter_stopwatch_app_v1/utils/badge_checking.dart';
 
 class StartController extends BadgeController {
   final String sharedPreferencesKey;
-  final List<SetupModel> setups = [];
+  final List<SetupModel> allSetups = [];
 
   // needs the label/visible for the menu(drawr) icon an the setups list items
   // TODO: use better naming for the list
@@ -21,17 +21,17 @@ class StartController extends BadgeController {
   void Function() refreshScreen;
 
   StartController(this.refreshScreen, this.sharedPreferencesKey) {
-    loadData(setups, sharedPreferencesKey).then((value) {
+    loadData(allSetups, sharedPreferencesKey).then((value) {
       refreshBadgeState();
       refreshScreen();
     });
     appLifecycleListener = AppLifecycleListener(
-        onPause: () => storeData(setups, sharedPreferencesKey));
+        onPause: () => storeData(allSetups, sharedPreferencesKey));
     timer = Timer.periodic(const Duration(seconds: 10), (Timer t) {
-      storeData(setups, sharedPreferencesKey);
+      storeData(allSetups, sharedPreferencesKey);
       log("");
       log("stored data controller\n");
-      for (SetupModel setup in setups) {
+      for (SetupModel setup in allSetups) {
         log(setup.toString());
       }
       log("");
@@ -40,20 +40,19 @@ class StartController extends BadgeController {
 
   @override
   void refreshBadgeState() {
-    badgeVisibles = List.filled(setups.length, false);
+    badgeVisibles = List.filled(allSetups.length, false);
     // could do all of that in parallel instead of .then
-    isMenuBadgeRequired("").then((value) => badgeVisible = value);
+    isMenuBadgeRequired(allSetups, null).then((value) => badgeVisible = value);
     getUnseenRecordingsCount().then((value) => badgeLabel = value);
 
-    for (int i = 0; i < setups.length; i++) {
-      isTextBadgeRequired(setups[i].name)
-          .then((value) => badgeVisibles[i] = value);
+    for (int i = 0; i < allSetups.length; i++) {
+      badgeVisibles[i] = isTextBadgeRequired(allSetups, allSetups[i]);
     }
     refreshScreen(); // calls set state because start badge doesn't have a ticker with setState
   }
 
   void removeSetup(SetupModel setup) {
-    setups.remove(setup);
+    allSetups.remove(setup);
     refreshScreen();
     refreshBadgeState();
   }

@@ -7,27 +7,23 @@
 
 import 'dart:convert';
 
+import 'package:flutter_stopwatch_app_v1/models/setup_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<List<String>> getAllRunningConfigurations() async {
-  List<String> runningConfigurations = [];
+List<SetupModel> getAllRunningConfigurations(List<SetupModel> allSetups) {
+  List<SetupModel> runningSetups = [];
 
-  final prefs = await SharedPreferences.getInstance();
-  List<String> allConfigurations = prefs.getStringList("configurations") ?? [];
-
-  for (String configuration in allConfigurations) {
-    List<String> allStopwatches = prefs.getStringList(configuration) ?? [];
-    for (String stopwatch in allStopwatches) {
-      dynamic json = jsonDecode(stopwatch);
-      if (json["state"] == "${StopwatchState.running}") {
-        runningConfigurations.add(configuration);
+  for (SetupModel setup in allSetups) {
+    for (StopwatchModel stopwatch in setup.stopwatches) {
+      if (stopwatch.state == StopwatchState.running) {
+        runningSetups.add(setup);
         break;
       }
     }
   }
 
-  return runningConfigurations;
+  return runningSetups;
 }
 
 Future<int> getUnseenRecordingsCount() async {
@@ -45,16 +41,17 @@ Future<int> getUnseenRecordingsCount() async {
   return count;
 }
 
-Future<bool> isBackBadgeRequired() async {
-  return (await getAllRunningConfigurations()).isNotEmpty;
+bool isBackBadgeRequired(List<SetupModel> allSetups) {
+  return getAllRunningConfigurations(allSetups).isNotEmpty;
 }
 
 // menu badge only if there are any running stopwatches or new recordings entries
-Future<bool> isMenuBadgeRequired(String configuration) async {
+Future<bool> isMenuBadgeRequired(
+    List<SetupModel> allSetups, SetupModel? setup) async {
   // check if there are any running stopwatches
-  List<String> runningConfigurations = await getAllRunningConfigurations();
-  runningConfigurations.remove(configuration);
-  if (runningConfigurations.isNotEmpty) {
+  List<SetupModel> runningSetups = getAllRunningConfigurations(allSetups);
+  runningSetups.remove(setup);
+  if (runningSetups.isNotEmpty) {
     return true;
   }
   // check if there are any unseen recordings entries
@@ -62,8 +59,9 @@ Future<bool> isMenuBadgeRequired(String configuration) async {
   return unseenRecordingsCount > 0;
 }
 
-Future<bool> isTextBadgeRequired(String configuration) async {
+bool isTextBadgeRequired(List<SetupModel> allSetups, SetupModel setup) {
   // check if there are any running stopwatches
-  List<String> runningConfigurations = await getAllRunningConfigurations();
-  return runningConfigurations.contains(configuration);
+  List<SetupModel> runningConfigurations =
+      getAllRunningConfigurations(allSetups);
+  return runningConfigurations.contains(setup);
 }

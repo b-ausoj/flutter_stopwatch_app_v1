@@ -33,7 +33,8 @@ class _StartPageState extends State<StartPage>
         title: const Text("MultiStopwatches by Josua"),
         leading: NavIcon(_startController),
       ),
-      drawer: NavDrawer(_startController.setups, _startController, null, true),
+      drawer:
+          NavDrawer(_startController.allSetups, _startController, null, true),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -46,7 +47,7 @@ class _StartPageState extends State<StartPage>
               child: ListView(
                 shrinkWrap: true,
                 children: [
-                  ..._startController.setups.map((SetupModel setup) => Card(
+                  ..._startController.allSetups.map((SetupModel setup) => Card(
                         color: const Color(0xFFEFEFEF),
                         elevation: 0,
                         child: ListTile(
@@ -55,7 +56,7 @@ class _StartPageState extends State<StartPage>
                           leading: const Icon(Icons.timer_outlined),
                           title: Center(
                               child: StartTextWithBadge(_startController,
-                                  _startController.setups.indexOf(setup))),
+                                  _startController.allSetups.indexOf(setup))),
                           trailing: StartPagePopupMenuButton(
                               onSelected: (StartPageCardMenuItem item) {
                             switch (item) {
@@ -71,7 +72,7 @@ class _StartPageState extends State<StartPage>
                             Navigator.of(context)
                                 .push(MaterialPageRoute(
                                     builder: (context) => StopwatchesPage(
-                                        setup, _startController.setups)))
+                                        setup, _startController.allSetups)))
                                 .then((value) {
                               _startController.refreshBadgeState();
                               setState(() {});
@@ -88,17 +89,17 @@ class _StartPageState extends State<StartPage>
                     child: InkWell(
                         onTap: () {
                           SetupModel newSetup = SetupModel(
-                              "Setup ${_startController.setups.length + 1}",
+                              "Setup ${_startController.allSetups.length + 1}",
                               0,
                               SortCriterion.creationDate,
                               SortDirection.ascending, []);
-                          _startController.setups.add(newSetup);
+                          _startController.allSetups.add(newSetup);
                           _startController.refreshBadgeState();
                           setState(() {});
                           Navigator.of(context)
                               .push(MaterialPageRoute(
                                   builder: (context) => StopwatchesPage(
-                                      newSetup, _startController.setups)))
+                                      newSetup, _startController.allSetups)))
                               .then((value) {
                             _startController.refreshBadgeState();
                             setState(() {});

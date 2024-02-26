@@ -18,8 +18,7 @@ class NavDrawer extends StatefulWidget {
   final BadgeController controller;
   final SetupModel? setup;
   final bool isStartPage;
-  const NavDrawer(this.allSetups, this.controller, this.setup,
-      this.isStartPage,
+  const NavDrawer(this.allSetups, this.controller, this.setup, this.isStartPage,
       {super.key});
 
   @override
@@ -27,9 +26,8 @@ class NavDrawer extends StatefulWidget {
 }
 
 class _NavDrawerState extends State<NavDrawer> {
-  late int _selectedIndex = widget.setup == null
-      ? -1
-      : widget.allSetups.indexOf(widget.setup!);
+  late int _selectedIndex =
+      widget.setup == null ? -1 : widget.allSetups.indexOf(widget.setup!);
 
   @override
   Widget build(BuildContext context) {
@@ -49,13 +47,15 @@ class _NavDrawerState extends State<NavDrawer> {
           ...widget.allSetups.map((SetupModel setup) =>
               NavigationDrawerDestination(
                   icon: const Icon(Icons.timer_outlined),
-                  label: Flexible(child: NavTextWithBadge(setup.name, false)))),
+                  label: Flexible(
+                      child: NavTextWithBadge(
+                          setup.name, setup, widget.allSetups, false)))),
           const NavigationDrawerDestination(
               icon: Icon(Icons.add), label: Text("Add a new setup")),
           const Divider(),
           const NavigationDrawerDestination(
               icon: Icon(Icons.history),
-              label: NavTextWithBadge("Recordings", true)),
+              label: NavTextWithBadge("Recordings", null, null, true)),
           const NavigationDrawerDestination(
               icon: Icon(Icons.settings_outlined), label: Text("Settings")),
           const NavigationDrawerDestination(
@@ -64,8 +64,7 @@ class _NavDrawerState extends State<NavDrawer> {
   }
 
   void handleSetupChanged(int selectedIndex) {
-    SetupModel? selectedSetup =
-        widget.allSetups.elementAtOrNull(selectedIndex);
+    SetupModel? selectedSetup = widget.allSetups.elementAtOrNull(selectedIndex);
 
     if (selectedSetup != null) {
       // setup x
@@ -75,8 +74,8 @@ class _NavDrawerState extends State<NavDrawer> {
       }
       Navigator.of(context)
           .push(MaterialPageRoute(
-              builder: (context) => StopwatchesPage(
-                  selectedSetup, widget.allSetups)))
+              builder: (context) =>
+                  StopwatchesPage(selectedSetup, widget.allSetups)))
           .then((value) => widget.controller.refreshBadgeState());
     } else {
       int base = widget.allSetups.length;
@@ -105,20 +104,22 @@ class _NavDrawerState extends State<NavDrawer> {
           Navigator.pop(context);
           Navigator.of(context)
               .push(MaterialPageRoute(
-                  builder: (context) => const RecordingsPage()))
+                  builder: (context) => RecordingsPage(widget.allSetups)))
               .then((value) => widget.controller.refreshBadgeState());
           break;
         case 2:
           // settings
           Navigator.pop(context);
-          isBackBadgeRequired().then((value) => Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => SettingsPage(value))));
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) =>
+                  SettingsPage(isBackBadgeRequired(widget.allSetups))));
           break;
         case 3:
           // about
           Navigator.pop(context);
-          isBackBadgeRequired().then((value) => Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => AboutPage(value))));
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) =>
+                  AboutPage(isBackBadgeRequired(widget.allSetups))));
 
           break;
         default:

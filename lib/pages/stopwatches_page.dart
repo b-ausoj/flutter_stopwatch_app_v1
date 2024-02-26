@@ -20,8 +20,7 @@ import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/stopwatches_
 class StopwatchesPage extends StatefulWidget {
   final SetupModel setup;
   final List<SetupModel> allSetups;
-  const StopwatchesPage(this.setup, this.allSetups,
-      {super.key});
+  const StopwatchesPage(this.setup, this.allSetups, {super.key});
 
   @override
   State<StopwatchesPage> createState() => _StopwatchesPageState();
@@ -121,11 +120,12 @@ class _StopwatchesPageState extends State<StopwatchesPage>
   void initState() {
     super.initState();
     _stopwatchesPageController =
-        StopwatchesPageController(context, widget.setup);
+        StopwatchesPageController(widget.allSetups, context, widget.setup);
     _ticker = createTicker((elapsed) {
       setState(() {});
     });
     _ticker.start();
+    _stopwatchesPageController.refreshBadgeState();
   }
 
   Future<void> _showDeleteSetupDialog() async {

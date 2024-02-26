@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/pages/start_page.dart';
+import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 
 void main() {
   runApp(const MyApp());

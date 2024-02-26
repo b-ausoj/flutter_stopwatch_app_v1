@@ -13,12 +13,12 @@ import 'package:flutter_stopwatch_app_v1/widgets/cards/stopwatch_card.dart';
 
 class StopwatchesPageController extends BadgeController {
   BuildContext context;
-
+  final List<SetupModel> allSetups;
   final List<StopwatchCard> _stopwatchCards = [];
   final List<String> _oldStopwatchesPage = [];
   SetupModel setupModel;
 
-  StopwatchesPageController(this.context, this.setupModel) {
+  StopwatchesPageController(this.allSetups, this.context, this.setupModel) {
     for (var element in setupModel.stopwatches) {
       _stopwatchCards.add(StopwatchCard(
         element,
@@ -38,8 +38,9 @@ class StopwatchesPageController extends BadgeController {
   Future<void> addStopwatch() async {
     // TODO: not taking the card count but the highest number a stopwatch has in "Athlete X" or cardsCount (whatever is bigger)
     int id = StopwatchModel.nextId++;
-    
-    StopwatchModel model = StopwatchModel("Athlete ${_stopwatchCards.length + 1}", id);
+
+    StopwatchModel model =
+        StopwatchModel("Athlete ${_stopwatchCards.length + 1}", id);
     _stopwatchCards.add(StopwatchCard(model, changedState,
         key: Key("$id"), stopwatchesPageController: this));
     setupModel.stopwatches.add(model);
@@ -47,8 +48,7 @@ class StopwatchesPageController extends BadgeController {
   }
 
   void changedState() {
-    sortAndListCards(_stopwatchCards, setupModel.order,
-        setupModel.direction);
+    sortAndListCards(_stopwatchCards, setupModel.order, setupModel.direction);
     refreshBadgeState();
   }
 
@@ -98,7 +98,7 @@ class StopwatchesPageController extends BadgeController {
 
   @override
   void refreshBadgeState() {
-    isMenuBadgeRequired(setupModel.name)
+    isMenuBadgeRequired(allSetups, setupModel)
         .then((value) => badgeVisible = value);
     getUnseenRecordingsCount().then((value) => badgeLabel = value);
   }

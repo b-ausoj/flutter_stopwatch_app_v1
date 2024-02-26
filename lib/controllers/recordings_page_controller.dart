@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/controllers/badge_controller.dart';
 import 'package:flutter_stopwatch_app_v1/enums/recordings_set_menu_item.dart';
+import 'package:flutter_stopwatch_app_v1/models/setup_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/utils/badge_checking.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/recordings_set_popup_menu_button.dart';
@@ -12,8 +13,9 @@ class RecordingsPageController extends BadgeController {
   void Function() refresh;
   final List<RecordingCard> recordingCards = [];
   final List<Widget> recordingsList = [];
+  final List<SetupModel> allSetups;
 
-  RecordingsPageController(this.context, this.refresh);
+  RecordingsPageController(this.context, this.refresh, this.allSetups);
 
   void createRecordingList() {
     recordingsList.clear();
@@ -117,7 +119,7 @@ class RecordingsPageController extends BadgeController {
 
   @override
   void refreshBadgeState() {
-    isBackBadgeRequired().then((value) => badgeVisible = value);
+    badgeVisible = isBackBadgeRequired(allSetups);
   }
 
   void setViewedToTrue(DateTime timestamp) {
