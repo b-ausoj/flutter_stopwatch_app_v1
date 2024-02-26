@@ -16,7 +16,7 @@ class StopwatchesPageController extends BadgeController {
   final List<SetupModel> allSetups;
   final List<StopwatchCard> _stopwatchCards = [];
   final List<String> _oldStopwatchesPage = [];
-  SetupModel setupModel;
+  final SetupModel setupModel;
 
   StopwatchesPageController(this.allSetups, this.context, this.setupModel) {
     for (var element in setupModel.stopwatches) {
@@ -27,13 +27,14 @@ class StopwatchesPageController extends BadgeController {
         stopwatchesPageController: this,
       ));
     }
+    changedState();
   }
 
   get direction => setupModel.direction;
   String get name => setupModel.name;
   set name(String value) => setupModel.name = value;
   get order => setupModel.order;
-  get stopwatchCards => _stopwatchCards;
+  List<StopwatchCard> get stopwatchCards => _stopwatchCards;
 
   Future<void> addStopwatch() async {
     // TODO: not taking the card count but the highest number a stopwatch has in "Athlete X" or cardsCount (whatever is bigger)
@@ -61,13 +62,16 @@ class StopwatchesPageController extends BadgeController {
       }
       _oldStopwatchesPage.add(jsonEncode(card.stopwatchModel));
     }
+    setupModel.stopwatches.clear();
     _stopwatchCards.clear();
     showLongSnackBar(context, "All stopwatches have been removed",
         action: SnackBarAction(
             label: "Undo",
             onPressed: () {
+              // TODO: reimplement the undo (with the setupmodel.stopwatches)
+              /*
               restoreAllStopwatches(_oldStopwatchesPage);
-              changedState();
+              changedState();*/
             }));
   }
 
@@ -75,17 +79,20 @@ class StopwatchesPageController extends BadgeController {
     int index = _stopwatchCards.indexWhere((element) =>
         element.stopwatchModel.id == id &&
         element.stopwatchModel.state != StopwatchState.running);
+    int index2 =
+        setupModel.stopwatches.indexWhere((element) => element.id == id);
     if (index == -1) {
       showShortSnackBar(context, "Can't delete while running");
       return;
     }
     StopwatchCard deleted = _stopwatchCards.removeAt(index);
+    StopwatchModel deletedModel = setupModel.stopwatches.removeAt(index2);
     showLongSnackBar(context, "'$name' has been removed",
         action: SnackBarAction(
             label: "Undo",
             onPressed: () {
               _stopwatchCards.add(deleted);
-              _stopwatchCards.length;
+              setupModel.stopwatches.insert(index2, deletedModel);
               changedState();
             }));
   }
@@ -150,5 +157,13 @@ class StopwatchesPageController extends BadgeController {
     for (var element in _stopwatchCards) {
       element.stopwatchModel.start();
     }
+  }
+
+  void onReorder(int oldIndex, int newIndex) {
+    StopwatchCard stopwatchCard = stopwatchCards.removeAt(oldIndex);
+    stopwatchCards.insert(newIndex, stopwatchCard);
+
+    StopwatchModel stopwatchModel = setupModel.stopwatches.removeAt(oldIndex);
+    setupModel.stopwatches.insert(newIndex, stopwatchModel);
   }
 }

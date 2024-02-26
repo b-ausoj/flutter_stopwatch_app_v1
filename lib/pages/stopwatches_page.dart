@@ -30,6 +30,7 @@ class _StopwatchesPageState extends State<StopwatchesPage>
     with SingleTickerProviderStateMixin {
   late final Ticker _ticker;
   late final StopwatchesPageController _stopwatchesPageController;
+  late final SetupModel _setupModel = widget.setup;
 
   @override
   Widget build(BuildContext context) {
@@ -101,9 +102,7 @@ class _StopwatchesPageState extends State<StopwatchesPage>
             if (oldIndex < newIndex) {
               newIndex -= 1;
             }
-            var item =
-                _stopwatchesPageController.stopwatchCards.removeAt(oldIndex);
-            _stopwatchesPageController.stopwatchCards.insert(newIndex, item);
+            _stopwatchesPageController.onReorder(oldIndex, newIndex);
           },
         ),
       ),
@@ -120,9 +119,10 @@ class _StopwatchesPageState extends State<StopwatchesPage>
   void initState() {
     super.initState();
     _stopwatchesPageController =
-        StopwatchesPageController(widget.allSetups, context, widget.setup);
+        StopwatchesPageController(widget.allSetups, context, _setupModel);
     _ticker = createTicker((elapsed) {
       setState(() {});
+      _stopwatchesPageController.changedState();
     });
     _ticker.start();
     _stopwatchesPageController.refreshBadgeState();
@@ -136,7 +136,7 @@ class _StopwatchesPageState extends State<StopwatchesPage>
         return DeleteSetupDialog(
           _stopwatchesPageController.name,
           onAccept: () {
-            widget.allSetups.remove(widget.setup);
+            widget.allSetups.remove(_setupModel);
             Navigator.pop(context);
           },
         );

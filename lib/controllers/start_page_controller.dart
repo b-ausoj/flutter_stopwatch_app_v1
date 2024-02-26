@@ -25,8 +25,7 @@ class StartController extends BadgeController {
       refreshBadgeState();
       refreshScreen();
     });
-    appLifecycleListener = AppLifecycleListener(
-        onPause: () => storeData(allSetups, sharedPreferencesKey));
+    appLifecycleListener = AppLifecycleListener(onStateChange: (_) => helper());
     timer = Timer.periodic(const Duration(seconds: 10), (Timer t) {
       storeData(allSetups, sharedPreferencesKey);
       log("");
@@ -36,6 +35,11 @@ class StartController extends BadgeController {
       }
       log("");
     });
+  }
+
+  void helper() {
+    log("before");
+    storeData(allSetups, sharedPreferencesKey).then((value) => log("after"));
   }
 
   @override
