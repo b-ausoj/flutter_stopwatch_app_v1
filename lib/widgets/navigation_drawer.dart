@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/controllers/badge_controller.dart';
-import 'package:flutter_stopwatch_app_v1/enums/sort_criterion.dart';
-import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
+import 'package:flutter_stopwatch_app_v1/models/settings_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/setup_model.dart';
 import 'package:flutter_stopwatch_app_v1/pages/about_page.dart';
 import 'package:flutter_stopwatch_app_v1/pages/recordings_page.dart';
@@ -12,12 +11,13 @@ import 'package:flutter_stopwatch_app_v1/widgets/text_with_badge/nav_text_with_b
 
 class NavDrawer extends StatefulWidget {
   final List<SetupModel> allSetups;
+  final SettingsModel settings;
   // add list of startControllers so that if we open the drawer from start page and
   // then navigate to a setup and go back per arrows (back wishing)
   // the badge will be updated
   final BadgeController controller;
   final SetupModel? setup;
-  const NavDrawer(this.allSetups, this.controller, this.setup,
+  const NavDrawer(this.allSetups, this.settings, this.controller, this.setup,
       {super.key});
 
   @override
@@ -39,7 +39,8 @@ class _NavDrawerState extends State<NavDrawer> {
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 16, 16, 20),
             child: Text(
-              "Stopwatch by Josua",
+              "MultiStopwatches by Josua",
+              overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
@@ -71,7 +72,7 @@ class _NavDrawerState extends State<NavDrawer> {
       Navigator.of(context)
           .push(MaterialPageRoute(
               builder: (context) =>
-                  StopwatchesPage(selectedSetup, widget.allSetups)))
+                  StopwatchesPage(selectedSetup, widget.allSetups, widget.settings)))
           .then((value) => widget.controller.refreshBadgeState());
     } else {
       int base = widget.allSetups.length;
@@ -82,14 +83,14 @@ class _NavDrawerState extends State<NavDrawer> {
           SetupModel newSetup = SetupModel(
               "Setup ${widget.allSetups.length + 1}",
               0,
-              SortCriterion.creationDate,
-              SortDirection.ascending,
+              widget.settings.defaultSortCriterion,
+              widget.settings.defaultSortDirection,
               []); // TODO: get the default orientation and criterion from somewhere
           widget.allSetups.add(newSetup);
           Navigator.of(context)
               .push(MaterialPageRoute(
                   builder: (context) =>
-                      StopwatchesPage(newSetup, widget.allSetups)))
+                      StopwatchesPage(newSetup, widget.allSetups, widget.settings)))
               .then((value) => widget.controller.refreshBadgeState());
           break;
         case 1:
@@ -105,7 +106,7 @@ class _NavDrawerState extends State<NavDrawer> {
           Navigator.pop(context);
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) =>
-                  SettingsPage(isBackBadgeRequired(widget.allSetups))));
+                  SettingsPage(isBackBadgeRequired(widget.allSetups), widget.settings)));
           break;
         case 3:
           // about

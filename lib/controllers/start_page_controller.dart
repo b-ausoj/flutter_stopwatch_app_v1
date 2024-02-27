@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/controllers/badge_controller.dart';
+import 'package:flutter_stopwatch_app_v1/models/settings_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/setup_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/utils/badge_checking.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_stopwatch_app_v1/utils/badge_checking.dart';
 class StartController extends BadgeController {
   final String sharedPreferencesKey;
   final List<SetupModel> allSetups = [];
+  late final SettingsModel settings = SettingsModel();
 
   // needs the label/visible for the menu(drawr) icon an the setups list items
   // TODO: use better naming for the list
@@ -25,6 +27,7 @@ class StartController extends BadgeController {
       refreshBadgeState();
       refreshScreen();
     });
+    loadSettings(settings);
     appLifecycleListener = AppLifecycleListener(onStateChange: (_) => helper());
     timer = Timer.periodic(const Duration(seconds: 10), (Timer t) {
       storeData(allSetups, sharedPreferencesKey);

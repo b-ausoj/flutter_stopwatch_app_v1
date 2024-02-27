@@ -26,6 +26,7 @@ class _SortDialogState extends State<SortDialog> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
+            // TODO: can make this shorter with map and the enum values string function
             RadioListTile(
                 title: const Text("Creation date"),
                 value: SortCriterion.creationDate,

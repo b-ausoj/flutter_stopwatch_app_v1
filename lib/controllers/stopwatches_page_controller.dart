@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/controllers/badge_controller.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_criterion.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
+import 'package:flutter_stopwatch_app_v1/models/settings_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/setup_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
 import 'package:flutter_stopwatch_app_v1/utils/badge_checking.dart';
@@ -17,8 +18,9 @@ class StopwatchesPageController extends BadgeController {
   final List<StopwatchCard> _stopwatchCards = [];
   final List<String> _oldStopwatchesPage = [];
   final SetupModel setupModel;
+  final SettingsModel settings;
 
-  StopwatchesPageController(this.allSetups, this.context, this.setupModel) {
+  StopwatchesPageController(this.allSetups, this.context, this.setupModel, this.settings) {
     for (var element in setupModel.stopwatches) {
       _stopwatchCards.add(StopwatchCard(
         element,
@@ -49,7 +51,7 @@ class StopwatchesPageController extends BadgeController {
   }
 
   void changedState() {
-    sortAndListCards(_stopwatchCards, setupModel.order, setupModel.direction);
+    sortAndListCards(_stopwatchCards, setupModel.order, setupModel.direction, settings);
     refreshBadgeState();
   }
 

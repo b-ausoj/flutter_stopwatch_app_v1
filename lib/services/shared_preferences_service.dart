@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/controllers/recordings_page_controller.dart';
+import 'package:flutter_stopwatch_app_v1/models/settings_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/setup_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/lap_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/recording_model.dart';
@@ -20,6 +21,22 @@ Future<void> loadData(
   for (String json in jsons) {
     setups.add(SetupModel.fromJson(jsonDecode(json)));
   }
+}
+
+Future<void> loadSettings(SettingsModel settingsModel) async {
+  final prefs = await SharedPreferences.getInstance();
+  String? json = prefs.getString("settings");
+  if (json != null) {
+  SettingsModel loaded = SettingsModel.fromJson(jsonDecode(json));
+  settingsModel.defaultSortCriterion = loaded.defaultSortCriterion;
+  settingsModel.defaultSortDirection = loaded.defaultSortDirection;
+  settingsModel.seperateRunningStopped = loaded.seperateRunningStopped;
+  }
+}
+
+Future<void> storeSettings(SettingsModel settings) async {
+  final prefs = await SharedPreferences.getInstance();
+  prefs.setString("settings", jsonEncode(settings));
 }
 
 Future<void> loadRecordings(

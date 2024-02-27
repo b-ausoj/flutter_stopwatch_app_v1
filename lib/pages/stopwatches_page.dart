@@ -5,6 +5,7 @@ import 'package:flutter_stopwatch_app_v1/controllers/stopwatches_page_controller
 import 'package:flutter_stopwatch_app_v1/enums/sort_criterion.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
 import 'package:flutter_stopwatch_app_v1/enums/stopwatches_page_menu_item.dart';
+import 'package:flutter_stopwatch_app_v1/models/settings_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/setup_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/stopwatch_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
@@ -20,7 +21,8 @@ import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/stopwatches_
 class StopwatchesPage extends StatefulWidget {
   final SetupModel setup;
   final List<SetupModel> allSetups;
-  const StopwatchesPage(this.setup, this.allSetups, {super.key});
+  final SettingsModel settings;
+  const StopwatchesPage(this.setup, this.allSetups, this.settings, {super.key});
 
   @override
   State<StopwatchesPage> createState() => _StopwatchesPageState();
@@ -77,7 +79,7 @@ class _StopwatchesPageState extends State<StopwatchesPage>
           )
         ],
       ),
-      drawer: NavDrawer(widget.allSetups, _stopwatchesPageController,
+      drawer: NavDrawer(widget.allSetups, widget.settings, _stopwatchesPageController,
           _stopwatchesPageController.setupModel),
       floatingActionButton: _stopwatchesPageController.isFabActive()
           ? FloatingActionButton.extended(
@@ -119,10 +121,10 @@ class _StopwatchesPageState extends State<StopwatchesPage>
   void initState() {
     super.initState();
     _stopwatchesPageController =
-        StopwatchesPageController(widget.allSetups, context, _setupModel);
+        StopwatchesPageController(widget.allSetups, context, _setupModel, widget.settings);
     _ticker = createTicker((elapsed) {
       setState(() {});
-      _stopwatchesPageController.changedState();
+      if (!widget.settings.seperateRunningStopped) _stopwatchesPageController.changedState();
     });
     _ticker.start();
     _stopwatchesPageController.refreshBadgeState();

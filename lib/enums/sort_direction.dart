@@ -1,4 +1,7 @@
 enum SortDirection {
-  ascending,
-  descending
+  ascending("Ascending"),
+  descending("Descending");
+
+  final String label;
+  const SortDirection(this.label);
 }

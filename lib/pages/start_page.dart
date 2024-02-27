@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/controllers/start_page_controller.dart';
-import 'package:flutter_stopwatch_app_v1/enums/sort_criterion.dart';
-import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
 import 'package:flutter_stopwatch_app_v1/enums/start_page_card_menu_item.dart';
 import 'package:flutter_stopwatch_app_v1/models/setup_model.dart';
 import 'package:flutter_stopwatch_app_v1/pages/stopwatches_page.dart';
@@ -33,8 +31,8 @@ class _StartPageState extends State<StartPage>
         title: const Text("MultiStopwatches by Josua"),
         leading: NavIcon(_startController),
       ),
-      drawer:
-          NavDrawer(_startController.allSetups, _startController, null),
+      drawer: NavDrawer(_startController.allSetups, _startController.settings,
+          _startController, null),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -72,7 +70,9 @@ class _StartPageState extends State<StartPage>
                             Navigator.of(context)
                                 .push(MaterialPageRoute(
                                     builder: (context) => StopwatchesPage(
-                                        setup, _startController.allSetups)))
+                                        setup,
+                                        _startController.allSetups,
+                                        _startController.settings)))
                                 .then((value) {
                               _startController.refreshBadgeState();
                               setState(() {});
@@ -91,15 +91,18 @@ class _StartPageState extends State<StartPage>
                           SetupModel newSetup = SetupModel(
                               "Setup ${_startController.allSetups.length + 1}",
                               0,
-                              SortCriterion.creationDate,
-                              SortDirection.ascending, []);
+                              _startController.settings.defaultSortCriterion,
+                              _startController.settings.defaultSortDirection,
+                              []);
                           _startController.allSetups.add(newSetup);
                           _startController.refreshBadgeState();
                           setState(() {});
                           Navigator.of(context)
                               .push(MaterialPageRoute(
                                   builder: (context) => StopwatchesPage(
-                                      newSetup, _startController.allSetups)))
+                                      newSetup,
+                                      _startController.allSetups,
+                                      _startController.settings)))
                               .then((value) {
                             _startController.refreshBadgeState();
                             setState(() {});

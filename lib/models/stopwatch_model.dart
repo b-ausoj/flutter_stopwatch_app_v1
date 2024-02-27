@@ -48,6 +48,8 @@ class StopwatchModel {
           .inMilliseconds ~/
       100;
 
+  bool get isRunning => state == StopwatchState.running;
+
   StopwatchModel(this.name, this.id,
       {this.state = StopwatchState.reseted,
       this.savedTime = Duration.zero,
