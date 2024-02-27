@@ -57,6 +57,7 @@ class StopwatchesPageController extends BadgeController {
 
   void deleteAllStopwatches() {
     _oldStopwatchesPage.clear();
+
     for (StopwatchCard card in _stopwatchCards) {
       if (card.stopwatchModel.state == StopwatchState.running) {
         showShortSnackBar(context, "Can't delete while running");
@@ -70,10 +71,8 @@ class StopwatchesPageController extends BadgeController {
         action: SnackBarAction(
             label: "Undo",
             onPressed: () {
-              // TODO: reimplement the undo (with the setupmodel.stopwatches)
-              /*
               restoreAllStopwatches(_oldStopwatchesPage);
-              changedState();*/
+              changedState();
             }));
   }
 
@@ -140,12 +139,14 @@ class StopwatchesPageController extends BadgeController {
     _stopwatchCards.clear();
     for (String entry in oldStopwatchesPage) {
       dynamic json = jsonDecode(entry);
+      StopwatchModel stopwatch = StopwatchModel.fromJson(json);
       _stopwatchCards.add(StopwatchCard(
-        json["name"],
+        stopwatch,
         changedState,
         key: Key("${json["id"]}"),
         stopwatchesPageController: this,
       ));
+      setupModel.stopwatches.add(stopwatch);
     }
   }
 
