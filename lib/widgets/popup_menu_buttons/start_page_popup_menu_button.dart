@@ -5,7 +5,7 @@ class StartPagePopupMenuButton extends StatelessWidget {
   final Function(StartPageCardMenuItem) onSelected;
 
   const StartPagePopupMenuButton({required this.onSelected, super.key});
-
+  // TODO: simplify like recording_popup_menu_button.dart
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(

@@ -5,6 +5,7 @@ class StopwatchPopupMenuButton extends StatelessWidget {
   final Function(StopwatchCardMenuItem) onSelected;
 
   const StopwatchPopupMenuButton({required this.onSelected, super.key});
+  // TODO: simplify like recording_popup_menu_button.dart
 
   @override
   Widget build(BuildContext context) {

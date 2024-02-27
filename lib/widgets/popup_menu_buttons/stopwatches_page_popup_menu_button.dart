@@ -9,6 +9,7 @@ class StopwatchesPagePopupMenuButton extends StatelessWidget {
       {required this.onSelected, super.key});
 
   // TODO: should improve this menu, not sure if it is intuitive and clear
+    // TODO: simplify like recording_popup_menu_button.dart
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(

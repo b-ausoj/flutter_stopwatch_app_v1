@@ -61,8 +61,6 @@ class _RecordingCardState extends State<RecordingCard> {
                         break;
                       case RecordingCardMenuItem.export:
                         break;
-                      case RecordingCardMenuItem.share:
-                        break;
                       case RecordingCardMenuItem.delete:
                         widget.deleteRecording(
                             _recordingModel.id, _recordingModel.name);
