@@ -28,9 +28,15 @@ class MyApp extends StatelessWidget {
     //resetSharedPreferences();
     //logAllSharedPreferences();
     return MaterialApp(
-      title: "Stopwatch by Josua",
+      title: "MultiStopwatch by Josua",
       theme: ThemeData(
         useMaterial3: true,
+        switchTheme: SwitchThemeData(
+          thumbColor: MaterialStateProperty.all(Colors.white),
+          trackColor: MaterialStateProperty.all(Colors.black),
+        ),
+        appBarTheme: const AppBarTheme(color: Colors.white),
+        scaffoldBackgroundColor: Colors.white,
         colorScheme: ColorScheme.fromSeed(
             seedColor: Colors.white,
             primary: Colors.black,
