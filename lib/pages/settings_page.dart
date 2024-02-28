@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_stopwatch_app_v1/enums/csv_delimiter.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_criterion.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
 import 'package:flutter_stopwatch_app_v1/models/settings_model.dart';
@@ -40,15 +41,20 @@ class _SettingsPageState extends State<SettingsPage> {
                     inactiveThumbColor: Colors.grey,
                     inactiveTrackColor: Colors.white,
                     value: widget.settings.seperateRunningStopped,
-                    onChanged: (value) {setState(() {
-                      widget.settings.seperateRunningStopped = value;
-                    });
-                    storeSettings(widget.settings);},
+                    onChanged: (value) {
+                      setState(() {
+                        widget.settings.seperateRunningStopped = value;
+                      });
+                      storeSettings(widget.settings);
+                    },
                   )
                 ],
               ),
             ),
-            const Divider(indent: 16.0, endIndent: 16.0,),
+            const Divider(
+              indent: 16.0,
+              endIndent: 16.0,
+            ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(children: [
@@ -113,7 +119,46 @@ class _SettingsPageState extends State<SettingsPage> {
                 )
               ]),
             ),
-            const Divider(indent: 16.0, endIndent: 16.0,),
+            const Divider(
+              indent: 16.0,
+              endIndent: 16.0,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(children: [
+                const Expanded(
+                    child: Text(
+                  "Delimiter for csv file:",
+                  style: TextStyle(fontSize: 16),
+                )),
+                const SizedBox(
+                  width: 16.0,
+                ),
+                DropdownMenu<CSVDelimiter>(
+                  initialSelection: widget.settings.csvDelimiter,
+                  onSelected: (CSVDelimiter? csvDelimiter) {
+                    if (csvDelimiter != null) {
+                      setState(() {
+                        widget.settings.csvDelimiter = csvDelimiter;
+                      });
+                      storeSettings(widget.settings);
+                    }
+                  },
+                  dropdownMenuEntries: CSVDelimiter.values
+                      .map<DropdownMenuEntry<CSVDelimiter>>(
+                          (CSVDelimiter csvDelimiter) {
+                    return DropdownMenuEntry<CSVDelimiter>(
+                      value: csvDelimiter,
+                      label: csvDelimiter.label,
+                    );
+                  }).toList(),
+                )
+              ]),
+            ),
+            const Divider(
+              indent: 16.0,
+              endIndent: 16.0,
+            ),
           ],
         ));
   }
