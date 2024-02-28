@@ -1,3 +1,4 @@
+import 'package:flutter_stopwatch_app_v1/enums/time_format.dart';
 import 'package:flutter_stopwatch_app_v1/models/lap_model.dart';
 
 String dateTimeToString(DateTime dateTime) {
@@ -18,6 +19,14 @@ String durationToString(Duration duration) {
       100 %
       10; // ~/ 10 % 100 for hunderts of a second
   return "${minutes < 10 ? "0$minutes" : "$minutes"}:${seconds < 10 ? "0$seconds" : "$seconds"}.$hSeconds";
+}
+
+String durationToStringExport(Duration duration, TimeFormat timeFormat) {
+  if (timeFormat == TimeFormat.mmsshs) return durationToString(duration);
+  int hours = duration.inHours;
+  int minutes = duration.inMinutes % 60;
+  int seconds = duration.inSeconds % 60;
+  return "${hours < 10 ? "0$hours" : "$hours"}:${minutes < 10 ? "0$minutes" : "$minutes"}:${seconds < 10 ? "0$seconds" : "$seconds"}";
 }
 
 String formatLapCount(List<LapModel> lapTimes) {

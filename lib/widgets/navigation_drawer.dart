@@ -71,8 +71,8 @@ class _NavDrawerState extends State<NavDrawer> {
       Navigator.pop(context);
       Navigator.of(context)
           .push(MaterialPageRoute(
-              builder: (context) =>
-                  StopwatchesPage(selectedSetup, widget.allSetups, widget.settings)))
+              builder: (context) => StopwatchesPage(
+                  selectedSetup, widget.allSetups, widget.settings)))
           .then((value) => widget.controller.refreshBadgeState());
     } else {
       int base = widget.allSetups.length;
@@ -89,8 +89,8 @@ class _NavDrawerState extends State<NavDrawer> {
           widget.allSetups.add(newSetup);
           Navigator.of(context)
               .push(MaterialPageRoute(
-                  builder: (context) =>
-                      StopwatchesPage(newSetup, widget.allSetups, widget.settings)))
+                  builder: (context) => StopwatchesPage(
+                      newSetup, widget.allSetups, widget.settings)))
               .then((value) => widget.controller.refreshBadgeState());
           break;
         case 1:
@@ -98,15 +98,16 @@ class _NavDrawerState extends State<NavDrawer> {
           Navigator.pop(context);
           Navigator.of(context)
               .push(MaterialPageRoute(
-                  builder: (context) => RecordingsPage(widget.allSetups)))
+                  builder: (context) =>
+                      RecordingsPage(widget.allSetups, widget.settings)))
               .then((value) => widget.controller.refreshBadgeState());
           break;
         case 2:
           // settings
           Navigator.pop(context);
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  SettingsPage(isBackBadgeRequired(widget.allSetups), widget.settings)));
+              builder: (context) => SettingsPage(
+                  isBackBadgeRequired(widget.allSetups), widget.settings)));
           break;
         case 3:
           // about

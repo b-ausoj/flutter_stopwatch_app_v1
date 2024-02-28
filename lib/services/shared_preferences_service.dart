@@ -13,8 +13,7 @@ import 'package:flutter_stopwatch_app_v1/widgets/cards/recording_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // This function is only executed once per app lifecycle namely for the initialization
-Future<void> loadData(
-    List<SetupModel> setups, String key) async {
+Future<void> loadData(List<SetupModel> setups, String key) async {
   final prefs = await SharedPreferences.getInstance();
   StopwatchModel.nextId = prefs.getInt("nextStopwatchId") ?? 1;
   List<String> jsons = prefs.getStringList(key) ?? [];
@@ -27,10 +26,10 @@ Future<void> loadSettings(SettingsModel settingsModel) async {
   final prefs = await SharedPreferences.getInstance();
   String? json = prefs.getString("settings");
   if (json != null) {
-  SettingsModel loaded = SettingsModel.fromJson(jsonDecode(json));
-  settingsModel.defaultSortCriterion = loaded.defaultSortCriterion;
-  settingsModel.defaultSortDirection = loaded.defaultSortDirection;
-  settingsModel.seperateRunningStopped = loaded.seperateRunningStopped;
+    SettingsModel loaded = SettingsModel.fromJson(jsonDecode(json));
+    settingsModel.defaultSortCriterion = loaded.defaultSortCriterion;
+    settingsModel.defaultSortDirection = loaded.defaultSortDirection;
+    settingsModel.seperateRunningStopped = loaded.seperateRunningStopped;
   }
 }
 
@@ -46,6 +45,7 @@ Future<void> loadRecordings(
   for (String entry in recordings.reversed) {
     recordingsPageController.recordingCards.add(RecordingCard(
       recordingsPageController.deleteRecoding,
+      recordingsPageController.settings,
       json: jsonDecode(entry),
       key: Key(entry),
     ));
@@ -100,8 +100,7 @@ Future<void> saveStopwatch(
 }
 
 // TODO: Should test this function
-Future<void> storeData(
-    List<SetupModel> setups, String key) async {
+Future<void> storeData(List<SetupModel> setups, String key) async {
   final prefs = await SharedPreferences.getInstance();
   prefs.setInt("nextStopwatchId", StopwatchModel.nextId);
   List<String> jsons = [];

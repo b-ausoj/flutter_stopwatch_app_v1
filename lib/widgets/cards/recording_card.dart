@@ -1,7 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/enums/recording_card_menu_item.dart';
 import 'package:flutter_stopwatch_app_v1/models/recording_model.dart';
+import 'package:flutter_stopwatch_app_v1/models/settings_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
+import 'package:flutter_stopwatch_app_v1/utils/export_to_csv.dart';
 import 'package:flutter_stopwatch_app_v1/utils/times_formatting_utils.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/recording_popup_menu_button.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/dialogs/rename_dialog.dart';
@@ -9,11 +13,13 @@ import 'package:flutter_stopwatch_app_v1/widgets/dialogs/rename_dialog.dart';
 class RecordingCard extends StatefulWidget {
   final Map<String, dynamic> json;
   final void Function(int id, String name) deleteRecording;
+  final SettingsModel settings;
   late final RecordingModel recordingModel = (json.isEmpty)
       ? RecordingModel(0, "bla", DateTime.now(), false, "test",
           Duration.zero) // TODO: schöner/korrekt machen
       : RecordingModel.fromJson(json);
-  RecordingCard(this.deleteRecording, {super.key, this.json = const {}});
+  RecordingCard(this.deleteRecording, this.settings,
+      {super.key, this.json = const {}});
 
   @override
   State<RecordingCard> createState() => _RecordingCardState();
@@ -57,9 +63,12 @@ class _RecordingCardState extends State<RecordingCard> {
                   onSelected: (RecordingCardMenuItem item) {
                     switch (item) {
                       case RecordingCardMenuItem.rename:
+                        log("message");
                         _showRenameDialog();
                         break;
                       case RecordingCardMenuItem.export:
+                        log("exporting");
+                        exportRecordingToCSV(_recordingModel, widget.settings);
                         break;
                       case RecordingCardMenuItem.delete:
                         widget.deleteRecording(

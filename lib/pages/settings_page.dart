@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/enums/csv_delimiter.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_criterion.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
+import 'package:flutter_stopwatch_app_v1/enums/time_format.dart';
 import 'package:flutter_stopwatch_app_v1/models/settings_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/icons/back_icon.dart';
@@ -128,7 +129,39 @@ class _SettingsPageState extends State<SettingsPage> {
               child: Row(children: [
                 const Expanded(
                     child: Text(
-                  "Delimiter for csv file:",
+                  "Timeformat for .csv export:",
+                  style: TextStyle(fontSize: 16),
+                )),
+                const SizedBox(
+                  width: 16.0,
+                ),
+                DropdownMenu<TimeFormat>(
+                  initialSelection: widget.settings.timeFormat,
+                  onSelected: (TimeFormat? timeFormat) {
+                    if (timeFormat != null) {
+                      setState(() {
+                        widget.settings.timeFormat = timeFormat;
+                      });
+                      storeSettings(widget.settings);
+                    }
+                  },
+                  dropdownMenuEntries: TimeFormat.values
+                      .map<DropdownMenuEntry<TimeFormat>>(
+                          (TimeFormat timeFormat) {
+                    return DropdownMenuEntry<TimeFormat>(
+                      value: timeFormat,
+                      label: timeFormat.value,
+                    );
+                  }).toList(),
+                )
+              ]),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(children: [
+                const Expanded(
+                    child: Text(
+                  "Delimiter for .csv file:",
                   style: TextStyle(fontSize: 16),
                 )),
                 const SizedBox(

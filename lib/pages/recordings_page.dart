@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/controllers/recordings_page_controller.dart';
 import 'package:flutter_stopwatch_app_v1/enums/recordings_page_menu_item.dart';
+import 'package:flutter_stopwatch_app_v1/models/settings_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/setup_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/icons/back_icon.dart';
@@ -8,8 +11,9 @@ import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/recordings_p
 
 class RecordingsPage extends StatefulWidget {
   final List<SetupModel> allSetups;
+  final SettingsModel settings;
 
-  const RecordingsPage(this.allSetups, {super.key});
+  const RecordingsPage(this.allSetups, this.settings, {super.key});
 
   @override
   State<RecordingsPage> createState() => _RecordingsPageState();
@@ -34,6 +38,7 @@ class _RecordingsPageState extends State<RecordingsPage>
                 recordingsPageController.deleteAllRecordings();
                 break;
               case RecordingsPageMenuItem.exportAll:
+                log("export all");
                 break;
             }
           })
@@ -54,7 +59,7 @@ class _RecordingsPageState extends State<RecordingsPage>
   void initState() {
     super.initState();
     loadRecordings(recordingsPageController = RecordingsPageController(
-            context, () => setState(() {}), widget.allSetups))
+            context, () => setState(() {}), widget.allSetups, widget.settings))
         .then((value) => null);
     recordingsPageController.refreshBadgeState();
     setState(() {});

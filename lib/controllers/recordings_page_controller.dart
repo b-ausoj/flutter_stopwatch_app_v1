@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/controllers/badge_controller.dart';
 import 'package:flutter_stopwatch_app_v1/enums/recordings_set_menu_item.dart';
+import 'package:flutter_stopwatch_app_v1/models/settings_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/setup_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/utils/badge_checking.dart';
+import 'package:flutter_stopwatch_app_v1/utils/export_to_csv.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/recordings_set_popup_menu_button.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/cards/recording_card.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/text_with_badge/recordings_set_text_with_badge.dart';
@@ -14,8 +16,9 @@ class RecordingsPageController extends BadgeController {
   final List<RecordingCard> recordingCards = [];
   final List<Widget> recordingsList = [];
   final List<SetupModel> allSetups;
+  final SettingsModel settings;
 
-  RecordingsPageController(this.context, this.refresh, this.allSetups);
+  RecordingsPageController(this.context, this.refresh, this.allSetups, this.settings);
 
   void createRecordingList() {
     recordingsList.clear();
@@ -46,6 +49,7 @@ class RecordingsPageController extends BadgeController {
                   deleteRecordingsSet(timeStamp);
                   break;
                 case RecordingsSetMenuItem.exportAll:
+                  exportRecordingsSetToCSV(recordingCards.where((element) => element.recordingModel.startingTime == timeStamp).toList(), settings);
                   break;
               }
               //selectedMenu = item;

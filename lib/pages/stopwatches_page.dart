@@ -55,6 +55,7 @@ class _StopwatchesPageState extends State<StopwatchesPage>
                   _showDeleteSetupDialog();
                   break;
                 case StopwatchesPageMenuItem.saveAll:
+                // TODO: move to controller
                   for (StopwatchCard element
                       in _stopwatchesPageController.stopwatchCards) {
                     if (element.stopwatchModel.state ==
