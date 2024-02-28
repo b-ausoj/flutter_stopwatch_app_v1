@@ -6,38 +6,24 @@ class RecordingsPagePopupMenuButton extends StatelessWidget {
 
   const RecordingsPagePopupMenuButton({required this.onSelected, super.key});
 
-  // TODO: simplify like recording_popup_menu_button.dart
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
       onSelected: onSelected,
-      itemBuilder: (BuildContext context) =>
-          <PopupMenuEntry<RecordingsPageMenuItem>>[
-        const PopupMenuItem<RecordingsPageMenuItem>(
-          value: RecordingsPageMenuItem.deleteAll,
-          child: Row(
-            children: [
-              Icon(Icons.delete_outlined),
-              SizedBox(
-                width: 12,
-              ),
-              Text('Delete all'),
-            ],
-          ),
-        ),
-        const PopupMenuItem<RecordingsPageMenuItem>(
-          value: RecordingsPageMenuItem.exportAll,
-          child: Row(
-            children: [
-              Icon(Icons.save_alt_outlined),
-              SizedBox(
-                width: 12,
-              ),
-              Text('Export all'),
-            ],
-          ),
-        ),
-      ],
+      itemBuilder: (BuildContext context) => RecordingsPageMenuItem.values
+          .map<PopupMenuEntry<RecordingsPageMenuItem>>(
+              (RecordingsPageMenuItem menuItem) => PopupMenuItem(
+                  value: menuItem,
+                  child: Row(
+                    children: [
+                      Icon(menuItem.icon),
+                      const SizedBox(
+                        width: 12,
+                      ),
+                      Text(menuItem.label),
+                    ],
+                  )))
+          .toList(),
     );
   }
 }
