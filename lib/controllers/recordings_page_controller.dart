@@ -83,6 +83,7 @@ class RecordingsPageController extends BadgeController {
                 deleteRecordingsSet(last);
                 break;
               case RecordingsSetMenuItem.exportAll:
+                exportRecordingsSetToCSV(recordingCards.where((element) => element.recordingModel.startingTime == last).toList(), settings);
                 break;
             }
             //selectedMenu = item;
