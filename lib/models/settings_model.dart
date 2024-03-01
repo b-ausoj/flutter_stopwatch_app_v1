@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_stopwatch_app_v1/enums/csv_delimiter.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_criterion.dart';
 import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
@@ -11,6 +13,15 @@ class SettingsModel {
   TimeFormat timeFormat = TimeFormat.hhmmss;
 
   SettingsModel();
+
+  void copyFrom(String json) {
+    SettingsModel other = SettingsModel.fromJson(jsonDecode(json));
+    defaultSortCriterion = other.defaultSortCriterion;
+    defaultSortDirection = other.defaultSortDirection;
+    seperateRunningStopped = other.seperateRunningStopped;
+    csvDelimiter = other.csvDelimiter;
+    timeFormat = other.timeFormat;
+  }
 
   factory SettingsModel.fromJson(Map<String, dynamic> json) {
     SettingsModel settingsModel = SettingsModel();

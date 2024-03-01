@@ -26,10 +26,7 @@ Future<void> loadSettings(SettingsModel settingsModel) async {
   final prefs = await SharedPreferences.getInstance();
   String? json = prefs.getString("settings");
   if (json != null) {
-    SettingsModel loaded = SettingsModel.fromJson(jsonDecode(json));
-    settingsModel.defaultSortCriterion = loaded.defaultSortCriterion;
-    settingsModel.defaultSortDirection = loaded.defaultSortDirection;
-    settingsModel.seperateRunningStopped = loaded.seperateRunningStopped;
+    settingsModel.copyFrom(json);
   }
 }
 
