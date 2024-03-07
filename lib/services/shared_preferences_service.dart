@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/controllers/recordings_page_controller.dart';
+import 'package:flutter_stopwatch_app_v1/controllers/start_page_controller.dart';
 import 'package:flutter_stopwatch_app_v1/models/settings_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/setup_model.dart';
 import 'package:flutter_stopwatch_app_v1/models/lap_model.dart';
@@ -18,8 +19,16 @@ Future<void> loadData(List<SetupModel> setups, String key) async {
   StopwatchModel.nextId = prefs.getInt("nextStopwatchId") ?? 1;
   List<String> jsons = prefs.getStringList(key) ?? [];
   for (String json in jsons) {
-    setups.add(SetupModel.fromJson(jsonDecode(json)));
+    SetupModel loaded = SetupModel.fromJson(jsonDecode(json));
+    SetupModel setup = SetupModel(loaded.name, loaded.id, loaded.order,
+        loaded.direction, loaded.stopwatches);
+    setups.add(setup);
   }
+}
+
+loadStart(StartController startController) async {
+  loadData(startController.allSetups, startController.sharedPreferencesKey)
+      .then((value) => startController.refreshBadgeState());
 }
 
 Future<void> loadSettings(SettingsModel settingsModel) async {

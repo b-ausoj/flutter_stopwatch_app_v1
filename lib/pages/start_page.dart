@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch_app_v1/controllers/start_page_controller.dart';
 import 'package:flutter_stopwatch_app_v1/enums/start_page_card_menu_item.dart';
 import 'package:flutter_stopwatch_app_v1/models/setup_model.dart';
 import 'package:flutter_stopwatch_app_v1/pages/stopwatches_page.dart';
+import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/dialogs/delete_setup_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/dialogs/rename_dialog.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/icons/navigation_icon.dart';
@@ -18,10 +21,16 @@ class StartPage extends StatefulWidget {
   State<StartPage> createState() => _StartPageState();
 }
 
-class _StartPageState extends State<StartPage>
-    with SingleTickerProviderStateMixin {
-  late final StartController _startController =
-      StartController(() => setState(() {}), widget.sharedPreferencesKey);
+class _StartPageState extends State<StartPage> {
+  late final StartController _startController;
+
+  @override
+  void initState() {
+    super.initState();
+    _startController =
+        StartController(() => setState(() {}), widget.sharedPreferencesKey);
+    loadStart(_startController);
+  }
 
   @override
   Widget build(BuildContext context) {

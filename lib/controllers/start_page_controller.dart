@@ -23,20 +23,10 @@ class StartController extends BadgeController {
   void Function() refreshScreen;
 
   StartController(this.refreshScreen, this.sharedPreferencesKey) {
-    loadData(allSetups, sharedPreferencesKey).then((value) {
-      refreshBadgeState();
-      refreshScreen();
-    });
     loadSettings(settings);
     appLifecycleListener = AppLifecycleListener(onStateChange: (_) => helper());
     timer = Timer.periodic(const Duration(seconds: 10), (Timer t) {
       storeData(allSetups, sharedPreferencesKey);
-      log("");
-      log("stored data controller\n");
-      for (SetupModel setup in allSetups) {
-        log(setup.toString());
-      }
-      log("");
     });
   }
 
