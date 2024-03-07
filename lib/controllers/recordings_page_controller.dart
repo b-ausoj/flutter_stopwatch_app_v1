@@ -6,6 +6,7 @@ import 'package:flutter_stopwatch_app_v1/models/setup_model.dart';
 import 'package:flutter_stopwatch_app_v1/services/shared_preferences_service.dart';
 import 'package:flutter_stopwatch_app_v1/utils/badge_checking.dart';
 import 'package:flutter_stopwatch_app_v1/utils/export_to_csv.dart';
+import 'package:flutter_stopwatch_app_v1/utils/snackbar_utils.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/popup_menu_buttons/recordings_set_popup_menu_button.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/cards/recording_card.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/text_with_badge/recordings_set_text_with_badge.dart';
@@ -18,7 +19,8 @@ class RecordingsPageController extends BadgeController {
   final List<SetupModel> allSetups;
   final SettingsModel settings;
 
-  RecordingsPageController(this.context, this.refresh, this.allSetups, this.settings);
+  RecordingsPageController(
+      this.context, this.refresh, this.allSetups, this.settings);
 
   void createRecordingList() {
     recordingsList.clear();
@@ -49,7 +51,12 @@ class RecordingsPageController extends BadgeController {
                   deleteRecordingsSet(timeStamp);
                   break;
                 case RecordingsSetMenuItem.exportAll:
-                  exportRecordingsSetToCSV(recordingCards.where((element) => element.recordingModel.startingTime == timeStamp).toList(), settings);
+                  exportRecordingsSetToCSV(
+                      recordingCards
+                          .where((element) =>
+                              element.recordingModel.startingTime == timeStamp)
+                          .toList(),
+                      settings);
                   break;
               }
               //selectedMenu = item;
@@ -83,7 +90,12 @@ class RecordingsPageController extends BadgeController {
                 deleteRecordingsSet(last);
                 break;
               case RecordingsSetMenuItem.exportAll:
-                exportRecordingsSetToCSV(recordingCards.where((element) => element.recordingModel.startingTime == last).toList(), settings);
+                exportRecordingsSetToCSV(
+                    recordingCards
+                        .where((element) =>
+                            element.recordingModel.startingTime == last)
+                        .toList(),
+                    settings);
                 break;
             }
             //selectedMenu = item;
@@ -99,27 +111,65 @@ class RecordingsPageController extends BadgeController {
   }
 
   void deleteAllRecordings() {
-    recordingCards.removeRange(0, recordingCards.length);
+    List<RecordingCard> deletedCards = [];
+    deletedCards.addAll(recordingCards);
+    recordingCards.clear();
     createRecordingList();
     storeRecordingsState(this);
     refresh();
+    showLongSnackBar(context, "All recordings have been deleted",
+        action: SnackBarAction(
+            label: "Undo",
+            onPressed: () {
+              recordingCards.addAll(deletedCards);
+              createRecordingList();
+              storeRecordingsState(this);
+              refresh();
+            }));
   }
 
   Future<void> deleteRecoding(int id, String name) async {
-    ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Stopwatch '$name' has been removed")));
-    recordingCards.removeWhere((element) => element.recordingModel.id == id);
+    RecordingCard? deletedCard;
+    recordingCards.removeWhere((element) {
+      bool remove = element.recordingModel.id == id;
+      if (remove) deletedCard = element;
+      return remove;
+    });
     createRecordingList();
     storeRecordingsState(this);
     refresh();
+    if (deletedCard != null) {
+      showLongSnackBar(context, "Recording have been deleted",
+          action: SnackBarAction(
+              label: "Undo",
+              onPressed: () {
+                recordingCards.add(deletedCard!);
+                createRecordingList();
+                storeRecordingsState(this);
+                refresh();
+              }));
+    }
   }
 
   void deleteRecordingsSet(DateTime timestamp) {
-    recordingCards.removeWhere(
-        (element) => element.recordingModel.startingTime == timestamp);
+    List<RecordingCard> deletedCards = [];
+    recordingCards.removeWhere((element) {
+      bool remove = element.recordingModel.startingTime == timestamp;
+      if (remove) deletedCards.add(element);
+      return remove;
+    });
     createRecordingList();
     storeRecordingsState(this);
     refresh();
+    showLongSnackBar(context, "Recordings have been deleted",
+        action: SnackBarAction(
+            label: "Undo",
+            onPressed: () {
+              recordingCards.addAll(deletedCards);
+              createRecordingList();
+              storeRecordingsState(this);
+              refresh();
+            }));
   }
 
   @override
