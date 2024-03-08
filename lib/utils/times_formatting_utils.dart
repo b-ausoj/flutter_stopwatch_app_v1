@@ -13,16 +13,16 @@ String dateTimeToString(DateTime dateTime) {
 }
 
 String durationToString(Duration duration) {
-  int minutes = duration.inMinutes;
+  int hours = duration.inHours;
+  int minutes = duration.inMinutes % 60;
   int seconds = duration.inSeconds % 60;
-  int hSeconds = duration.inMilliseconds ~/
-      100 %
-      10; // ~/ 10 % 100 for hunderts of a second
-  return "${minutes < 10 ? "0$minutes" : "$minutes"}:${seconds < 10 ? "0$seconds" : "$seconds"}.$hSeconds";
+  int dSeconds = duration.inMilliseconds ~/ 100 % 10;
+  // int hSeconds = duration.inMilliseconds ~/ 10 % 100;
+  return "${hours > 0 ? "$hours:" : ""}${minutes < 10 ? "0$minutes" : "$minutes"}:${seconds < 10 ? "0$seconds" : "$seconds"}.$dSeconds";
 }
 
 String durationToStringExport(Duration duration, TimeFormat timeFormat) {
-  if (timeFormat == TimeFormat.mmsshs) return durationToString(duration);
+  if (timeFormat == TimeFormat.mmssds) return durationToString(duration);
   int hours = duration.inHours;
   int minutes = duration.inMinutes % 60;
   int seconds = duration.inSeconds % 60;
