@@ -3,9 +3,9 @@ import 'package:flutter_stopwatch_app_v1/enums/sort_direction.dart';
 import 'package:flutter_stopwatch_app_v1/models/settings_model.dart';
 import 'package:flutter_stopwatch_app_v1/widgets/cards/stopwatch_card.dart';
 
-buildSort(SortCriterion order, SortDirection orientation, SettingsModel settings) => ((StopwatchCard a, StopwatchCard b) {
-  int sign = orientation == SortDirection.ascending ? 1 : -1;
-  switch (order) {
+buildSort(SortCriterion criterion, SortDirection direction, SettingsModel settings) => ((StopwatchCard a, StopwatchCard b) {
+  int sign = direction == SortDirection.ascending ? 1 : -1;
+  switch (criterion) {
     case SortCriterion.creationDate: // TODO: delete this case
       return 0;
     case SortCriterion.name:
@@ -27,8 +27,8 @@ buildSort(SortCriterion order, SortDirection orientation, SettingsModel settings
   }
 });
 
-List<StopwatchCard> sortAndListCards(List<StopwatchCard> list, SortCriterion order, SortDirection orientation, SettingsModel settings) {
-  list.sort(buildSort(order, orientation, settings));
+List<StopwatchCard> sortAndListCards(List<StopwatchCard> list, SortCriterion criterion, SortDirection direction, SettingsModel settings) {
+  list.sort(buildSort(criterion, direction, settings));
   return list;
 }
 

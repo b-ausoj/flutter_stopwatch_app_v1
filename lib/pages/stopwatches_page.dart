@@ -98,7 +98,7 @@ class _StopwatchesPageState extends State<StopwatchesPage>
         padding: const EdgeInsets.all(8.0),
         child: ReorderableListView(
           buildDefaultDragHandles:
-              _stopwatchesPageController.order == SortCriterion.customReordable,
+              _stopwatchesPageController.criterion == SortCriterion.customReordable,
           footer: AddStopwatchCard(_stopwatchesPageController.addStopwatch),
           children: _stopwatchesPageController.stopwatchCards,
           onReorder: (int oldIndex, int newIndex) {
@@ -153,10 +153,10 @@ class _StopwatchesPageState extends State<StopwatchesPage>
       barrierDismissible: true,
       builder: (BuildContext context) {
         return SortDialog(
-            _stopwatchesPageController.order,
+            _stopwatchesPageController.criterion,
             _stopwatchesPageController.direction,
-            (SortCriterion order, SortDirection orientation) =>
-                _stopwatchesPageController.setSorting(order, orientation));
+            (SortCriterion criterion, SortDirection direction) =>
+                _stopwatchesPageController.setSorting(criterion, direction));
       },
     );
   }

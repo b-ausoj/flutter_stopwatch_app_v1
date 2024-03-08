@@ -3,8 +3,6 @@
 // if one is running and its not the current configuration, show a badge at the menu burger
 // if the navdrawer is open, show a badge at the corresponding configuration where the stopwatch is running
 
-// TODO: BIG TODO: update this as no longer via shared preferences but via the list of setups
-
 import 'dart:convert';
 
 import 'package:flutter_stopwatch_app_v1/models/setup_model.dart';

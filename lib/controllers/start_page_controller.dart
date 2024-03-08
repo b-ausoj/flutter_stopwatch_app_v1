@@ -14,8 +14,7 @@ class StartController extends BadgeController {
   late final SettingsModel settings = SettingsModel();
 
   // needs the label/visible for the menu(drawr) icon an the setups list items
-  // TODO: use better naming for the list
-  List<bool> badgeVisibles = [];
+  List<bool> isSetupBadgeVisibleList = [];
   late final AppLifecycleListener appLifecycleListener;
 
   late Timer timer;
@@ -37,13 +36,13 @@ class StartController extends BadgeController {
 
   @override
   void refreshBadgeState() {
-    badgeVisibles = List.filled(allSetups.length, false);
+    isSetupBadgeVisibleList = List.filled(allSetups.length, false);
     // could do all of that in parallel instead of .then
     isMenuBadgeRequired(allSetups, null).then((value) => badgeVisible = value);
     getUnseenRecordingsCount().then((value) => badgeLabel = value);
 
     for (int i = 0; i < allSetups.length; i++) {
-      badgeVisibles[i] = isTextBadgeRequired(allSetups, allSetups[i]);
+      isSetupBadgeVisibleList[i] = isTextBadgeRequired(allSetups, allSetups[i]);
     }
     refreshScreen(); // calls set state because start badge doesn't have a ticker with setState
   }

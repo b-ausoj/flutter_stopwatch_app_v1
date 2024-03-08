@@ -17,12 +17,12 @@ class SetupModel {
 
   String name;
 
-  SortCriterion order;
+  SortCriterion criterion;
   SortDirection direction;
 
   List<StopwatchModel> stopwatches;
 
-  SetupModel(this.name, this.id, this.order, this.direction, this.stopwatches);
+  SetupModel(this.name, this.id, this.criterion, this.direction, this.stopwatches);
 
   // TODO: Should write tests for that
   factory SetupModel.fromJson(Map<String, dynamic> json) {
@@ -33,7 +33,7 @@ class SetupModel {
     SetupModel model = SetupModel(
         json["name"],
         json["id"],
-        SortCriterion.values[json["order"]],
+        SortCriterion.values[json["criterion"]],
         SortDirection.values[json["direction"]],
         stopwatches);
     return model;
@@ -42,7 +42,7 @@ class SetupModel {
   Map<String, dynamic> toJson() => {
         "name": name,
         "id": id,
-        "order": SortCriterion.values.indexOf(order),
+        "criterion": SortCriterion.values.indexOf(criterion),
         "direction": SortDirection.values.indexOf(direction),
         "stopwatches": jsonEncode(stopwatches)
       };
@@ -50,7 +50,7 @@ class SetupModel {
   @override
   String toString() {
     String string =
-        "SetupModel: id: $id, name: $name, order: $order, direction: $direction, stopwatches: \n";
+        "SetupModel: id: $id, name: $name, criterion: $criterion, direction: $direction, stopwatches: \n";
 
     for (var stopwatch in stopwatches) {
       string += "\t$stopwatch\n";

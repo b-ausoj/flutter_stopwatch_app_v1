@@ -23,7 +23,7 @@ Future<void> _loadData(List<SetupModel> setups, String key) async {
   List<String> jsons = prefs.getStringList(key) ?? [];
   for (String json in jsons) {
     SetupModel loaded = SetupModel.fromJson(jsonDecode(json));
-    SetupModel setup = SetupModel(loaded.name, loaded.id, loaded.order,
+    SetupModel setup = SetupModel(loaded.name, loaded.id, loaded.criterion,
         loaded.direction, loaded.stopwatches);
     setups.add(setup);
   }

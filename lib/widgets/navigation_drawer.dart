@@ -85,7 +85,7 @@ class _NavDrawerState extends State<NavDrawer> {
               0,
               widget.settings.defaultSortCriterion,
               widget.settings.defaultSortDirection,
-              []); // TODO: get the default orientation and criterion from somewhere
+              []);
           widget.allSetups.add(newSetup);
           Navigator.of(context)
               .push(MaterialPageRoute(

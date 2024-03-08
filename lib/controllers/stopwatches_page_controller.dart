@@ -35,7 +35,7 @@ class StopwatchesPageController extends BadgeController {
   get direction => setupModel.direction;
   String get name => setupModel.name;
   set name(String value) => setupModel.name = value;
-  get order => setupModel.order;
+  get criterion => setupModel.criterion;
   List<StopwatchCard> get stopwatchCards => _stopwatchCards;
 
   Future<void> addStopwatch() async {
@@ -51,7 +51,7 @@ class StopwatchesPageController extends BadgeController {
   }
 
   void changedState() {
-    sortAndListCards(_stopwatchCards, setupModel.order, setupModel.direction, settings);
+    sortAndListCards(_stopwatchCards, setupModel.criterion, setupModel.direction, settings);
     refreshBadgeState();
   }
 
@@ -134,7 +134,6 @@ class StopwatchesPageController extends BadgeController {
             }));
   }
 
-  // TODO: implement
   void restoreAllStopwatches(List<String> oldStopwatchesPage) {
     _stopwatchCards.clear();
     for (String entry in oldStopwatchesPage) {
@@ -150,8 +149,8 @@ class StopwatchesPageController extends BadgeController {
     }
   }
 
-  void setSorting(SortCriterion order, SortDirection direction) {
-    setupModel.order = order;
+  void setSorting(SortCriterion criterion, SortDirection direction) {
+    setupModel.criterion = criterion;
     setupModel.direction = direction;
     changedState();
   }

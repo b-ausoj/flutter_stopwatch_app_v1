@@ -16,8 +16,8 @@ class SortDialog extends StatefulWidget {
 }
 
 class _SortDialogState extends State<SortDialog> {
-  late SortCriterion _selectedOrder = widget.initialCriterion;
-  late SortDirection _selectedOrientation = widget.initialDirection;
+  late SortCriterion _selectedCriterion = widget.initialCriterion;
+  late SortDirection _selectedDirection = widget.initialDirection;
 
   @override
   Widget build(BuildContext context) {
@@ -30,80 +30,80 @@ class _SortDialogState extends State<SortDialog> {
             RadioListTile(
                 title: const Text("Creation date"),
                 value: SortCriterion.creationDate,
-                groupValue: _selectedOrder,
+                groupValue: _selectedCriterion,
                 onChanged: (SortCriterion? value) {
                   if (value == null) return;
                   setState(() {
-                    _selectedOrder = value;
+                    _selectedCriterion = value;
                   });
-                  widget.onValueChange(_selectedOrder, _selectedOrientation);
+                  widget.onValueChange(_selectedCriterion, _selectedDirection);
                 }),
             RadioListTile(
                 title: const Text("Name"),
                 value: SortCriterion.name,
-                groupValue: _selectedOrder,
+                groupValue: _selectedCriterion,
                 onChanged: (SortCriterion? value) {
                   if (value == null) return;
                   setState(() {
-                    _selectedOrder = value;
+                    _selectedCriterion = value;
                   });
-                  widget.onValueChange(_selectedOrder, _selectedOrientation);
+                  widget.onValueChange(_selectedCriterion, _selectedDirection);
                 }),
             RadioListTile(
                 title: const Text("Longest Time"),
                 value: SortCriterion.longestTime,
-                groupValue: _selectedOrder,
+                groupValue: _selectedCriterion,
                 onChanged: (SortCriterion? value) {
                   if (value == null) return;
                   setState(() {
-                    _selectedOrder = value;
+                    _selectedCriterion = value;
                   });
-                  widget.onValueChange(_selectedOrder, _selectedOrientation);
+                  widget.onValueChange(_selectedCriterion, _selectedDirection);
                 }),
             RadioListTile(
                 title: const Text("Longest Lap Time"),
                 value: SortCriterion.longestLapTime,
-                groupValue: _selectedOrder,
+                groupValue: _selectedCriterion,
                 onChanged: (SortCriterion? value) {
                   if (value == null) return;
                   setState(() {
-                    _selectedOrder = value;
+                    _selectedCriterion = value;
                   });
-                  widget.onValueChange(_selectedOrder, _selectedOrientation);
+                  widget.onValueChange(_selectedCriterion, _selectedDirection);
                 }),
             RadioListTile(
                 title: const Text("Custom"),
                 value: SortCriterion.customReordable,
-                groupValue: _selectedOrder,
+                groupValue: _selectedCriterion,
                 onChanged: (SortCriterion? value) {
                   if (value == null) return;
                   setState(() {
-                    _selectedOrder = value;
+                    _selectedCriterion = value;
                   });
-                  widget.onValueChange(_selectedOrder, _selectedOrientation);
+                  widget.onValueChange(_selectedCriterion, _selectedDirection);
                 }),
             const Divider(),
             RadioListTile(
                 title: const Text("Ascending"),
                 value: SortDirection.ascending,
-                groupValue: _selectedOrientation,
+                groupValue: _selectedDirection,
                 onChanged: (SortDirection? value) {
                   if (value == null) return;
                   setState(() {
-                    _selectedOrientation = value;
+                    _selectedDirection = value;
                   });
-                  widget.onValueChange(_selectedOrder, _selectedOrientation);
+                  widget.onValueChange(_selectedCriterion, _selectedDirection);
                 }),
             RadioListTile(
                 title: const Text("Descending"),
                 value: SortDirection.descending,
-                groupValue: _selectedOrientation,
+                groupValue: _selectedDirection,
                 onChanged: (SortDirection? value) {
                   if (value == null) return;
                   setState(() {
-                    _selectedOrientation = value;
+                    _selectedDirection = value;
                   });
-                  widget.onValueChange(_selectedOrder, _selectedOrientation);
+                  widget.onValueChange(_selectedCriterion, _selectedDirection);
                 }),
           ],
         ));
