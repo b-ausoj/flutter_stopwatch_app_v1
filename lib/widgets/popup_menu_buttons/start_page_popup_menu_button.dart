@@ -5,38 +5,25 @@ class StartPagePopupMenuButton extends StatelessWidget {
   final Function(StartPageCardMenuItem) onSelected;
 
   const StartPagePopupMenuButton({required this.onSelected, super.key});
-  // TODO: simplify like recording_popup_menu_button.dart
+
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
       onSelected: onSelected,
-      itemBuilder: (BuildContext context) =>
-          <PopupMenuEntry<StartPageCardMenuItem>>[
-        const PopupMenuItem<StartPageCardMenuItem>(
-          value: StartPageCardMenuItem.rename,
-          child: Row(
-            children: [
-              Icon(Icons.edit_outlined),
-              SizedBox(
-                width: 12,
-              ),
-              Text('Rename'),
-            ],
-          ),
-        ),
-        const PopupMenuItem<StartPageCardMenuItem>(
-          value: StartPageCardMenuItem.delete,
-          child: Row(
-            children: [
-              Icon(Icons.delete_outlined),
-              SizedBox(
-                width: 12,
-              ),
-              Text('Delete'),
-            ],
-          ),
-        ),
-      ],
+      itemBuilder: (BuildContext context) => StartPageCardMenuItem.values
+          .map((menuItem) => PopupMenuItem<StartPageCardMenuItem>(
+                value: menuItem,
+                child: Row(
+                  children: [
+                    Icon(menuItem.icon),
+                    const SizedBox(
+                      width: 12,
+                    ),
+                    Text(menuItem.label),
+                  ],
+                ),
+              ))
+          .toList(),
     );
   }
 }

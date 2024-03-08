@@ -9,90 +9,24 @@ class StopwatchesPagePopupMenuButton extends StatelessWidget {
       {required this.onSelected, super.key});
 
   // TODO: should improve this menu, not sure if it is intuitive and clear
-    // TODO: simplify like recording_popup_menu_button.dart
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
       onSelected: onSelected,
-      itemBuilder: (BuildContext context) =>
-          <PopupMenuEntry<StopwatchesPageMenuItem>>[
-        const PopupMenuItem<StopwatchesPageMenuItem>(
-          value: StopwatchesPageMenuItem.rename,
-          child: Row(
-            children: [
-              Icon(Icons.edit_outlined),
-              SizedBox(
-                width: 12,
-              ),
-              Text('Rename'),
-            ],
-          ),
-        ),
-        PopupMenuItem<StopwatchesPageMenuItem>(
-          value: StopwatchesPageMenuItem.deleteSetup,
-          child: Row(
-            children: [
-              const Icon(Icons.delete_forever_outlined),
-              const SizedBox(
-                width: 12,
-              ),
-              Container(
-                constraints: const BoxConstraints(maxWidth: 140),
-                child: const Text("Delete this setup", overflow: TextOverflow.ellipsis,), // TODO: not a perfect name
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        const PopupMenuItem<StopwatchesPageMenuItem>(
-          value: StopwatchesPageMenuItem.saveAll,
-          child: Row(
-            children: [
-              Icon(Icons.save_outlined),
-              SizedBox(
-                width: 12,
-              ),
-              Text('Save all'),
-            ],
-          ),
-        ),
-        const PopupMenuItem<StopwatchesPageMenuItem>(
-          value: StopwatchesPageMenuItem.resetAll,
-          child: Row(
-            children: [
-              Icon(Icons.refresh),
-              SizedBox(
-                width: 12,
-              ),
-              Text('Reset all'),
-            ],
-          ),
-        ),
-        const PopupMenuItem<StopwatchesPageMenuItem>(
-          value: StopwatchesPageMenuItem.deleteAll,
-          child: Row(
-            children: [
-              Icon(Icons.delete_outline),
-              SizedBox(
-                width: 12,
-              ),
-              Text('Delete all'),
-            ],
-          ),
-        ),
-        const PopupMenuItem<StopwatchesPageMenuItem>(
-          value: StopwatchesPageMenuItem.changeOrder,
-          child: Row(
-            children: [
-              Icon(Icons.sort),
-              SizedBox(
-                width: 12,
-              ),
-              Text('Change order'),
-            ],
-          ),
-        ),
-      ],
+      itemBuilder: (BuildContext context) => StopwatchesPageMenuItem.values
+          .map((menuItem) => PopupMenuItem<StopwatchesPageMenuItem>(
+                value: menuItem,
+                child: Row(
+                  children: [
+                    Icon(menuItem.icon),
+                    const SizedBox(
+                      width: 12,
+                    ),
+                    Text(menuItem.label),
+                  ],
+                ),
+              ))
+          .toList(),
     );
   }
 }

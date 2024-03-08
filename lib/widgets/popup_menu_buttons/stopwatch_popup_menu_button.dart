@@ -5,62 +5,25 @@ class StopwatchPopupMenuButton extends StatelessWidget {
   final Function(StopwatchCardMenuItem) onSelected;
 
   const StopwatchPopupMenuButton({required this.onSelected, super.key});
-  // TODO: simplify like recording_popup_menu_button.dart
 
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
-        onSelected: onSelected,
-        itemBuilder: (BuildContext context) =>
-            <PopupMenuEntry<StopwatchCardMenuItem>>[
-              const PopupMenuItem<StopwatchCardMenuItem>(
-                value: StopwatchCardMenuItem.rename,
+      onSelected: onSelected,
+      itemBuilder: (BuildContext context) => StopwatchCardMenuItem.values
+          .map((menuItem) => PopupMenuItem<StopwatchCardMenuItem>(
+                value: menuItem,
                 child: Row(
                   children: [
-                    Icon(Icons.edit_outlined),
-                    SizedBox(
+                    Icon(menuItem.icon),
+                    const SizedBox(
                       width: 12,
                     ),
-                    Text('Rename'),
+                    Text(menuItem.label),
                   ],
                 ),
-              ),
-              const PopupMenuItem<StopwatchCardMenuItem>(
-                value: StopwatchCardMenuItem.save,
-                child: Row(
-                  children: [
-                    Icon(Icons.save_outlined),
-                    SizedBox(
-                      width: 12,
-                    ),
-                    Text('Save'),
-                  ],
-                ),
-              ),
-              const PopupMenuItem<StopwatchCardMenuItem>(
-                value: StopwatchCardMenuItem.reset,
-                child: Row(
-                  children: [
-                    Icon(Icons.refresh),
-                    SizedBox(
-                      width: 12,
-                    ),
-                    Text('Reset'),
-                  ],
-                ),
-              ),
-              const PopupMenuItem<StopwatchCardMenuItem>(
-                value: StopwatchCardMenuItem.delete,
-                child: Row(
-                  children: [
-                    Icon(Icons.delete_outline),
-                    SizedBox(
-                      width: 12,
-                    ),
-                    Text('Delete'),
-                  ],
-                ),
-              ),
-            ]);
+              ))
+          .toList(),
+    );
   }
 }
