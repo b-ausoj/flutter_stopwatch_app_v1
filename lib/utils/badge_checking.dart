@@ -16,7 +16,7 @@ List<SetupModel> getAllRunningConfigurations(List<SetupModel> allSetups) {
 
   for (SetupModel setup in allSetups) {
     for (StopwatchModel stopwatch in setup.stopwatches) {
-      if (stopwatch.state == StopwatchState.running) {
+      if (stopwatch.isRunning) {
         runningSetups.add(setup);
         break;
       }
